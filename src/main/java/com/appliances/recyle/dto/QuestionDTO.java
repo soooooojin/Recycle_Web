@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -22,4 +24,6 @@ public class QuestionDTO {
     private String qtitle; //질문 제목
 
     private String qcomment; //질문 내용
+
+    private LocalDateTime qdate; //질문 작성 일시
 }

@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -26,4 +28,6 @@ public class NoticeDTO {
     private String ntitle; //공지 제목
 
     private Long ncomment; //공지 내용
+
+    private LocalDateTime ndate; //공지 작성 일시
 }

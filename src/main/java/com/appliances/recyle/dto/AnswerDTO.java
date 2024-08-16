@@ -21,6 +21,6 @@ public class AnswerDTO {
     @NotEmpty
     private String email;
 
-    @NotEmpty(message = "전화번호는 필수 입력 값입니다.")
+    @NotEmpty
     private String acomment; //답변 내용
 }
