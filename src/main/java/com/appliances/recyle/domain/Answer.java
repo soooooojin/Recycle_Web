@@ -15,7 +15,7 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ano;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "qno", nullable = false)
     private Question question;
 

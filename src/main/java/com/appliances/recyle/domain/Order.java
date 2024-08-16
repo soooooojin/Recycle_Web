@@ -2,9 +2,6 @@ package com.appliances.recyle.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
-
-import java.time.LocalDate;
 
 @Builder
 @Data
@@ -26,6 +23,11 @@ public class Order {
     @JoinColumn(name = "ino", nullable = false)
     private Item item;
 
+    @ManyToOne
+    @JoinColumn(name ="pno", nullable = false)
+    private Pay pay;
+
+    private String purl; //사진 url
 
     @Column(length = 20, nullable = false)
     private String ostatus; //진행 상태 [진행 중, 대기, 완료]
