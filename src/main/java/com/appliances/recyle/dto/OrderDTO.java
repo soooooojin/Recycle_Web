@@ -28,7 +28,7 @@ public class OrderDTO {
     private String iname;
 
     @NotEmpty
-    private String iprice;
+    private Long iprice;
 
     private String purl; //사진 url
 

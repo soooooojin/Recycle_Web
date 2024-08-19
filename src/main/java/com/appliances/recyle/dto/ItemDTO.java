@@ -22,4 +22,5 @@ public class ItemDTO {
 
     @NotEmpty
     private Long iprice;  //스티커 금액(제품가격)
+
 }

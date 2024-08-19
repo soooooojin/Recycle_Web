@@ -20,6 +20,6 @@ public class Item {
     @Column(length = 20, nullable = false)
     private String iname; //제품 이름
 
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false)
     private Long price; //스티커 가격
 }
