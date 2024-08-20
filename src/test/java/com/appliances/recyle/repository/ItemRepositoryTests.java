@@ -1,4 +1,4 @@
 package com.appliances.recyle.repository;
 
-public class RecycleRepositoryTests {
+public class ItemRepositoryTests {
 }
