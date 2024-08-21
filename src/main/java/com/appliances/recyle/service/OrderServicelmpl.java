@@ -1,4 +1,4 @@
 package com.appliances.recyle.service;
 
-public class RecycleServiceTests {
+public class OrderServicelmpl {
 }
