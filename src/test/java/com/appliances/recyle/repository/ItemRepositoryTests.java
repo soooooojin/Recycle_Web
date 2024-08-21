@@ -13,6 +13,10 @@ public class ItemRepositoryTests {
     @Autowired
     ItemRepository itemRepository;
 
+    @Autowired
+    OrderRepository orderRepository;
+
+
 
 
 
