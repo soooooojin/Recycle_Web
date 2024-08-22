@@ -13,7 +13,8 @@ public interface MemberService {
 
     // 회원 가입
     void join(MemberDTO memberDTO) throws MidExistException;
-    // 회원 수정 재사용 join
+
+    // 회원 수정
     void update(MemberDTO memberDTO) throws MidExistException;
 
 //    //소셜 로그인시 수정하는 서비스
