@@ -1,17 +1,56 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="www.thymeleaf.org"
-      layout:decorate="~{layout/base.html}"
->
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
 <head>
-    <title>로그인</title>
+    <title>로그인 페이지</title>
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>로그인</h1>
+    <div class="login-container">
+        <h2>로그인</h2>
 
-    <script layout:fragment="javascript" th:inline="javascript"></script>
+        <div class="card-body">
+            <th:block th:if="${param.logout != null}">
+                <h1>Logout</h1>
+            </th:block>
+
+            <th:block th:if="${param.error != null }">
+                <h1>접근 권한이 없습니다.</h1>
+                <h1>다시 로그인해주세요. </h1>
+            </th:block>
+
+
+        <form action="/echopickup/member/login" method="post">
+            <div class="form-group">
+                <label for="memberId">아이디</label>
+                <input type="text" id="memberId" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="memberPw">비밀번호</label>
+                <input type="password" id="memberPw" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary signInBtn">로그인</button>
+            <p class="register-link">계정이 없으신가요? <a th:href="@{/echopickup/member/join}">회원가입</a></p>
+        </form>
+
+<!--            <a href="/oauth2/authorization/kakao">-->
+<!--                <img th:src="@{/images/login/kakao_login_medium_narrow.png}" alt="카카오 로그인 화면">-->
+<!--            </a>-->
+
+        </div>
+    </div>
 </div>
+
+
+<script>
+    document.querySelector(".signInBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+        self.location = "/shoes/main"
+
+    })
+</script>
 </body>
 </html>
