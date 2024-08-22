@@ -1,5 +1,6 @@
 package com.appliances.recyle.service;
 
+import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.domain.Order;
 import com.appliances.recyle.dto.OrderDTO;
 import com.appliances.recyle.repository.ItemRepository;
@@ -8,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,12 +23,13 @@ public class OrderServicelmpl implements OrderService{
     @Autowired
     private ItemRepository itemRepository;
 
-    // @Autowired final:더 이상 바꾸지 않음
+    // @Autowired ::final:더 이상 바꾸지 않음
     //    private final TypeRepository typeRepository;
 
     @Autowired
     public OrderServicelmpl(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
+    //  this.payRepository = payRepository;
     }
 
     @Override
@@ -51,14 +54,21 @@ public class OrderServicelmpl implements OrderService{
                 //           memberdb것
                 .email(order.getMember().getEmail())
                 .iname(order.getItem().getIname())
-                .iprice(order.getItem().getPrice())
-                .purl()
+                .iprice(order.getItem().getIprice())
+                .purl(order.getPurl())
+                .oaddress(order.getOaddress())
+                .pmethod(order.getPay().getPmethod())
                 .build();
 
+//        List<String> images = order.getPurl().stream()
+//                .map(image -> image.get);
+// 사진올라가는게 여긴가?
 
-        return null;
+        return orderDTO;
     }
 
+
+    // 있어야할까? 히지가 필요할지도?
     @Override
     public List<OrderDTO> searchOrders(String keyword) {
         return List.of();
@@ -73,6 +83,22 @@ public class OrderServicelmpl implements OrderService{
 
     @Override
     public Order dtoTOEntity(OrderDTO orderDTO) {
+        //등록할 떄 이름으로 하나?
+        Item item = itemRepository.findById(orderDTO.getIprice())
+                .orElseGet(() -> {
+                    Item newitem = Item.builder()
+                            .iname(orderDTO.getIname())
+                            //사진도 필요하지 않아?
+                            .build();
+
+                    return itemRepository.save(newitem);
+                });
+
+        Order order = Order.builder()
+                .ono(orderDTO.getOno())
+                .
+                .build();
+
         return null;
     }
 
