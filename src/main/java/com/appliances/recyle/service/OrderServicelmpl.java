@@ -1,9 +1,11 @@
 package com.appliances.recyle.service;
 
 import com.appliances.recyle.domain.Item;
+import com.appliances.recyle.domain.Member;
 import com.appliances.recyle.domain.Order;
 import com.appliances.recyle.dto.OrderDTO;
 import com.appliances.recyle.repository.ItemRepository;
+import com.appliances.recyle.repository.MemberRepository;
 import com.appliances.recyle.repository.OrderRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,16 @@ public class OrderServicelmpl implements OrderService{
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     // @Autowired ::final:더 이상 바꾸지 않음
     //    private final TypeRepository typeRepository;
 
     @Autowired
     public OrderServicelmpl(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
+        this.memberRepository = memberRepository;
     //  this.payRepository = payRepository;
     }
 
@@ -83,34 +89,60 @@ public class OrderServicelmpl implements OrderService{
 
     @Override
     public Order dtoTOEntity(OrderDTO orderDTO) {
-        //등록할 떄 이름으로 하나?
-        Item item = itemRepository.findById(orderDTO.getIprice())
+        //등록할 때 이름으로 하나? -> 무조건 iname!
+        Item item = itemRepository.findByItem(orderDTO.getIname(),orderDTO.getIprice())
                 .orElseGet(() -> {
                     Item newitem = Item.builder()
-                            .iname(orderDTO.getIname())
-                            //사진도 필요하지 않아?
+                            .iname(orderDTO.getIname()) //제품이름
+                            .iprice(orderDTO.getIprice()) //제품 스티커 가격
                             .build();
 
                     return itemRepository.save(newitem);
                 });
 
+        //Pay도 들어가야 함!
+        // Pay pay =
+
+
+        //member
+        Member member = memberRepository.findByEmail(orderDTO.getEmail())
+                .orElseGet(() -> {
+                    Member newMember = Member.builder()
+                            .email(orderDTO.getEmail())
+                            .build();
+
+                    return newMember;
+                });
+
         Order order = Order.builder()
                 .ono(orderDTO.getOno())
-                .
+                .member(member)
+                .item(item)
+//               .pay(pay) -> pay만들면 추가하기!
+                .purl(orderDTO.getPurl())
+                .ostatus(orderDTO.getOstatus())
+                .oaddress(orderDTO.getOaddress())
                 .build();
 
-        return null;
+
+        return order;
     }
 
     @Override
     public void update(OrderDTO orderDTO) {
-
+        // DTO를 Entity로 변환
+        Order order = dtoTOEntity(orderDTO);
+        // AnimalRepository를 통해 저장된 Entity를 업데이트
+        orderRepository.save(order);
     }
 
     @Override
     public void delete(OrderDTO orderDTO) {
+        orderRepository.deleteById(orderDTO.getOno());
 
     }
+
+
 
 
 }
