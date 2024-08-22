@@ -2,6 +2,7 @@ package com.appliances.recyle.repository;
 
 import com.appliances.recyle.domain.Member;
 import com.appliances.recyle.domain.MemberRole;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,13 +10,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.fail;
 
+@SpringBootTest
+@Log4j2
 public class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
-    @Autowired
+    //@Autowired
     //private PasswordEncoder passwordEncoder;
 
 
@@ -33,12 +36,12 @@ public class MemberRepositoryTest {
                     .phone("암튼 전화번호임")
                     .build();
 
-//            // 권한주기. USER, ADMIN
-//            member.addRole(MemberRole.USER);
-//            // 90번 이상부터는, 동시권한, USER 이면서 ADMIN 주기.
-//            if(i >= 90) {
-//                member.addRole(MemberRole.ADMIN);
-//            }
+            // 권한주기. USER, ADMIN
+            member.addRole(MemberRole.USER);
+            // 9번 이상부터는, 동시권한, USER 이면서 ADMIN 주기.
+            if(i >= 9) {
+                member.addRole(MemberRole.ADMIN);
+            }
 
             // 엔티티 클래스를 저장, 실제 디비 반영이되는 비지니스 모델.
             memberRepository.save(member);
@@ -49,7 +52,13 @@ public class MemberRepositoryTest {
     @Test
     public void readMember() {
         Optional<Member> result = memberRepository.getWithRoles("ngy2@gmail.com");
-        Member member = result.orElseThrow();
+//        Member member = result.orElseThrow();
+        if (result.isEmpty()) {
+            // Optional이 비어있는 경우 적절한 예외를 던지거나 기본값을 설정합니다.
+            fail("Member not found for email: ngy2@gmail.com");
+        }
+
+        Member member = result.get();
 
         log.info("MemberRepositoryTests read, member:  "+member);
         log.info("MemberRepositoryTests read, member.getRoleSet():  "+member.getRoleSet());

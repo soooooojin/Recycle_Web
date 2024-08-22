@@ -3,6 +3,7 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Table(name = "orders")
 @Builder
 @Data
 @AllArgsConstructor
