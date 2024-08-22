@@ -3,6 +3,7 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @Data
 @AllArgsConstructor
@@ -23,5 +24,5 @@ public class Notice extends BaseEntity {
     private String ntitle; //공지 제목
 
     @Column(length = 200)
-    private Long ncomment; //공지 내용
+    private String ncomment; //공지 내용
 }
