@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
+
+<head>
+  <title>공지사항</title>
+  <link rel="stylesheet" th:href="@{../../static/css/notice.css}">
+</head>
+
+<body>
+<div layout:fragment="content">
+  <main>
+    <div class="content">
+      <h1>공지사항</h1>
+      <div class="notice-list">
+        <table>
+          <thead>
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Thymeleaf 반복문으로 공지사항 데이터 출력 -->
+          <tr th:each="notice : ${noticeList}">
+            <td th:text="${notice.nno}"></td>
+            <td th:text="${notice.ntitle}"></td>
+            <td th:text="${notice.member.mname}"></td>
+            <td th:text="${#dates.format(notice.regDate, 'yyyy-MM-dd')}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

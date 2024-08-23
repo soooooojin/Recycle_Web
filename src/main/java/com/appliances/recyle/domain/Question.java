@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
+@Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,5 +24,5 @@ public class Question extends BaseEntity {
     private String qtitle; //질문 제목
 
     @Column(length = 200)
-    private Long qcomment; //질문 내용
+    private String qcomment; //질문 내용
 }
