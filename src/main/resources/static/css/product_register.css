@@ -1,26 +1,45 @@
+.form-box {
+    margin-top: 50px;
+}
+
 .form-container {
-    margin-top: 100px;
+    height: 600px;
 }
 
 .form-table {
-    margin-top: 150px;
     border-spacing: 0 20px;
+}
+
+table, th, td {
+    border: 1px solid #373737;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #c8c8c8;
+}
+
+th, td {
+    padding: 8px 16px;
 }
 
 label {
     font-weight: 600;
-    margin-right: 10px;
     color: #555;
 }
 
 input {
+    width: 450px;
     padding: 4px;
     border: 1px solid #ddd;
     font-size: 14px;
 }
 
+.btns-box {
+    margin-top: 50px;
+}
+
 .form-btns {
-    margin-top: 450px;
     display: flex;
     justify-content: end;
     gap: 10px;
