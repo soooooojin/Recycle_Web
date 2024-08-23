@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org"
+      layout:decorate="~{layout/sidebar.html}"
+>
+<head>
+  <title>제품등록</title>
+  <link th:href="@{/css/product_register.css}" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="admin_content">
+  <div class="container">
+    <h1>제품등록</h1>
+    <form method="post" action="/echopickup/admin/register">
+      <div class="form-box">
+        <div class="form-container">
+          <table class="form-table">
+            <tbody>
+            <tr class="form-group">
+              <th>
+                <label for="iname">제품분류</label>
+              </th>
+              <td>
+                <input type="text" name="iname" id="iname">
+              </td>
+            </tr>
+            <tr class="form-group">
+              <th>
+                <label for="iprice">제품가격</label>
+              </th>
+              <td>
+                <input type="number" name="iprice" id="iprice">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+    <div class="btns-box">
+      <div class="form-btns">
+        <button type="submit" class="btn-primary">작성</button>
+<!--        <a th:href="@{/echopickup/admin/product}"><button type="button" class="btn-secondary">목록</button></a>-->
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

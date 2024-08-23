@@ -3,6 +3,7 @@ package com.appliances.recyle.service;
 import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.dto.ItemDTO;
 import com.appliances.recyle.repository.ItemRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log4j2
 @Service
+@Log4j2
+@RequiredArgsConstructor
 public class ItemServicelmpl implements ItemService{
 
-    @Autowired
     private ItemRepository itemRepository;
 
 
@@ -57,8 +58,9 @@ public class ItemServicelmpl implements ItemService{
     @Override
     public Long insert(ItemDTO itemDTO) {
         Item item = dtoToEntity(itemDTO);
-        Long ino =itemRepository.save(item).getIno();
-        return null;
+
+        Long ino = itemRepository.save(item).getIno();
+        return ino;
     }
 
     @Override

@@ -3,8 +3,6 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Builder
 @Data
 @AllArgsConstructor
