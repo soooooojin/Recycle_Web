@@ -36,3 +36,4 @@ public class Order {
     @Column(length = 100, nullable = false)
     private String oaddress; //주소
 }
+

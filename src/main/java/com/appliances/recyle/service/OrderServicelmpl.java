@@ -132,7 +132,7 @@ public class OrderServicelmpl implements OrderService{
     public void update(OrderDTO orderDTO) {
         // DTO를 Entity로 변환
         Order order = dtoTOEntity(orderDTO);
-        // AnimalRepository를 통해 저장된 Entity를 업데이트
+        // orderRepository 통해 저장된 Entity를 업데이트
         orderRepository.save(order);
     }
 
