@@ -24,6 +24,7 @@ public class AdminController {
     @GetMapping("/product_register")
     public void registerGet() {
 
+
     }
 
     @PostMapping
