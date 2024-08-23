@@ -1,0 +1,133 @@
+/* 전체 스타일 */
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    background-color: #f9f9f9;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*    color: #333;*/
+/*}*/
+
+/* 로그인 폼 컨테이너 */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+/* 로그인 폼 스타일 */
+.login-form {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-form h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    text-align: left;
+    font-size: 14px;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.find-info a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.find-info a:hover {
+    text-decoration: underline;
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.signup-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    color: #007bff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.signup-button:hover {
+    background-color: #f1f1f1;
+}
+
+.social-login {
+    text-align: center;
+}
+
+.google-login {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.kakao-login img {
+    /*width: 100%;*/
+    /*max-width: 300px; !* 구글 로그인 버튼의 크기와 일치하도록 설정 *!*/
+    /*display: block;*/
+    height: 40px;
+    margin: 10px auto;
+    cursor: pointer;
+}
+
+.google-login:hover {
+    background-color: #f1f1f1;
+}

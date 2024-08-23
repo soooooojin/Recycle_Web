@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #0A1931;
+    color: white;
+    padding-top: 20px;
+    flex-shrink: 0; /* 사이드바가 축소되지 않도록 설정 */
+}
+
+.main-content {
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    background-color: #F4F4F4;
+    padding: 50px;
+    box-sizing: border-box; /* 패딩 포함 박스 크기 설정 */
+}
+
+.sidebar .logo {
+    text-align: center;
+}
+
+.sidebar .logo h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.sidebar .logo h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #A9A9A9;
+}
+
+.sidebar ul.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul.menu li {
+    padding: 15px 20px;
+    border-top: 1px solid #1C2B3A;
+}
+
+.sidebar ul.menu li a {
+    color: #A9A9A9;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.sidebar ul.menu li a.active,
+.sidebar ul.menu li a:hover {
+    color: white;
+    background-color: #162447;
+    border-radius: 5px;
+}
