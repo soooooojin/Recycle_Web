@@ -1,0 +1,43 @@
+.notice-list {
+    margin-top: 20px;
+}
+
+.notice-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.notice-list th, .notice-list td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.notice-list th {
+    background-color: #4fbbe8;
+    color: white;
+}
+
+.notice-list tr:hover {
+    background-color: #f5f5f5;
+}
+
+.notice-list td {
+    font-size: 16px;
+}
+
+.notice-list td:nth-child(1) {
+    width: 10%;
+}
+
+.notice-list td:nth-child(2) {
+    width: 50%;
+}
+
+.notice-list td:nth-child(3) {
+    width: 20%;
+}
+
+.notice-list td:nth-child(4) {
+    width: 20%;
+}
