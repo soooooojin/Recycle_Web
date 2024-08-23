@@ -3,13 +3,14 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/base.html}">
+
 <head>
     <title>로그인 페이지</title>
+    <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
 <body>
 <div layout:fragment="content">
     <div class="login-container">
-        <h2>로그인</h2>
 
         <div class="card-body">
             <th:block th:if="${param.logout != null}">
@@ -21,24 +22,47 @@
                 <h1>다시 로그인해주세요. </h1>
             </th:block>
 
-
-        <form action="/echopickup/member/login" method="post">
+        <form class="login-form" action="/echopickup/member/login" method="post">
+            <h2>로그인</h2>
             <div class="form-group">
                 <label for="email">아이디(이메일)</label>
-                <input type="text" id="email" name="username" required>
+                <input type="email" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="pw">비밀번호</label>
-                <input type="password" id="pw" name="password" required>
+                <input type="password" id="pw" name="pw" required>
             </div>
-            <button type="submit" class="btn btn-primary LoginBtn">로그인</button>
-            <button type="submit" class="btn btn-primary JoinBtn">회원가입</button>
+
+            <div class="options">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember-me">
+                    <label for="remember-me">아이디 저장</label>
+                </div>
+                <div class="find-info">
+                    <a href="#">아이디 찾기</a> |
+                    <a href="#">비밀번호 찾기</a>
+                </div>
+            </div>
+
+            <button type="button" class="login-button">로그인</button>
+            <button type="button" class="signup-button">회원가입</button>
 <!--            <p class="register-link">계정이 없으신가요? <a th:href="@{/echopickup/member/join}">회원가입</a></p>-->
+
+            <div class="social-login">
+                <button type="button" class="google-login">구글 계정으로 로그인</button>
+
+                <a href="/oauth2/authorization/kakao" class="kakao-login">
+                    <img th:src="@{/images/login/kakao_login_medium_narrow.png}" alt="카카오 로그인 화면">
+                </a>
+            </div>
+
+
+
         </form>
 
-            <a href="/oauth2/authorization/kakao">
-                <img th:src="@{/images/login/kakao_login_medium_narrow.png}" alt="카카오 로그인 화면">
-            </a>
+<!--            <a href="/oauth2/authorization/kakao">-->
+<!--                <img th:src="@{/images/login/kakao_login_medium_narrow.png}" alt="카카오 로그인 화면">-->
+<!--            </a>-->
 
         </div>
     </div>
