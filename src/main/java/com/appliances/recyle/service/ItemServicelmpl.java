@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -17,51 +18,74 @@ public class ItemServicelmpl implements ItemService{
 
     private ItemRepository itemRepository;
 
+
     @Override
     public List<ItemDTO> getAllItems() {
-        return List.of();
+        return itemRepository.findAll().stream()
+                .map(this::entityToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ItemDTO read(Long ino) {
-        return null;
+        return itemRepository.findById(ino)
+                .map(this::entityToDTO)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
     }
 
     @Override
     public ItemDTO entityToDTO(Item item) {
-        return null;
+
+        ItemDTO itemDTO = ItemDTO.builder()
+                .ino(item.getIno())
+                .iname(item.getIname())
+                .iprice(item.getIprice())
+                .build();
+
+        //이미지 추가?
+
+        return itemDTO;
     }
 
     @Override
-    public List<ItemDTO> searchItems(String keyword) {
-        return List.of();
+    public List<ItemDTO> searchItems(String iname) { // 일단 iname으로 설정.
+        List<Item> items = itemRepository.findByItemName(iname);
+        return items.stream()
+                .map(this::entityToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Long insert(ItemDTO itemDTO) {
         Item item = dtoToEntity(itemDTO);
+
         Long ino = itemRepository.save(item).getIno();
         return ino;
     }
 
     @Override
     public Item dtoToEntity(ItemDTO itemDTO) {
+
         Item item = Item.builder()
                 .ino(itemDTO.getIno())
                 .iname(itemDTO.getIname())
-                .price(itemDTO.getIprice())
+                .iprice(itemDTO.getIprice())
                 .build();
+
+        //첨부 이미지는 purl로 할건가?
 
         return item;
     }
 
     @Override
     public void update(ItemDTO itemDTO) {
-
+        Item item = dtoToEntity(itemDTO);
+        itemRepository.save(item);
     }
 
     @Override
     public void delete(Long ino) {
+        itemRepository.deleteById(ino);
 
     }
 }
