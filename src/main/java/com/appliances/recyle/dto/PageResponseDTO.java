@@ -22,12 +22,12 @@ public class PageResponseDTO<E> {
     private boolean next;
 
     // 받아온 데이터의 목록,(페이징이 되고, 검색된 결과물 목록)
-    private List<E> dtoList;
+    private List<E> itemList;
 
     // PageResponseDTO 생성자 정의.
     @Builder(builderMethodName = "withAll")
     public PageResponseDTO(PageRequestDTO pageRequestDTO,
-                           List<E> dtoList,int total) {
+                           List<E> itemList,int total) {
         // 전체 갯수가 없을 경우
         if(total <= 0) {
             return;
@@ -37,7 +37,7 @@ public class PageResponseDTO<E> {
         this.page = pageRequestDTO.getPage();
         this.size = pageRequestDTO.getSize();
         this.total = total;
-        this.dtoList = dtoList;
+        this.itemList = itemList;
 
         // 선택시, 1 ~ 10
         // 화면에 그려지는 페이지수, 1,2,3, ... 7,8,9,10,
