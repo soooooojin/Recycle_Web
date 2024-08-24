@@ -32,8 +32,8 @@ public class QuestionRepositoryTest {
 
         IntStream.range(1, 11).forEach(i -> {
             Question question = Question.builder()
-                    .qtitle("제목test" + i)
-                    .qcomment("내용입력test " + i)
+                    .qtitle("titletest" + i)
+                    .qcomment("contenttest " + i)
                     .member(member)  // Notice와 Member 연관 관계 설정
                     .build();
 

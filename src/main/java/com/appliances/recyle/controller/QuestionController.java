@@ -3,13 +3,14 @@ package com.appliances.recyle.controller;
 import com.appliances.recyle.domain.Question;
 import com.appliances.recyle.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/echopickup/questions")
+@Controller
+@RequestMapping("/echopickup")
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -19,29 +20,21 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-        return ResponseEntity.ok(questionService.createQuestion(question));
+    // 문의 작성 폼을 보여주는 메서드
+    @GetMapping("/question")
+    public String showQuestionForm() {
+        return "echopickup/question";  // echopickup/question.html로 이동
     }
 
-    @GetMapping("/{qno}")
-    public ResponseEntity<Question> readQuestion(@PathVariable Long qno) {
-        return ResponseEntity.ok(questionService.readQuestion(qno));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Question>> readAllQuestions() {
-        return ResponseEntity.ok(questionService.readAllQuestions());
-    }
-
-    @PutMapping("/{qno}")
-    public ResponseEntity<Question> updateQuestion(@PathVariable Long qno, @RequestBody Question question) {
-        return ResponseEntity.ok(questionService.updateQuestion(qno, question));
-    }
-
-    @DeleteMapping("/{qno}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long qno) {
-        questionService.deleteQuestion(qno);
-        return ResponseEntity.noContent().build();
+    // 문의 작성 폼 제출을 처리하는 메서드
+    @PostMapping("/question")
+    public String createQuestion(@RequestParam String qtitle,
+                                 @RequestParam String qcomment) {
+        Question question = Question.builder()
+                .qtitle(qtitle)
+                .qcomment(qcomment)
+                .build();
+        questionService.createQuestion(question);
+        return "redirect:/echopickup/questions";  // 등록 후 목록 페이지로 리다이렉트
     }
 }
