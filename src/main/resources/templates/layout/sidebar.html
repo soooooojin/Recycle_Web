@@ -2,30 +2,43 @@
 <html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Echo Pickup Admin</title>
-        <link rel="stylesheet" th:href="@{/css/sidebar.css}">
-    </head>
-    <body>
-        <div class="sidebar">
-            <div class="logo">
-                <img th:src="@{/images/echologo.png}" alt="Logo" width="250dp" height="100dp">
-            </div>
-            <ul class="menu">
-                <li><a th:href="@{/echopickup/admin/auths}" class="active">회원관리</a></li>
-                <li><a th:href="@{/echopickup/admin/reservs}">예약관리</a></li>
-                <li><a th:href="@{/echopickup/admin/pays}">결제관리</a></li>
-                <li><a th:href="@{/echopickup/admin/helps}">문의관리</a></li>
-                <li><a th:href="@{/echopickup/admin/notices}">공지등록</a></li>
-                <li><a th:href="@{/echopickup/admin/products}">제품등록</a></li>
-                <li><a th:href="@{/echopickup/member/logout}">로그아웃</a></li>
-            </ul>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Pickup Admin</title>
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img th:src="@{/images/echologo.png}" alt="Logo" width="250dp" height="100dp">
         </div>
+        <ul class="menu">
+            <li><a th:href="@{/echopickup/admin/auths}">회원관리</a></li>
+            <li><a th:href="@{/echopickup/admin/reservs}">예약관리</a></li>
+            <li><a th:href="@{/echopickup/admin/pays}">결제관리</a></li>
+            <li><a th:href="@{/echopickup/admin/helps}">문의관리</a></li>
+            <li><a th:href="@{/echopickup/admin/notice_register}">공지등록</a></li>
+            <li><a th:href="@{/echopickup/admin/product_register}">제품등록</a></li>
+            <li><a th:href="@{/echopickup/member/logout}">로그아웃</a></li>
+        </ul>
+    </div>
 
-        <div class="main-content" layout:fragment="admin_content">
+    <div class="main_content" layout:fragment="admin_content">
 
-        </div>
-    </body>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentPath = window.location.pathname;
+            const menuItems = document.querySelectorAll(".sidebar .menu li a");
+
+            menuItems.forEach(function (item) {
+                if (item.getAttribute("href") === currentPath) {
+                    item.classList.add("active");
+                }
+            });
+        });
+    </script>
+</body>
 </html>
