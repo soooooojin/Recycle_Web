@@ -30,10 +30,10 @@ public class NoticeRepositoryTest {
                 new IllegalArgumentException("Member not found")
         );
 
-        IntStream.range(1, 11).forEach(i -> {
+        IntStream.range(1, 31).forEach(i -> {
             Notice notice = Notice.builder()
-                    .ntitle("제목test" + i)
-                    .ncomment("내용입력test " + i)
+                    .ntitle("titletest" + i)
+                    .ncomment("commenttest " + i)
                     .member(member)  // Notice와 Member 연관 관계 설정
                     .build();
 
@@ -45,5 +45,20 @@ public class NoticeRepositoryTest {
     public void testFindById() {
         Optional<Notice> result = noticeRepository.findById(1L);
         result.ifPresent(notice -> log.info(notice));
+    }
+
+    @Test
+    public void deleteNotice() {
+        // 1L ID를 가진 Notice를 삭제
+        Long noticeId = 1L;
+        noticeRepository.deleteById(noticeId);
+
+        // 삭제 후 존재하는지 확인
+        Optional<Notice> result = noticeRepository.findById(noticeId);
+        if (result.isPresent()) {
+            log.error("삭제 실패: Notice가 여전히 존재합니다.");
+        } else {
+            log.info("삭제 성공: Notice가 삭제되었습니다.");
+        }
     }
 }

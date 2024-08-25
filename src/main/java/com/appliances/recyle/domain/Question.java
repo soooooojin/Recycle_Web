@@ -3,9 +3,9 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @Data
-@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
