@@ -1,0 +1,79 @@
+h1 {
+    padding-bottom: 20px;
+    font-size: 28px;
+    border-bottom: 2px solid #0A1931;
+}
+
+.sub-box {
+    margin-top: 50px;
+}
+
+.sub-container {
+    height: 600px;
+}
+
+.paging-container {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    border-radius: 0.25rem;
+}
+
+.pagination .page-item {
+    margin: 0 3px;
+}
+
+.pagination .page-item .page-link {
+    color: #007bff;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    cursor: default;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+.btns-box {
+    margin-top: 50px;
+}
+
+.form-btns {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+}

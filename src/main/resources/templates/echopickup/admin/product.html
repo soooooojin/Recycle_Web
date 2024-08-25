@@ -1,85 +1,86 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="ko"-->
-<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
-<!--      xmlns:th="www.thymeleaf.org"-->
-<!--      layout:decorate="~{layout/sidebar.html}"-->
-<!--&gt;-->
-<!--<head>-->
-<!--    <title>제품목록</title>-->
-<!--    <link th:href="@{/css/product.css}" rel="stylesheet">-->
-<!--</head>-->
-<!--<body>-->
-<!--<div layout:fragment="admin_content">-->
-<!--    <div class="container">-->
-<!--        <h1>제품목록</h1>-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org"
+      layout:decorate="~{layout/sidebar.html}"
+>
+<head>
+    <title>제품목록</title>
+    <link th:href="@{/css/product.css}" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="admin_content">
+    <div class="container">
+        <h1>제품목록</h1>
+        <form action="/echopickup/admin/product" method="get">
+            <div class="sub-box">
+                <div class="sub-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">번호</th>
+                                <th scope="col">분류</th>
+                                <th scope="col">가격</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item:${responseDTO.itemList}">
+                                <td>[[${item.ino}]]</td>
+                                <td>[[${item.iname}]]</td>
+                                <td>[[${item.iprice}]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-<!--        <table class="table">-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--                <th scope="col">번호</th>-->
-<!--                <th scope="col">분류</th>-->
-<!--                <th scope="col">가격</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody th:with="link = ${pageRequestDTO.getLink()}">-->
-<!--            <tr th:each="dto:${responseDTO.dtoList}">-->
-<!--                <th scope="row">[[${dto.bno}]]</th>-->
+            <div class="paging-container">
+                <ul class="pagination paging-content">
+                    <li class="page-item" th:if="${responseDTO.prev}">
+                        <a class="page-link" th:data-num="${responseDTO.start-1}">이전</a>
+                    </li>
+                    <th:block th:each="i:${#numbers.sequence(responseDTO.start,responseDTO.end)}">
+                        <li th:class="${responseDTO.page == i}?'page-item active':'page-item'">
+                            <a class="page-link"
+                               th:data-num="${i}">[[${i}]]</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:if="${responseDTO.next}">
+                        <a class="page-link" th:data-num="${responseDTO.end +1}">다음</a>
+                    </li>
+                </ul>
+            </div>
 
-<!--                <td>-->
-<!--                    <a th:href="|@{/board/read(bno =${dto.bno})}&${link}|">-->
-<!--                        [[${dto.title}]]-->
-<!--                    </a>-->
-<!--                    <span class="badge progress-bar-success" style="background-color: #fe010a">-->
-<!--                                    [[${dto.replyCount}]]-->
-<!--                                </span>-->
-<!--                    &lt;!&ndash;                                첨부 이미지 출력하기&ndash;&gt;-->
-<!--                    <div th:if="${dto.boardImages != null && dto.boardImages.size()>0}">-->
-<!--                        <img style="width: 100px" th:each="boardImage : ${dto.boardImages}"-->
-<!--                             th:src="|/view/s_${boardImage.uuid}_${boardImage.fileName}|">-->
-<!--                    </div>-->
-<!--                </td>-->
-<!--                &lt;!&ndash;이부분 주석 인식 못해서 삭제함&ndash;&gt;-->
+            <div class="btns-box">
+                <div class="form-btns">
+                    <a href="/echopickup/admin/product_register"><button type="button" class="btn-primary">글작성</button></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-<!--                <td>[[${dto.writer}]]</td>-->
-<!--                &lt;!&ndash;                            <td>[[${dto.regDate}]]</td>&ndash;&gt;-->
-<!--                &lt;!&ndash;                            날짜 출력 포맷팅 작업 : yyyy-MM-dd HH:mm:ss 형식&ndash;&gt;-->
-<!--                <td>[[${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}]]</td>-->
-<!--            </tr>-->
+<script>
+    document.querySelector(".pagination").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
 
-<!--            </tbody>-->
-<!--        </table>-->
-<!--        &lt;!&ndash;                   페이징 부트스트랩 추가하기&ndash;&gt;-->
-<!--        <div class="paging-container">-->
-<!--            <ul class="pagination paging-content">-->
-<!--                &lt;!&ndash;                                    이전화면이 나오고&ndash;&gt;-->
-<!--                <li class="page-item" th:if="${responseDTO.prev}">-->
-<!--                    <a class="page-link" th:data-num="${responseDTO.start-1}">Previous</a>-->
-<!--                </li>-->
-<!--                &lt;!&ndash;                                    페이지 : 1 ~ 10 개 출력&ndash;&gt;-->
-<!--                &lt;!&ndash;                                    서버에서 받아온 데이터를 적용하기&ndash;&gt;-->
-<!--                &lt;!&ndash;                            화면에 표시에 페이지 번호 10개 그리기&ndash;&gt;-->
-<!--                <th:blcok th:each="i:${#numbers.sequence(responseDTO.start,responseDTO.end)}">-->
-<!--                    &lt;!&ndash;                                기존 jstl c 태그 문법 , 타임리프 문법으로 변경하기&ndash;&gt;-->
-<!--                    <li th:class="${responseDTO.page == i}?'page-item active':'page-item'">-->
-<!--                        <a class="page-link"-->
-<!--                           th:data-num="${i}">[[${i}]]</a>-->
-<!--                    </li>-->
-<!--                </th:blcok>-->
+        const target = e.target
+        // a 태그 가 아니면 해당 클릭 이벤트 함수를 나간다.
+        if (target.tagName !== 'A') {
+            return
+        }
+        // tagName 전부 a 태그만 살아 남음.
+        const num = target.getAttribute("data-num")
+        // const link = [[${pageRequestDTO.getLink()}]]
 
-<!--                &lt;!&ndash;                            다음 화면 이 나오고&ndash;&gt;-->
+        // 추가, 검색 및 필터 관련 정보를 추가해서, 페이징 이동하기.
+        const formObj = document.querySelector("form")
+        formObj.innerHTML += `<input type="hidden" name="page" value="${num}">`
+        formObj.submit()
+        self.location = `/echopickup/admin/product?page=${num}?${link}`
 
-<!--                <li class="page-item" th:if="${responseDTO.next}">-->
-<!--                    <a class="page-link" th:data-num="${responseDTO.end +1}">Next</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-
-<!--        <div class="btns-box">-->
-<!--            <div class="form-btns">-->
-<!--                <a th:href="@{/echopickup/admin/product_register}"><button type="submit" class="btn-primary">글작성</button></a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
+    }, false)
+</script>
+</body>
+</html>
