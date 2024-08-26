@@ -3,12 +3,12 @@
     max-width: 900px;
     margin: 50px auto;
     background-color: white;
-    padding: 40px 50px 60px 50px;
+    padding: 40px 50px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .question-content h1 {
-    text-align: left; /* 중앙 정렬에서 좌측 정렬로 변경 */
+    text-align: left; /* 제목을 좌측 정렬 */
     color: #007acc;
     margin-bottom: 30px;
 }
@@ -49,14 +49,13 @@
 .form-group .btn-list {
     background-color: #007acc;
     color: white;
-    padding: 10px 20px; /* 패딩 조정으로 버튼 크기를 맞춤 */
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    min-width: 100px; /* 버튼 최소 너비 설정 */
+    min-width: 100px;
     text-align: center;
-    line-height: 1.5; /* 텍스트를 중앙에 위치시키기 위한 line-height 설정 */
 }
 
 .form-group .btn-submit:hover,

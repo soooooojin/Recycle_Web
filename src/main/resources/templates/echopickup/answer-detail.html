@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
+
+<head>
+  <title>문의 상세</title>
+  <link rel="stylesheet" th:href="@{/css/question-detail.css}">
+</head>
+
+<body>
+<div layout:fragment="content">
+  <main>
+    <div class="question-detail-content">
+      <h1>Q&A</h1>
+      <table class="question-detail-table">
+        <tr>
+          <th>제목</th>
+          <td th:text="${question.qtitle}"></td>
+        </tr>
+        <tr>
+          <th>질문자</th>
+          <td th:text="${question.member.email}"></td>
+        </tr>
+      </table>
+      <div class="question-content" th:text="${question.qcomment}">
+        <!-- 질문 내용이 이곳에 표시됩니다 -->
+      </div>
+
+      <!-- 답글이 있을 경우 답글을 표시 -->
+      <div class="answer-content" th:if="${question.answer != null}">
+        <h2>답글</h2>
+        <table class="answer-detail-table">
+          <tr>
+            <th>작성자</th>
+            <td th:text="${question.answer.member.email}"></td>
+          </tr>
+          <tr>
+            <th>내용</th>
+            <td th:text="${question.answer.acomment}"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="button-group">
+        <button class="btn-answer" type="button">답글 달기</button> <!-- 답글 달기 버튼 -->
+        <div class="btn-group-right">
+          <button class="btn-update" th:onclick="|location.href='/echopickup/question-update/${question.qno}'|">수정</button>
+          <form th:action="@{'/echopickup/question-delete/' + ${question.qno}}" method="post" style="display:inline;">
+            <button class="btn-delete" type="submit" onclick="return confirm('삭제하시겠습니까?')">삭제</button>
+          </form>
+          <button class="btn-list" onclick="location.href='/echopickup/question-list'">목록</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

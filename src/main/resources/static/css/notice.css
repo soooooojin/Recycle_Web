@@ -23,6 +23,7 @@
 
 /* 테이블 셀 스타일 */
 .notice-table td {
+    font-weight:bold;
     padding: 15px;
     text-align: center;
     font-size: 14px;
