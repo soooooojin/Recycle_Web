@@ -11,7 +11,7 @@
 <div layout:fragment="content">
     <div class="signup-card">
 
-        <form class="registration-form" action="/echopickup/member/join" method="post">
+        <form id="registrationForm" class="registration-form" action="/echopickup/member/join" method="post">
             <h2>회원가입</h2>
 
             <div class="form-group">
@@ -26,6 +26,7 @@
             <div class="form-group">
                 <label for="confirm-pw">비밀번호 확인</label>
                 <input type="password" id="confirm-pw" name="confirm-pw" required>
+                <span id="password-error" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</span>
             </div>
             <div class="form-group">
                 <label for="mname">사용자 이름</label>
@@ -43,6 +44,14 @@
             <p class="login-link">이미 계정이 있으신가요? <a th:href="@{/echopickup/member/login}">로그인</a></p>
         </form>
     </div>
+
+    <!-- JavaScript 파일 링크 -->
+    <script th:src="@{/js/join.js}"></script>
 </div>
+
+<!-- JavaScript 파일 링크 -->
+<!--<script th:src="@{/js/join.js}"></script>-->
+<!--<script src="js/join.js"></script>-->
+
 </body>
 </html>

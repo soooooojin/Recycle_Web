@@ -22,7 +22,7 @@ public class MemberController {
     // 로그인
     @GetMapping("/login")
     public void loginGet(String error, String logout, RedirectAttributes redirectAttributes) {
-        log.info("========logout Test========"+ logout);
+        log.info("========logout Test========\n"+ logout);
 
         if(logout != null) {
             log.info("logged out successfully");
