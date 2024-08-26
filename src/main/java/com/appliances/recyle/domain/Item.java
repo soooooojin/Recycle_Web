@@ -3,8 +3,6 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
 @Builder
 @Data
 @AllArgsConstructor
@@ -21,5 +19,5 @@ public class Item {
     private String iname; //제품 이름
 
     @Column(nullable = false)
-    private Long price; //스티커 가격
+    private Long iprice; //스티커 가격
 }

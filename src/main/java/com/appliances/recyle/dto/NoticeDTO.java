@@ -27,7 +27,7 @@ public class NoticeDTO {
     @NotEmpty
     private String ntitle; //공지 제목
 
-    private Long ncomment; //공지 내용
+    private String ncomment; //공지 내용
 
     private LocalDateTime ndate; //공지 작성 일시
 }

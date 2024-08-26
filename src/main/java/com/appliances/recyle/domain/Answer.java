@@ -24,5 +24,5 @@ public class Answer {
     private Member member;
 
     @Column(length = 200)
-    private Long qcomment; //답변 내용
+    private String acomment; //답변 내용
 }

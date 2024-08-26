@@ -3,6 +3,7 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @Data
 @AllArgsConstructor
@@ -23,5 +24,5 @@ public class Question extends BaseEntity {
     private String qtitle; //질문 제목
 
     @Column(length = 200)
-    private Long qcomment; //질문 내용
+    private String qcomment; //질문 내용
 }
