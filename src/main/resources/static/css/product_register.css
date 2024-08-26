@@ -1,5 +1,14 @@
+h1 {
+    padding-bottom: 20px;
+    font-size: 28px;
+    border-bottom: 2px solid #0A1931;
+}
+
 .form-box {
     margin-top: 50px;
+    padding-top: 20px;
+    padding-left: 20px;
+    background-color: #d1d1d1;
 }
 
 .form-container {
@@ -7,32 +16,60 @@
 }
 
 .form-table {
+    border-top: 2px solid #919191;
+    border-bottom: 2px solid #919191;
     border-spacing: 0 20px;
+    width: 1200px;
 }
 
 table, th, td {
-    border: 1px solid #373737;
+    border: 1px solid #c1c1c1;
     border-collapse: collapse;
 }
 
 th {
-    background-color: #c8c8c8;
+    width: 200px;
+    text-align: left;
+    background-color: #e5e5e5;
+}
+
+td {
+    width: 1000px;
+    background-color: #F4F4F4;
 }
 
 th, td {
-    padding: 8px 16px;
+
+    padding: 4px 8px;
 }
 
 label {
-    font-weight: 600;
+    text-align: left;
+    font-size: 14px;
     color: #555;
 }
 
 input {
-    width: 450px;
+    width: 600px;
     padding: 4px;
     border: 1px solid #ddd;
     font-size: 14px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox에서 스피너 제거 */
+}
+
+#iprice {
+    -webkit-appearance: none;
+    text-align: right;
+    width: 300px;
 }
 
 .btns-box {

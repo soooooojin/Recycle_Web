@@ -13,7 +13,7 @@ body {
     flex-shrink: 0; /* 사이드바가 축소되지 않도록 설정 */
 }
 
-.main-content {
+.main_content {
     flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
     background-color: #F4F4F4;
     padding: 50px;
