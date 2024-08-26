@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,6 +34,22 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/login")
+    public String loginPost(MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
+        log.info("loginPost====================");
+        log.info("loginDTO = " + memberDTO);
+
+        boolean value  = memberService.checkid(memberDTO.getEmail());
+        log.info("value = " + value);
+
+        if(!value){
+            redirectAttributes.addFlashAttribute("error", "아이디 중복입니다");
+            return "redirect:/echopickup/member/login";
+        }
+
+        redirectAttributes.addFlashAttribute("result","로그인 성공");
+        return "redirect:/echopickup/index";
+    }
     // 회원 수정
 //    @GetMapping("/update")
 //    public void updateGet(@AuthenticationPrincipal UserDetails user, Model model) {
@@ -50,7 +67,7 @@ public class MemberController {
     public String joinPost(MemberDTO memberDTO,
                            RedirectAttributes redirectAttributes) {
         log.info("joinPost====================");
-        log.info("shoesJoinDTO = " + memberDTO);
+        log.info("JoinDTO = " + memberDTO);
 
 
         try {

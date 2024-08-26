@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <button type="button" class="login-button">로그인</button>
+            <button type="submit" class="login-button">로그인</button>
             <button type="button" class="signup-button" onclick="location.href='join'" >회원가입</button>
 <!--            <p class="register-link">계정이 없으신가요? <a th:href="@{/echopickup/member/join}">회원가입</a></p>-->
 
@@ -66,15 +66,30 @@
 
         </div>
     </div>
+
+    <!-- 자바스크립트로 alert 표시 -->
+    <script th:if="${error != null}">
+        alert("님아이디가 없슈");
+        window.location.href = "/echopickup/member/join";
+    </script>
+    <script th:if="${error == null}">
+        document.querySelector(".login-button").addEventListener("click", function () {
+            window.location.href = "/echopickup/index";
+        });
+    </script>
+<!--    <script>-->
+<!--        document.querySelector(".login-button").addEventListener("click", function () {-->
+<!--            // 여기서 페이지 이동을 설정합니다.-->
+<!--            // 서버에서 전달된 error 메시지가 있는지 확인-->
+<!--            const errorMessage = [[${error}]];-->
+<!--            if (errorMessage) {-->
+<!--                alert("님틀렸슈");-->
+<!--            }else {-->
+<!--                window.location.href = "/echopickup/index";-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
 </div>
 
-
-<script>
-    document.querySelector(".signInBtn").addEventListener("click", function (e) {
-        e.preventDefault()
-        e.stopPropagation()
-        self.location = "/shoes/main"
-    })
-</script>
 </body>
 </html>
