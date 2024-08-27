@@ -3,9 +3,12 @@ package com.appliances.recyle.service;
 import com.appliances.recyle.domain.Notice;
 import com.appliances.recyle.repository.NoticeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -35,7 +38,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public Notice updateNotice(Long nno, Notice notice) {
         if (noticeRepository.existsById(nno)) {
-            notice.setNno(nno);  // Notice 엔티티의 nno 설정
+            notice.setNno(nno);
             return noticeRepository.save(notice);
         }
         return null;
@@ -44,5 +47,10 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public void deleteNotice(Long nno) {
         noticeRepository.deleteById(nno);
+    }
+
+    @Override
+    public Page<Notice> getNotices(Pageable pageable) {
+        return noticeRepository.findAll(pageable);
     }
 }

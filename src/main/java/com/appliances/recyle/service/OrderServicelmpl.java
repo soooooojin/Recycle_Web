@@ -90,15 +90,15 @@ public class OrderServicelmpl implements OrderService{
     @Override
     public Order dtoTOEntity(OrderDTO orderDTO) {
         //등록할 때 이름으로 하나? -> 무조건 iname!
-        Item item = itemRepository.findByItem(orderDTO.getIname(),orderDTO.getIprice())
-                .orElseGet(() -> {
-                    Item newitem = Item.builder()
-                            .iname(orderDTO.getIname()) //제품이름
-                            .iprice(orderDTO.getIprice()) //제품 스티커 가격
-                            .build();
-
-                    return itemRepository.save(newitem);
-                });
+//        Item item = itemRepository.findByItem(orderDTO.getIname(),orderDTO.getIprice())
+//                .orElseGet(() -> {
+//                    Item newitem = Item.builder()
+//                            .iname(orderDTO.getIname()) //제품이름
+//                            .iprice(orderDTO.getIprice()) //제품 스티커 가격
+//                            .build();
+//
+//                    return itemRepository.save(newitem);
+//                });
 
         //Pay도 들어가야 함!
         // Pay pay =
@@ -117,7 +117,7 @@ public class OrderServicelmpl implements OrderService{
         Order order = Order.builder()
                 .ono(orderDTO.getOno())
                 .member(member)
-                .item(item)
+//                .item(item)
 //               .pay(pay) -> pay만들면 추가하기!
                 .purl(orderDTO.getPurl())
                 .ostatus(orderDTO.getOstatus())
