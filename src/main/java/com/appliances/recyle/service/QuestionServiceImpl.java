@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -34,9 +35,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question updateQuestion(Long qno, Question question) {
-        if (questionRepository.existsById(qno)) {
-            question.setQno(qno);
-            return questionRepository.save(question);
+        Optional<Question> existingQuestion = questionRepository.findById(qno);
+        if (existingQuestion.isPresent()) {
+            Question updatedQuestion = existingQuestion.get();
+            updatedQuestion.setQtitle(question.getQtitle());
+            updatedQuestion.setQcomment(question.getQcomment());
+            return questionRepository.save(updatedQuestion);
         }
         return null;
     }

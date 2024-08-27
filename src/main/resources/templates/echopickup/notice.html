@@ -6,34 +6,57 @@
 
 <head>
   <title>공지사항</title>
-  <link rel="stylesheet" th:href="@{../../static/css/notice.css}">
+  <link rel="stylesheet" th:href="@{/css/notice.css}">
 </head>
 
 <body>
 <div layout:fragment="content">
   <main>
-    <div class="content">
+    <div class="notice-content">
       <h1>공지사항</h1>
       <div class="notice-list">
-        <table>
+        <table class="notice-table">
           <thead>
           <tr>
             <th>번호</th>
             <th>제목</th>
-            <th>작성자</th>
-            <th>작성일</th>
+            <th>등록자</th>
+            <th>등록일</th>
           </tr>
           </thead>
           <tbody>
           <!-- Thymeleaf 반복문으로 공지사항 데이터 출력 -->
-          <tr th:each="notice : ${noticeList}">
+          <tr th:each="notice : ${noticePage.content}">
             <td th:text="${notice.nno}"></td>
-            <td th:text="${notice.ntitle}"></td>
-            <td th:text="${notice.member.mname}"></td>
-            <td th:text="${#dates.format(notice.regDate, 'yyyy-MM-dd')}"></td>
+            <td>
+              <a th:href="@{'/echopickup/notice/' + ${notice.nno}}" th:text="${notice.ntitle}"></a>
+            </td>
+            <td>관리자</td>
+            <td th:text="${notice.regDate}"></td>
           </tr>
           </tbody>
         </table>
+
+        <div class="pagination">
+          <ul>
+            <!-- 첫 번째 페이지로 이동 -->
+            <li th:classappend="${noticePage.hasPrevious()} ? '' : 'disabled'">
+              <a th:href="@{/echopickup/notice(page=0, size=${noticePage.size})}">&laquo;</a>
+            </li>
+
+            <!-- 각 페이지 번호로 이동 -->
+            <li th:each="i : ${#numbers.sequence(1, noticePage.totalPages)}"
+                th:classappend="${noticePage.number + 1 == i} ? 'active'">
+              <a th:href="@{/echopickup/notice(page=${i - 1}, size=${noticePage.size})}"
+                 th:text="${i}">1</a>
+            </li>
+
+            <!-- 마지막 페이지로 이동 -->
+            <li th:classappend="${noticePage.hasNext()} ? '' : 'disabled'">
+              <a th:href="@{/echopickup/notice(page=${noticePage.totalPages - 1}, size=${noticePage.size})}">&raquo;</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </main>
