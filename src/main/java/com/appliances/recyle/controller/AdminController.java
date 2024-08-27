@@ -1,6 +1,8 @@
 package com.appliances.recyle.controller;
 
 import com.appliances.recyle.dto.ItemDTO;
+import com.appliances.recyle.dto.PageRequestDTO;
+import com.appliances.recyle.dto.PageResponseDTO;
 import com.appliances.recyle.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,21 +29,21 @@ public class AdminController {
 
     }
 
-    @PostMapping
-    public void registerPost(@Valid ItemDTO itemDTO
-            , BindingResult bindingResult
-            , RedirectAttributes redirectAttributes
-            , Model model) {
+    @PostMapping("/product_register")
+    public String registerPost(@Valid ItemDTO itemDTO) {
         Long ino = itemService.insert(itemDTO);
 
-        redirectAttributes.addFlashAttribute("result", bno);
-        redirectAttributes.addFlashAttribute("resultType", "register");
-        return "redirect:/board/list";
+        return "redirect:/echopickup/admin/product";
     }
 
     @GetMapping("/product")
-    public void productGet() {
+    public void productGet(PageRequestDTO pageRequestDTO, Model model) {
+        PageResponseDTO<ItemDTO> responseDTO
+                = itemService.productList(pageRequestDTO);
 
+        log.info("AdminController 확인 중, responseDTO : " + responseDTO);
+
+        model.addAttribute("responseDTO", responseDTO);
     }
 
 }

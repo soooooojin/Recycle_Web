@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
+
+<head>
+  <title>공지사항 상세보기</title>
+  <link rel="stylesheet" th:href="@{/css/notice-detail.css}">
+</head>
+
+<body>
+<div layout:fragment="content">
+  <main>
+    <div class="notice-detail-content">
+      <h1 th:text="${notice.ntitle}">공지 제목</h1>
+      <p class="author">관리자</p> <!-- 작성자 부분을 관리자 고정으로 설정 -->
+      <div class="content" th:text="${notice.ncomment}">공지 내용</div>
+
+      <a th:href="@{/echopickup/notice}" class="btn-list">목록으로 돌아가기</a>
+    </div>
+  </main>
+</div>
+</body>
+</html>

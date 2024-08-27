@@ -12,7 +12,7 @@
 <div layout:fragment="admin_content">
   <div class="container">
     <h1>제품등록</h1>
-    <form method="post" action="/echopickup/admin/register">
+    <form method="post" action="/echopickup/admin/product_register">
       <div class="form-box">
         <div class="form-container">
           <table class="form-table">
@@ -30,20 +30,20 @@
                 <label for="iprice">제품가격</label>
               </th>
               <td>
-                <input type="number" name="iprice" id="iprice">
+                <input type="number" name="iprice" id="iprice" min="0">원
               </td>
             </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </form>
-    <div class="btns-box">
-      <div class="form-btns">
-        <button type="submit" class="btn-primary">작성</button>
-<!--        <a th:href="@{/echopickup/admin/product}"><button type="button" class="btn-secondary">목록</button></a>-->
+      <div class="btns-box">
+        <div class="form-btns">
+          <button type="submit" class="btn-primary">작성</button>
+          <a href="/echopickup/admin/product"><button type="button" class="btn-secondary">목록</button></a>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>
 </body>

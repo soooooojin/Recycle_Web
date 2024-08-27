@@ -2,10 +2,14 @@ package com.appliances.recyle.service;
 
 import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.dto.ItemDTO;
+import com.appliances.recyle.dto.PageRequestDTO;
+import com.appliances.recyle.dto.PageResponseDTO;
 import com.appliances.recyle.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemServicelmpl implements ItemService{
 
-    private ItemRepository itemRepository;
-
+    private final ItemRepository itemRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<ItemDTO> getAllItems() {
@@ -58,9 +62,27 @@ public class ItemServicelmpl implements ItemService{
     @Override
     public Long insert(ItemDTO itemDTO) {
         Item item = dtoToEntity(itemDTO);
-
         Long ino = itemRepository.save(item).getIno();
         return ino;
+    }
+
+    @Override
+    public PageResponseDTO<ItemDTO> productList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("ino");
+
+        Page<Item> result = itemRepository.findAll(pageable);
+
+        List<ItemDTO> itemList = result.getContent().stream()
+                .map(product -> modelMapper.map(product,ItemDTO.class))
+                .collect(Collectors.toList());
+
+        PageResponseDTO pageResponseDTO = PageResponseDTO.<ItemDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .itemList(itemList)
+                .total((int) result.getTotalElements())
+                .build();
+
+        return pageResponseDTO;
     }
 
     @Override
