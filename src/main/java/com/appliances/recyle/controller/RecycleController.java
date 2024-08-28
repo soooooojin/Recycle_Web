@@ -20,10 +20,10 @@ public class RecycleController {
 
     }
 
-    @GetMapping("/notice")
-    public void notice() {
-
-    }
+//    @GetMapping("/notice")
+//    public void notice() {
+//
+//    }
 
 //    @GetMapping("/notice")
 //    public ModelAndView showNotices() {
