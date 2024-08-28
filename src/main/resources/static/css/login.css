@@ -131,3 +131,95 @@
 .google-login:hover {
     background-color: #f1f1f1;
 }
+
+
+/*회원가입 css*/
+
+
+/* 전체 폼 스타일 */
+.registration-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* 폼 그룹 스타일 */
+.registration-form .form-group {
+    margin-bottom: 15px;
+}
+
+/* 레이블 스타일 */
+.registration-form .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 인풋 필드 스타일 */
+.registration-form .form-group input[type="email"],
+.registration-form .form-group input[type="password"],
+.registration-form .form-group input[type="text"],
+.registration-form .form-group input[type="number"] {
+    width: calc(100% - 10px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+/* 중복확인 버튼 스타일 */
+.registration-form .form-group button[type="button"] {
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.registration-form .form-group button[type="button"]:hover {
+    background-color: #2980b9;
+}
+
+/* 제출 버튼 스타일 */
+.registration-form .submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.registration-form .submit-button:hover {
+    background-color: #007bff;
+}
+
+/* 로그인 링크 스타일 */
+.registration-form .login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.registration-form .login-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.registration-form .login-link a:hover {
+    text-decoration: underline;
+}

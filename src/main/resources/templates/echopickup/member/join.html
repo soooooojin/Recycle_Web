@@ -5,41 +5,53 @@
       layout:decorate="~{layout/base.html}">
 <head>
     <title>회원가입 페이지</title>
+    <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
 <body>
 <div layout:fragment="content">
     <div class="signup-card">
-        <h2>회원가입</h2>
 
-        <form action="/echopickup/member/join" method="post">
+        <form id="registrationForm" class="registration-form" action="/echopickup/member/join" method="post">
+            <h2>회원가입</h2>
+
             <div class="form-group">
-                <label for="memberName">사용자 이름</label>
-                <input type="text" id="memberName" name="memberName" required>
+                <label for="email">아이디(이메일)</label>
+                <input type="email" id="email" name="email" required>
+<!--                <button type="button">중복확인</button>-->
             </div>
             <div class="form-group">
-                <label for="memberId">아이디</label>
-                <input type="text" id="memberId" name="memberId" required>
+                <label for="pw">비밀번호</label>
+                <input type="password" id="pw" name="pw" required>
             </div>
             <div class="form-group">
-                <label for="memberPw">비밀번호</label>
-                <input type="password" id="memberPw" name="memberPw" required>
+                <label for="confirm-pw">비밀번호 확인</label>
+                <input type="password" id="confirm-pw" name="confirm-pw" required>
+                <span id="password-error" style="color: red; display: none;">비밀번호가 일치하지 않습니다.</span>
             </div>
             <div class="form-group">
-                <label for="confirm-memberPw">비밀번호 확인</label>
-                <input type="password" id="confirm-memberPw" name="confirm-password" required>
+                <label for="mname">사용자 이름</label>
+                <input type="text" id="mname" name="mname" required>
             </div>
             <div class="form-group">
-                <label for="memberEmail">이메일</label>
-                <input type="email" id="memberEmail" name="memberEmail" required>
+                <label for="address">주소</label>
+                <input type="text" id="address" name="address" required>
             </div>
             <div class="form-group">
-                <label for="memberPhone">휴대폰</label>
-                <input type="number" id="memberPhone" name="memberPhone" required>
+                <label for="phone">휴대폰 번호</label>
+                <input type="text" id="phone" name="phone" required>
             </div>
-            <button type="submit">회원가입</button>
+            <button type="submit" class="submit-button">회원가입</button>
             <p class="login-link">이미 계정이 있으신가요? <a th:href="@{/echopickup/member/login}">로그인</a></p>
         </form>
     </div>
+
+    <!-- JavaScript 파일 링크 -->
+    <script th:src="@{/js/join.js}"></script>
 </div>
+
+<!-- JavaScript 파일 링크 -->
+<!--<script th:src="@{/js/join.js}"></script>-->
+<!--<script src="js/join.js"></script>-->
+
 </body>
 </html>
