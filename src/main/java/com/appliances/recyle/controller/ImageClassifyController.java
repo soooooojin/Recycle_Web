@@ -22,7 +22,9 @@ import java.io.IOException;
 public class ImageClassifyController {
 
     @PostMapping("/classify")
+
     public ResponseEntity<String> classifyImage(@RequestParam("image") MultipartFile image, Model model) {
+
         if (image.isEmpty()) {
             return ResponseEntity.badRequest().body("No file was submitted.");
         }
