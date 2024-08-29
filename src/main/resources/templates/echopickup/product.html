@@ -3,30 +3,169 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="www.thymeleaf.org"
       layout:decorate="~{layout/base.html}">
->
-
 <head>
     <meta charset="UTF-8">
-    <title>동록페이지</title>
+    <title>등록 페이지</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link th:href="@{/css/product.css}" rel="stylesheet">
 </head>
 <body>
-    <div layout:fragment="content">
-    <main>
-    <h3>수거품목 선택</h3>
-<!--            한 개의 파일 가능-->
-<!--        <div class="file-upload preview-image">-->
-<!--            <input type="text" class="upload-name" value="파일 선택" disabled="disabled">-->
-<!--            <input type="file" id="input-file" class="upload-hidden">-->
-<!--        </div>-->
-<!--            여러 개의 파일 가능하지만 파일의 이름 확인 불가-->
-<!--        <form name="이 폼의 이름" action="이 데이터들을 받을 파일" method="post" enctype="multipart/form-data">-->
-<!--            <input type='file' name='' multiple/>-->
-<!--        </form>-->
+        <div layout:fragment="content">
+            <main>
+                <h3>수거품목 선택</h3>
+
+                <form id="uploadForm">
+                    <div id="fileInputContainer">
+                        <input type="file" name="image" id="imageInput">
+                    </div>
+                    <button type="button" id="uploadButton">이미지 업로드</button>
+                </form>
+
+                <!-- 팝업창 -->
+                <div class="popup-background" id="popupBackground">
+                    <div class="popup-content">
+                        <button class="popup-close" id="popupClose">&times;</button>
+                        <h3>분류 결과</h3>
+                        <p id="popupMessage">이미지 분류 중...</p>
+                        <div id="popupActions">
+                            <button id="confirmYes" style="display: none;">확인</button>
+                            <button id="confirmNo" style="display: none;">아니오</button>
+                        </div>
+                        <div class="selection-buttons" id="selectionButtons">
+                            <!-- 선택 버튼들이 여기 추가됩니다 -->
+                        </div>
+                    </div>
+                </div>
+
+                <h3>선택된 분류:</h3>
+                <ul id="classifiedItems">
+                    <!-- 분류된 항목들이 여기 추가됩니다 -->
+                </ul>
+
+                <script>
+                    $(document).ready(function() {
+                        const popupBackground = $('#popupBackground');
+                        const popupMessage = $('#popupMessage');
+                        const popupActions = $('#popupActions');
+                        const confirmYes = $('#confirmYes');
+                        const confirmNo = $('#confirmNo');
+                        const selectionButtons = $('#selectionButtons');
+                        const fileInputContainer = $('#fileInputContainer');
+                        const classifiedItems = $('#classifiedItems');
+
+                        // 파일 추가 버튼 클릭 시 새로운 파일 input 요소를 추가
+                        $('#addButton').click(function() {
+                            const newFileInput = $('<input type="file" name="image">');
+                            fileInputContainer.append(newFileInput);
+                        });
+
+                        // 업로드 버튼 클릭 시
+                        $('#uploadButton').click(function() {
+                            const formData = new FormData($('#uploadForm')[0]);
+
+                            // 팝업 열기
+                            popupBackground.show();
+                            popupMessage.text("이미지 분류 중...");
+
+                            // 서버에 파일 업로드 및 이미지 분류 요청
+                            $.ajax({
+                                url: '/classify',
+                                type: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(response) {
+                                    // 분류 결과를 팝업창에 표시
+                                    popupMessage.text(`분류 결과: ${response}`);
+                                    confirmYes.show();
+                                    confirmNo.show();
+                                },
+                                error: function() {
+                                    popupMessage.text('이미지 분류 중 오류가 발생했습니다.');
+                                }
+                            });
+                        });
+
+                        // 확인 버튼 클릭 시 (분류 결과를 페이지에 추가)
+                        confirmYes.click(function() {
+                            const result = popupMessage.text().replace("분류 결과: ", "");
+                            classifiedItems.append(`<li>${result}</li>`);
+                            resetPopup();
+                            clearFileInputs();
+                        });
+
+                        // 아니오 버튼 클릭 시 (수동 선택 버튼 표시)
+                        confirmNo.click(function() {
+                            confirmYes.hide();
+                            confirmNo.hide();
+                            selectionButtons.show();
+                            selectionButtons.empty();
+
+                            const categories = ["가정용냉장고", "업소용냉장고", "통돌이세탁기", "드럼세탁기", "벽걸이에어컨",
+                                "스탠드에어컨", "TV", "전자레인지", "CPU", "그래픽카드", "메인보드", "파워", "램"];
+
+                            categories.forEach(function(category) {
+                                const button = $(`<button>${category}</button>`);
+                                button.click(function() {
+                                    classifiedItems.append(`<li>${category}</li>`);
+                                    resetPopup();
+                                    clearFileInputs();
+                                });
+                                selectionButtons.append(button);
+                            });
+                        });
+
+
+                        // 팝업 닫기 버튼 클릭 시
+                        $('#popupClose').click(function() {
+                            resetPopup();
+                        });
+
+                        // 페이지에 항목 추가하고 쿠키에 저장하는 함수
+                        function addItemToPage(itemName) {
+                            $.getJSON('/api/getItem', { name: itemName }, function(item) {
+                                if (item && item.iname) {
+                                    const listItem = `<li>제품명: ${item.iname}, 가격: ${item.iprice}, 수량: 1</li>`;
+                                    $('#classifiedItems').append(listItem);
+                                    saveToCookie(item.iname, item.iprice, 1);
+                                } else {
+                                    alert('DB에서 해당 항목을 찾을 수 없습니다.');
+                                }
+                            }).fail(function(jqXHR, textStatus, errorThrown) {
+                                console.error("Error fetching data: ", textStatus, errorThrown);
+                                alert('데이터를 불러오지 못했습니다.');
+                            });
+                        }
+
+                        // 쿠키에 데이터 저장하는 함수
+                        function saveToCookie(name, price, quantity) {
+                            const item = { iname: name, iprice: price, quantity: quantity };
+                            document.cookie = `item_${name}=${JSON.stringify(item)};path=/`;
+                        }
 
 
 
-    </main>
-    <script layout:fragment="javascript" th:inline="javascript"></script>
+                        // 팝업 초기화 함수
+                        function resetPopup() {
+                            popupBackground.hide();
+                            confirmYes.hide();
+                            confirmNo.hide();
+                            selectionButtons.hide();
+                            popupMessage.text('');
+                        }
+
+                        // 파일 input 초기화 함수
+
+                        function clearFileInputs() {
+                            fileInputContainer.html('<input type="file" name="image" id="imageInput">');
+                        }
+                    });
+                </script>
+
+
+            </main>
+<!--            <script layout:fragment="javascript" th:inline="javascript"></script>-->
+<!--            </div>-->
     </div>
 </body>
 </html>
