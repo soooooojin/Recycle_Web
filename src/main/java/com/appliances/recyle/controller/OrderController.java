@@ -7,17 +7,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 @Log4j2
 @Controller
-@RequestMapping("/echopickup")
+@RequestMapping("/echopickup/product")
 @RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/product")
-    public void product() {
+    @GetMapping
+    public String productGet() {
+        return "/echopickup/product/product";
+    }
+
+    @GetMapping("/order")
+    public void orderGet() {
+
+    }
+
+    @GetMapping("/pay")
+    public void payGet() {
 
     }
 

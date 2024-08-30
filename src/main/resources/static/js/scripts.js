@@ -139,15 +139,25 @@ $(document).ready(function() {
         });
 
         // 다음 페이지로 이동
-        window.location.href = `/nextPage?${queryParams}`;
+        window.location.href = `/echopickup/product/order`;
     });
 
     // 쿠키에 데이터 저장하는 함수
-    function saveToCookie(name, price, quantity) {
-        const item = { iname: name, iprice: price, quantity: quantity };
-        const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
-        document.cookie = `item_${name}_${cookieIndex}=${JSON.stringify(item)};path=/`;
+    // function saveToCookie(name, price) {
+    //     const item = { iname: name, iprice: price };
+    //     const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
+    //     document.cookie = `item_${name}_${cookieIndex}=${JSON.stringify(item)};path=/`;
+    // }
+
+    function saveToCookie(name, price) {
+        const item = { iname: name, iprice: price };
+        const cookieIndex = new Date().getTime(); // 고유 인덱스 생성
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (24 * 60 * 60 * 1000)); // 1일 후 만료
+        document.cookie = `item_${name}_${cookieIndex}=${encodeURIComponent(JSON.stringify(item))};path=/;expires=${expires.toUTCString()};SameSite=Lax`;
     }
+
+
 
 
     // 쿠키 초기화 함수
