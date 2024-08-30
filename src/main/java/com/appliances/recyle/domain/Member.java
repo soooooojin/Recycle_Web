@@ -22,9 +22,9 @@ public class Member {
     private String mname;
     @Column(length = 100, nullable = false)
     private String pw;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String address;
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String phone;
 
 //    // 권한 [0: 일반사용자, 1: 공지만 쓸 수 있는 관리자, 2:전부 다 가능한 관리자]
