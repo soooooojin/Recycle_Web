@@ -1,3 +1,5 @@
+//product 스크립트입니다~!
+
 $(document).ready(function() {
 
     // 페이지 로드 시 쿠키 초기화
@@ -75,7 +77,6 @@ $(document).ready(function() {
         });
     });
 
-
     // DB에서 데이터를 가져와 화면에 표시하는 함수
     // function fetchAndDisplayItem(iname) {
     //     $.getJSON('/api/getAllItems', function(items) {
@@ -121,6 +122,24 @@ $(document).ready(function() {
             alert('데이터를 불러오지 못했습니다.');
         });
     }
+
+    // 신청하기 버튼 클릭 시 실행되는 함수
+    document.getElementById('applyButton').addEventListener('click', function() {
+        const cookies = document.cookie.split('; ');
+        let queryParams = '';
+
+        // 모든 쿠키 데이터를 URL 파라미터로 변환
+        cookies.forEach(function(cookie, index) {
+            const [name, value] = cookie.split('=');
+            queryParams += `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+            if (index < cookies.length - 1) {
+                queryParams += '&';
+            }
+        });
+
+        // 다음 페이지로 이동
+        window.location.href = `/nextPage?${queryParams}`;
+    });
 
     // 쿠키에 데이터 저장하는 함수
     function saveToCookie(name, price, quantity) {
