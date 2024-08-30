@@ -20,4 +20,7 @@ public class Item {
 
     @Column(nullable = false)
     private Long iprice; //스티커 가격
+
+    private String imageUrl;
+
 }
