@@ -99,6 +99,7 @@ $(document).ready(function() {
     //     });
     // }
 
+
     function fetchAndDisplayItem(iname) {
         $.getJSON('/api/getAllItems', function(items) {
             console.log("서버에서 받은 응답:", items);
