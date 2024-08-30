@@ -77,6 +77,27 @@ $(document).ready(function() {
 
 
     // DB에서 데이터를 가져와 화면에 표시하는 함수
+    // function fetchAndDisplayItem(iname) {
+    //     $.getJSON('/api/getAllItems', function(items) {
+    //         console.log("서버에서 받은 응답:", items);
+    //
+    //         // 서버에서 받은 데이터 중에서 iname이 일치하는 항목 찾기
+    //         const matchedItem = items.find(item => item.iname === iname);
+    //
+    //         if (matchedItem) {
+    //             // 일치하는 항목이 있을 경우 화면에 표시
+    //             const listItem = `<li>제품명: ${matchedItem.iname}, 가격: ${matchedItem.iprice}, 수량: 1</li>`;
+    //             $('#classifiedItems').append(listItem);
+    //             saveToCookie(matchedItem.iname, matchedItem.iprice, 1);
+    //         } else {
+    //             alert('DB에서 해당 항목을 찾을 수 없습니다.');
+    //         }
+    //     }).fail(function (jqXHR, textStatus, errorThrown) {
+    //         console.error("데이터 가져오기 실패:", textStatus, errorThrown);
+    //         alert('데이터를 불러오지 못했습니다.');
+    //     });
+    // }
+
     function fetchAndDisplayItem(iname) {
         $.getJSON('/api/getAllItems', function(items) {
             console.log("서버에서 받은 응답:", items);
@@ -85,10 +106,13 @@ $(document).ready(function() {
             const matchedItem = items.find(item => item.iname === iname);
 
             if (matchedItem) {
-                // 일치하는 항목이 있을 경우 화면에 표시
-                const listItem = `<li>제품명: ${matchedItem.iname}, 가격: ${matchedItem.iprice}, 수량: 1</li>`;
-                $('#classifiedItems').append(listItem);
-                saveToCookie(matchedItem.iname, matchedItem.iprice, 1);
+                // 일치하는 항목이 있을 경우 화면에 테이블 행으로 추가
+                const row = `<tr>
+                            <td>${matchedItem.iname}</td>
+                            <td>${matchedItem.iprice}</td>                        
+                        </tr>`;
+                $('#classifiedItems').append(row);
+                saveToCookie(matchedItem.iname, matchedItem.iprice);
             } else {
                 alert('DB에서 해당 항목을 찾을 수 없습니다.');
             }
@@ -101,8 +125,10 @@ $(document).ready(function() {
     // 쿠키에 데이터 저장하는 함수
     function saveToCookie(name, price, quantity) {
         const item = { iname: name, iprice: price, quantity: quantity };
-        document.cookie = `item_${name}=${JSON.stringify(item)};path=/`;
+        const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
+        document.cookie = `item_${name}_${cookieIndex}=${JSON.stringify(item)};path=/`;
     }
+
 
     // 쿠키 초기화 함수
     function clearAllCookies() {
