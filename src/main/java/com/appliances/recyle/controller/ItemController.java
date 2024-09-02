@@ -28,7 +28,7 @@ public class ItemController {
     public ResponseEntity<List<ItemDTO>> getAllItems() {
         List<Item> items = itemService2.getAllItems();
         List<ItemDTO> itemDTOs = items.stream()
-                .map(item -> new ItemDTO(item.getIno(), item.getIname(), item.getIprice(), item.getImageUrl()))
+                .map(item -> new ItemDTO(item.getIno(), item.getIname(), item.getIprice()))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(itemDTOs, HttpStatus.OK);
     }
