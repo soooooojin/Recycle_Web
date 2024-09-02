@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
+
+<head>
+    <title>문의 수정</title>
+    <link rel="stylesheet" th:href="@{/css/question-update.css}">
+</head>
+
+<body>
+<div layout:fragment="content">
+    <main>
+        <div class="question-content">
+            <h1>문의 수정</h1>
+            <form th:action="@{'/echopickup/question-update/' + ${question.qno}}" method="post">
+                <div class="form-group">
+                    <label for="qtitle">제목</label>
+                    <input type="text" id="qtitle" name="qtitle" th:value="${question.qtitle}" required>
+                </div>
+                <div class="form-group">
+                    <label for="qcomment">내용</label>
+                    <textarea id="qcomment" name="qcomment" required th:text="${question.qcomment}"></textarea>
+                </div>
+                <div class="form-group button-group">
+                    <button class="btn-submit" type="submit">수정하기</button>
+                    <button class="btn-list" type="button" onclick="location.href='/echopickup/question-list'">목록</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Table(name = "orders")
 @Builder
 @Data
 @AllArgsConstructor
@@ -35,3 +36,4 @@ public class Order {
     @Column(length = 100, nullable = false)
     private String oaddress; //주소
 }
+

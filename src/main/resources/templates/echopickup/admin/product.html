@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org"
+      layout:decorate="~{layout/sidebar.html}"
+>
+<head>
+    <title>제품목록</title>
+    <link th:href="@{/css/product.css}" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="admin_content">
+    <div class="container">
+        <h1>제품목록</h1>
+        <form action="/echopickup/admin/product" method="get">
+            <div class="sub-box">
+                <div class="sub-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">번호</th>
+                                <th scope="col">분류</th>
+                                <th scope="col">가격</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item:${responseDTO.itemList}">
+                                <td>[[${item.ino}]]</td>
+                                <td>[[${item.iname}]]</td>
+                                <td>[[${item.iprice}]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="paging-container">
+                <ul class="pagination paging-content">
+                    <li class="page-item" th:if="${responseDTO.prev}">
+                        <a class="page-link" th:data-num="${responseDTO.start-1}">이전</a>
+                    </li>
+                    <th:block th:each="i:${#numbers.sequence(responseDTO.start,responseDTO.end)}">
+                        <li th:class="${responseDTO.page == i}?'page-item active':'page-item'">
+                            <a class="page-link"
+                               th:data-num="${i}">[[${i}]]</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:if="${responseDTO.next}">
+                        <a class="page-link" th:data-num="${responseDTO.end +1}">다음</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="btns-box">
+                <div class="form-btns">
+                    <a href="/echopickup/admin/product_register"><button type="button" class="btn-primary">글작성</button></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.querySelector(".pagination").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const target = e.target
+        // a 태그 가 아니면 해당 클릭 이벤트 함수를 나간다.
+        if (target.tagName !== 'A') {
+            return
+        }
+        // tagName 전부 a 태그만 살아 남음.
+        const num = target.getAttribute("data-num")
+        // const link = [[${pageRequestDTO.getLink()}]]
+
+        // 추가, 검색 및 필터 관련 정보를 추가해서, 페이징 이동하기.
+        const formObj = document.querySelector("form")
+        formObj.innerHTML += `<input type="hidden" name="page" value="${num}">`
+        formObj.submit()
+        // self.location = `/echopickup/admin/product?page=${num}?${link}`
+
+    }, false)
+</script>
+</body>
+</html>

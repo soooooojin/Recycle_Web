@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Echo Pickup</title>
+        <link th:href="@{/css/styles.css}" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <img th:src="@{/images/echologo.png}" alt="Logo">
+            </div>
+            <nav>
+                <span><a th:href="@{/}">이용안내</a></span>
+                <span><a th:href="@{/echopickup/product}">수거신청</a></span>
+                <span><a th:href="@{/echopickup/question}">고객문의</a></span>
+                <span><a th:href="@{/echopickup/notice}">공지사항</a></span>
+            </nav>
+            <div class="auth">
+                <a th:href="@{/echopickup/member/login}">로그인</a>
+                <a th:href="@{/echopickup/member/join}">회원가입</a>
+            </div>
+        </header>
+
+        <div layout:fragment="content">
+
+        </div>
+
+        <script th:src="@{/js/scripts.js}"></script>
+        <th:block layout:fragment="javascript">
+
+        </th:block>
+
+        <footer>
+            <p>&copy; 2024 Your Company 에코픽업에코픽업. All rights reserved.</p>
+        </footer>
+    </body>
+</html>
