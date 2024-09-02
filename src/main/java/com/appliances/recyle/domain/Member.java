@@ -41,6 +41,10 @@ public class Member {
     @Builder.Default
     private Set<MemberRole> roleSet = new HashSet<>();
 
+    // 세터 대신에, 임의의 멤버의 필드를 교체하는 메서드 만들기 => set 랑 비슷함.
+    public void changePassword(String pw) {
+        this.pw = pw;
+    }
     public void addRole(MemberRole memberRole) {
         this.roleSet.add(memberRole);
     }
