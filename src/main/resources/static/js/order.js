@@ -19,7 +19,7 @@ $(document).ready(function() {
         const row = `<tr>
                       <td>
                         <div class="product-info">
-                          <img src="https://via.placeholder.com/50" alt="제품 이미지" class="product-image">
+                          <img src="${purl}" alt="제품 이미지" class="product-image">
                           <div class="product-details">
                             <strong>${item.iname}</strong>
                           </div>

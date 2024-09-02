@@ -149,13 +149,15 @@ $(document).ready(function() {
         });
 
         // 다음 페이지로 이동
-        window.location.href = `/echopickup/product/order?${queryParams}`;
+        window.location.href = `/echopickup/product/order`;
     });
 
     // 쿠키에 데이터 저장하는 함수
-    function saveToCookie(purl ,name, price) {
-        const item = {purl ,iname: name, iprice: price };
+    function saveToCookie(purl, name, price) {
+        const item = {purl, iname: name, iprice: price };
         const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
+        const jsonString = JSON.stringify(item);
+        const encodedString = encodeURIComponent(jsonString);
         document.cookie = `item_${name}_${cookieIndex}=${JSON.stringify(item)};path=/`;
     }
 
@@ -189,4 +191,17 @@ $(document).ready(function() {
         selectionButtons.hide();
         popupMessage.text('');
     }
+
+    // 팝업 닫기 함수
+    function closePopup() {
+        popupBackground.hide();
+        popupContent.hide();
+        resetPopup();
+    }
+
+    // X 버튼 클릭 시 팝업 닫기
+    $('#popupClose').on('click', function() {
+        closePopup();
+    });
+
 });
