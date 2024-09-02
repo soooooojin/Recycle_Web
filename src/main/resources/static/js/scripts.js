@@ -4,6 +4,8 @@ $(document).ready(function() {
 
     // 페이지 로드 시 쿠키 초기화
     clearAllCookies();
+    // 테이블에서 행 삭제
+    $(row).closest('tr').remove();
 
     const popupBackground = $('#popupBackground');
     const popupMessage = $('#popupMessage');
@@ -13,6 +15,21 @@ $(document).ready(function() {
     const selectionButtons = $('#selectionButtons');
     const fileInputContainer = $('#fileInputContainer');
     const classifiedItems = $('#classifiedItems');
+
+    let selectedImageUrl = null; // 선택된 이미지 URL을 저장할 변수
+
+    // 이미지 파일 선택 시 파일을 미리 읽어와 미리보기 URL 생성
+    $('#imageInput').change(function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedImageUrl = e.target.result; // 이미지 URL 저장
+                console.log("Selected image URL: ", selectedImageUrl); // 이미지 URL 콘솔에 출력
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
     // 업로드 버튼 클릭 시
     $('#uploadButton').off('click').on('click', function() {  // off()로 기존 핸들러 제거 후 on()으로 바인딩
@@ -42,26 +59,26 @@ $(document).ready(function() {
                 confirmYes.show();
                 confirmNo.show();
 
-                // 자동으로 결과를 확인
-                // 확인 버튼 클릭 시 중복 방지
+                // 예 버튼 클릭 시
                 confirmYes.off('click').on('click', function () {
-                    fetchAndDisplayItem(resultLabel);
+                    fetchAndDisplayItem(resultLabel, selectedImageUrl);
                     resetPopup();
                 });
 
-                // 수동으로 다른 항목 선택
+                // 아니요 버튼 클릭 시
                 confirmNo.off('click').on('click', function () {
-                    confirmYes.hide();
-                    confirmNo.hide();
-                    selectionButtons.show();
-                    selectionButtons.empty();
+                        confirmYes.hide();
+                        confirmNo.hide();
+                        selectionButtons.show();
+                        selectionButtons.empty();
+
 
                     // DB에서 제품명 목록을 가져와 버튼 생성
                     $.getJSON('/api/getAllItems', function (items) {
                         items.forEach(function (item) {
                             const button = $(`<button>${item.iname}</button>`);
                             button.click(function () {
-                                fetchAndDisplayItem(item.iname);
+                                fetchAndDisplayItem(item.iname, selectedImageUrl);
                                 resetPopup();
                             });
                             selectionButtons.append(button);
@@ -100,7 +117,8 @@ $(document).ready(function() {
     // }
 
 
-    function fetchAndDisplayItem(iname) {
+
+    function fetchAndDisplayItem(iname, imageUrl) {
         $.getJSON('/api/getAllItems', function(items) {
             console.log("서버에서 받은 응답:", items);
 
@@ -109,12 +127,19 @@ $(document).ready(function() {
 
             if (matchedItem) {
                 // 일치하는 항목이 있을 경우 화면에 테이블 행으로 추가
-                const row = `<tr>
-                            <td>${matchedItem.iname}</td>
-                            <td>${matchedItem.iprice}</td>                        
-                        </tr>`;
+                const row =
+                        `<tr>
+                            <td class="product-image-container">
+                                <img src="${imageUrl}" alt="제품 이미지" class="product-image">
+                            </td>
+                            <td class="product-info">${matchedItem.iname}</td>
+                            <td class="product-info">${matchedItem.iprice}</td>                        
+                         </tr>`;
                 $('#classifiedItems').append(row);
+
                 saveToCookie(matchedItem.iname, matchedItem.iprice);
+
+
             } else {
                 alert('DB에서 해당 항목을 찾을 수 없습니다.');
             }
@@ -139,12 +164,12 @@ $(document).ready(function() {
         });
 
         // 다음 페이지로 이동
-        window.location.href = `/nextPage?${queryParams}`;
+        window.location.href = `/echopickup/product/order?${queryParams}`;
     });
 
     // 쿠키에 데이터 저장하는 함수
-    function saveToCookie(name, price, quantity) {
-        const item = { iname: name, iprice: price, quantity: quantity };
+    function saveToCookie(imageUrl ,name, price) {
+        const item = {imageUrl ,iname: name, iprice: price };
         const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
         document.cookie = `item_${name}_${cookieIndex}=${JSON.stringify(item)};path=/`;
     }

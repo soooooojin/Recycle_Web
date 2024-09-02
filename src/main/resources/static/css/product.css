@@ -1,9 +1,16 @@
-
 /* 파일 선택과 업로드 버튼을 가로로 배치 */
 #fileInputContainer {
     display: inline-block;
+    vertical-align: middle;
     margin-right: 10px;
     position: relative;
+}
+
+/* 테이블을 바로 아래로 이동 */
+#classifiedItemsTable {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 
@@ -37,10 +44,23 @@
 
 #classifiedItemsTable th {
     background-color: #f8f8f8;
+    text-align: center;
 }
 
 #classifiedItemsTable tbody tr:hover {
     background-color: #f1f1f1;
+}
+
+.product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.product-info {
+    text-align: left;
 }
 
 /* 신청하기 버튼 스타일 */
@@ -52,6 +72,13 @@
     display: flex;
     justify-content: center;
     padding: 10px 0;
+    text-align: center;
+    margin-top: 20px; /* 테이블과 버튼 사이에 간격을 줍니다. */
+}
+
+/* 테이블 아래 간격 확보 */
+#classifiedItemsTable + #applyButtonContainer {
+    margin-top: 20px;
 }
 
 #applyButton {

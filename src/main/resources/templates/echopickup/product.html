@@ -8,17 +8,6 @@
     <title>등록 페이지</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link th:href="@{/css/product.css}" rel="stylesheet">
-    <style>
-        /* 파일 선택과 업로드 버튼을 가로로 배치 */
-        #fileInputContainer, #uploadButton {
-            display: inline-block;
-            vertical-align: middle;
-        }
-        /* 테이블을 바로 아래로 이동 */
-        #classifiedItemsTable {
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -29,7 +18,7 @@
         <div style="display: flex; justify-content: center; align-items: flex-start; padding-top: 20px;">
             <form id="uploadForm" style="text-align: center;">
                 <div id="fileInputContainer" style="margin-right: 10px;">
-                    <input type="file" name="image" id="imageInput">
+                    <input type="file" name="image" id="imageInput" accept="image/*">
                 </div>
                 <button type="button" id="uploadButton">이미지 업로드</button>
             </form>
@@ -38,12 +27,14 @@
 
 
         <!-- 분류된 항목 표시 -->
-        <h3>선택된 분류:</h3>
+        <h3>선택된 분류</h3>
         <table id="classifiedItemsTable" border="1" style="width: 100%; border-collapse: collapse;">
             <thead>
             <tr>
-                <th style="width: 50%;">제품명</th>
-                <th style="width: 50%;">가격</th>
+                <th style="width: 20%;">제품</th>
+                <th style="width: 40%;">제품명</th>
+                <th style="width: 40%;">가격</th>
+                <th style="width: 10%;">삭제</th>
             </tr>
             </thead>
             <tbody id="classifiedItems">
