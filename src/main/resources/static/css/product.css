@@ -1,79 +1,153 @@
-h1 {
-    padding-bottom: 20px;
-    font-size: 28px;
-    border-bottom: 2px solid #0A1931;
+
+/* 파일 선택과 업로드 버튼을 가로로 배치 */
+#fileInputContainer {
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
 }
 
-.sub-box {
-    margin-top: 50px;
+
+#fileSelectButton,#uploadButton {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
 }
 
-.sub-container {
-    height: 600px;
+#fileSelectButton:hover, #uploadButton:hover {
+    background-color: #0056b3;
 }
 
-.paging-container {
-    display: flex;
-    justify-content: center; /* 가운데 정렬 */
+/* 테이블 스타일 */
+#classifiedItemsTable {
     margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
 }
 
-.pagination {
+#classifiedItemsTable th, #classifiedItemsTable td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+#classifiedItemsTable th {
+    background-color: #f8f8f8;
+}
+
+#classifiedItemsTable tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* 신청하기 버튼 스타일 */
+#applyButtonContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
-    list-style: none;
-    padding-left: 0;
-    border-radius: 0.25rem;
+    justify-content: center;
+    padding: 10px 0;
 }
 
-.pagination .page-item {
-    margin: 0 3px;
+#applyButton {
+    padding: 10px 20px;
+    background-color: skyblue;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
 }
 
-.pagination .page-item .page-link {
+#applyButton:hover {
+    background-color: skyblue;
+}
+
+/* 팝업창 스타일 */
+.popup-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.popup-close:hover {
     color: #007bff;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    padding: 8px 12px;
-    border-radius: 0.25rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.pagination .page-item .page-link:hover {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.pagination .page-item.active .page-link {
-    z-index: 1;
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-    cursor: default;
-}
-
-.pagination .page-item.disabled .page-link {
-    color: #6c757d;
-    pointer-events: none;
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
-}
-
-.btns-box {
-    margin-top: 50px;
-}
-
-.form-btns {
-    display: flex;
-    justify-content: end;
-    gap: 10px;
-}
-
-button {
+#confirmYes, #confirmNo {
+    margin: 10px 5px;
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#confirmYes {
+    background-color: skyblue;
+    color: #fff;
+}
+
+#confirmYes:hover {
+    background-color: skyblue;
+}
+
+#confirmNo {
+    background-color: skyblue;
+    color: #fff;
+}
+
+#confirmNo:hover {
+    background-color: skyblue;
+}
+
+/* 선택 버튼 스타일 */
+.selection-buttons button {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 5px;
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.selection-buttons button:hover {
+    background-color: #5a6268;
 }

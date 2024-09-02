@@ -9,6 +9,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,9 @@ import java.io.IOException;
 public class ImageClassifyController {
 
     @PostMapping("/classify")
-    public ResponseEntity<String> classifyImage(@RequestParam("image") MultipartFile image) {
+
+    public ResponseEntity<String> classifyImage(@RequestParam("image") MultipartFile image, Model model) {
+
         if (image.isEmpty()) {
             return ResponseEntity.badRequest().body("No file was submitted.");
         }

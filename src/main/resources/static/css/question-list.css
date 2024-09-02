@@ -1,0 +1,107 @@
+/* 기본 레이아웃 */
+.question-content {
+    max-width: 1200px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 40px 60px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.question-content h1 {
+    text-align: left; /* 중앙 정렬에서 좌측 정렬로 변경 */
+    color: #007acc;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.question-list .question-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.question-list th, .question-list td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.question-list th {
+    background-color: #4fbbe8;
+    color: white;
+}
+
+.question-list tr:hover {
+    background-color: #f5f5f5;
+}
+
+.question-list td {
+    font-size: 16px;
+}
+
+/* 번호 칸의 너비를 조정 */
+.question-list td:nth-child(1), .question-list th:nth-child(1) {
+    width: 5%; /* 번호 칸의 너비를 5%로 조정 */
+    text-align: center; /* 번호를 가운데 정렬 */
+}
+
+/* 제목 칸의 너비 조정 */
+.question-list td:nth-child(2), .question-list th:nth-child(2) {
+    width: 25%; /* 제목 칸의 너비를 25%로 조정 */
+}
+
+/* 내용 칸의 너비 조정 */
+.question-list td:nth-child(3), .question-list th:nth-child(3) {
+    width: 45%; /* 내용 칸의 너비를 45%로 조정 */
+    padding-left: 10px; /* 제목과 내용을 더 가깝게 배치하기 위해 패딩 조정 */
+}
+
+/* 작성자 칸의 너비 조정 */
+.question-list td:nth-child(4), .question-list th:nth-child(4) {
+    width: 25%; /* 작성자 칸의 너비를 25%로 조정 */
+    text-align: center; /* 작성자를 가운데 정렬 */
+}
+
+/* 페이징 스타일 */
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination ul li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination ul li a {
+    color: #007acc;
+    padding: 10px 15px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.pagination ul li a:hover {
+    background-color: #007acc;
+    color: white;
+}
+
+.pagination ul li.active a {
+    background-color: #007acc;
+    color: white;
+    border-color: #007acc;
+}
+
+.pagination ul li.disabled a {
+    color: #ccc;
+    pointer-events: none;
+}
+
+/* 질문 제목 앞에 답글 아이콘을 스타일링 */
+.reply-icon {
+    color: #007acc; /* 답글 아이콘의 색상 */
+    margin-right: 5px; /* 아이콘과 텍스트 간격 */
+}

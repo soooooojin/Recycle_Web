@@ -129,6 +129,11 @@ public class OrderServicelmpl implements OrderService{
     }
 
     @Override
+    public void saveAll(List<Item> items) {
+
+    }
+
+    @Override
     public void update(OrderDTO orderDTO) {
         // DTO를 Entity로 변환
         Order order = dtoTOEntity(orderDTO);
@@ -141,8 +146,5 @@ public class OrderServicelmpl implements OrderService{
         orderRepository.deleteById(orderDTO.getOno());
 
     }
-
-
-
 
 }

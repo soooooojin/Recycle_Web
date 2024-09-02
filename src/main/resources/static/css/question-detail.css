@@ -1,0 +1,123 @@
+.question-detail-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.question-detail-wrapper {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.question-detail-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+.question-detail-table th,
+.question-detail-table td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
+}
+
+.question-detail-table th {
+    background-color: #ffffff;
+    color: #333;
+    width: 20%;
+}
+
+.question-content {
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    height: 200px; /* 화면에 꽉 차도록 높이를 조정 */
+    overflow-y: auto;
+}
+
+.answer-content {
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    height: 150px; /* 화면에 꽉 차도록 높이를 조정 */
+    overflow-y: auto;
+}
+
+.answer-content h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.answer-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.answer-detail-table th,
+.answer-detail-table td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
+}
+
+.answer-detail-table th {
+    background-color: #ffffff;
+    color: #333;
+    width: 15%;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+.button-group .btn-answer,
+.button-group .btn-update,
+.button-group .btn-delete,
+.button-group .btn-list {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.button-group .btn-update {
+    background-color: #007bff;
+}
+
+.button-group .btn-delete {
+    background-color: #dc3545;
+}
+
+.button-group .btn-list {
+    background-color: #17a2b8;
+}
+
+.button-group .btn-answer {
+    background-color: #28a745;
+    margin-right: auto;
+}
+
+.button-group .btn-answer:hover,
+.button-group .btn-update:hover,
+.button-group .btn-delete:hover,
+.button-group .btn-list:hover {
+    opacity: 0.9;
+}

@@ -1,5 +1,5 @@
 /* 기본 레이아웃 */
-.question-content {
+.answer-content {
     max-width: 900px;
     margin: 50px auto;
     background-color: white;
@@ -7,8 +7,8 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.question-content h1 {
-    text-align: left; /* 중앙 정렬에서 좌측 정렬로 변경 */
+.answer-content h1 {
+    text-align: center;
     color: #007acc;
     margin-bottom: 30px;
 }
@@ -24,64 +24,58 @@
     margin-bottom: 5px;
 }
 
-.form-group input[type="text"],
 .form-group textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
-}
-
-.form-group textarea {
     height: 250px;
     resize: vertical;
 }
 
 /* 버튼 스타일 */
-.form-group.button-group {
+.button-group {
     display: flex;
-    justify-content: flex-end; /* 버튼들을 오른쪽 끝으로 정렬 */
-    gap: 10px; /* 버튼 간의 간격을 설정 */
+    justify-content: flex-end;
+    gap: 10px;
 }
 
-.form-group .btn-submit,
-.form-group .btn-list {
+.button-group .btn-submit,
+.button-group .btn-list {
     background-color: #007acc;
     color: white;
-    padding: 10px 20px; /* 패딩 조정으로 버튼 크기를 맞춤 */
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    min-width: 100px; /* 버튼 최소 너비 설정 */
+    min-width: 100px;
     text-align: center;
-    line-height: 1.5; /* 텍스트를 중앙에 위치시키기 위한 line-height 설정 */
 }
 
-.form-group .btn-submit:hover,
-.form-group .btn-list:hover {
+.button-group .btn-submit:hover,
+.button-group .btn-list:hover {
     background-color: #005f99;
 }
 
-.form-group .btn-list {
-    text-decoration: none; /* 링크의 기본 스타일 제거 */
+.button-group .btn-list {
+    text-decoration: none;
 }
 
 /* 모바일 대응 */
 @media (max-width: 768px) {
-    .question-content {
+    .answer-content {
         padding: 20px;
         max-width: 100%;
     }
 
-    .form-group input[type="text"],
     .form-group textarea {
         font-size: 14px;
     }
 
-    .form-group .btn-submit,
-    .form-group .btn-list {
+    .button-group .btn-submit,
+    .button-group .btn-list {
         font-size: 14px;
         width: auto;
     }
