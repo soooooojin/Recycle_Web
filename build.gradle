@@ -53,6 +53,14 @@ dependencies {
 
     // 모델 맵퍼 도구 설치.
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
+    // 장고 레스트 확인용
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    // Spring WebFlux 비동기 요청
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    // OkHttp dependency
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    // 결제 모듈
+//    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 
     // 서버에서 유효성 체크 도구.
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.3.0'
