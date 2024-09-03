@@ -1,64 +1,47 @@
 package com.appliances.recyle.controller;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import com.appliances.recyle.dto.PredictionResponseDTO;
+import com.appliances.recyle.service.ImageUploadService;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
 
 @RestController
+@Log4j2
 public class ImageClassifyController {
+        private final ImageUploadService imageUploadService;
+
+    @Autowired
+    public ImageClassifyController(ImageUploadService imageUploadService) {
+        this.imageUploadService = imageUploadService;
+    }
 
     @PostMapping("/classify")
-
-    public ResponseEntity<String> classifyImage(@RequestParam("image") MultipartFile image, Model model) {
-
+    public ResponseEntity<PredictionResponseDTO> classifyImage(@RequestParam("image") MultipartFile image) {
         if (image.isEmpty()) {
-            return ResponseEntity.badRequest().body("No file was submitted.");
+            return ResponseEntity.badRequest().body(null);
         }
 
-        // PyCharm에서 실행 중인 Python 서버의 URL
-        String apiUrl = "http://localhost:8000/classify/";
+        try {
+            // Django 서버로 이미지 전송 및 응답 처리
+            PredictionResponseDTO predictionResponse = imageUploadService.sendImageToDjangoServer(image.getBytes(), image.getOriginalFilename());
 
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            // MultipartFile을 임시 파일로 변환
-            File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + image.getOriginalFilename());
-            image.transferTo(convFile);
+            // 응답을 PredictionResponseDTO 객체로 반환
+            return new ResponseEntity<>(predictionResponse, HttpStatus.OK);
 
-            // POST 요청 준비
-            HttpPost uploadFile = new HttpPost(apiUrl);
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            builder.addBinaryBody("image", convFile);
-            HttpEntity multipart = builder.build();
-            uploadFile.setEntity(multipart);
+//            // 응답을 String 형식으로 변환하여 반환
+//            String apiResult = String.format("predicted_class_label: %s, Confidence: %.2f", predictionResponse.getPredictedClassLabel(), predictionResponse.getConfidence());
+//            return new ResponseEntity<>(apiResult, HttpStatus.OK);
 
-            // 요청 실행
-            HttpResponse response = httpClient.execute(uploadFile);
-            HttpEntity responseEntity = response.getEntity();
-            String apiResult = EntityUtils.toString(responseEntity, "UTF-8");
-
-            // 임시 파일 정리
-            if (!convFile.delete()) {
-                System.err.println("Failed to delete the temporary file.");
-            }
-
-            // API 응답 반환
-            return new ResponseEntity<>(apiResult, HttpStatus.OK);
         } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File processing error: " + e.getMessage());
+            log.error("File processing error: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }
