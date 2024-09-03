@@ -9,20 +9,25 @@ import okhttp3.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.IOException;
 
 @Log4j2
 @Service
 public class ImageUploadService {
 
-    private final OkHttpClient client = new OkHttpClient();
-    private final ObjectMapper objectMapper = new ObjectMapper(); // JSON 파싱을 위한 ObjectMapper
+    private final OkHttpClient client;
+    private final ObjectMapper objectMapper; // JSON 파싱을 위한 ObjectMapper
 
     private final FileImageRepository fileImageRepository;
 
-    public ImageUploadService() {
-        fileImageRepository = null;
+    // 생성자 주입을 통해 의존성 주입
+    public ImageUploadService(FileImageRepository fileImageRepository) {
+        this.client = new OkHttpClient();
+        this.objectMapper = new ObjectMapper();
+        this.fileImageRepository = fileImageRepository;
     }
+
 
     public PredictionResponseDTO sendImageToDjangoServer(byte[] imageBytes, String filename) throws IOException {
         // 이미지 파일을 MultipartBody로 구성
@@ -55,17 +60,24 @@ public class ImageUploadService {
         }
     }
 
-    //프로필 이미지 업로드, 레스트 형식
-    public void saveProfileImage(MultipartFile file) throws IOException {
-
-        FileImage fileImage = new FileImage(
-                file.getOriginalFilename(),
-                file.getContentType(),
-                file.getBytes()
-        );
-
-        fileImageRepository.save(fileImage);
+    public String saveFileImage(MultipartFile file) throws IOException {
+        FileImage fileImage = new FileImage(file.getOriginalFilename(), file.getContentType(), file.getBytes());
+        FileImage savedFileImage = fileImageRepository.save(fileImage);
+        return savedFileImage.getId();
     }
+
+    public FileImage getImage(String id) {
+        return fileImageRepository.findById(id).orElse(null);
+    }
+    public boolean deleteImage(String id) {
+        if (fileImageRepository.existsById(id)) {
+            fileImageRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 //    public FileImage getFileImage(String imageId) {
 //        return FileImageRepository.findById(imageId)

@@ -55,6 +55,7 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
     // 장고 레스트 확인용
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.mongodb:mongodb-driver-sync'
     // Spring WebFlux 비동기 요청
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     // OkHttp dependency
