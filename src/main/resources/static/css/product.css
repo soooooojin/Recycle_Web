@@ -58,6 +58,13 @@
     background-color: #f1f1f1;
 }
 
+.order-container {
+    margin: 30px 50px;
+    background-color: white;
+    padding: 40px 50px;
+    border-radius: 8px;
+}
+
 .product-image {
     width: 100px;
     height: 100px;
@@ -70,17 +77,9 @@
     text-align: left;
 }
 
-/* 신청하기 버튼 스타일 */
 #applyButtonContainer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 10px 0;
-    text-align: center;
-    margin-top: 20px; /* 테이블과 버튼 사이에 간격을 줍니다. */
+    text-align: center; /* 버튼을 중앙 정렬 */
+    margin-top: 40px; /* 버튼과 테이블 사이에 충분한 여백 추가 */
 }
 
 /* 테이블 아래 간격 확보 */
@@ -89,6 +88,9 @@
 }
 
 #applyButton {
+    justify-content: center;
+    text-align: center;
+    display: inline-block; /* 버튼을 중앙 정렬 */
     padding: 10px 20px;
     background-color: skyblue;
     color: white;
