@@ -1,6 +1,8 @@
 package com.appliances.recyle.config;
 
 
+import com.appliances.recyle.repository.MemberRepository;
+import com.appliances.recyle.security.CustomUserDetailsService;
 import com.appliances.recyle.security.handler.Custom403Handler;
 import com.appliances.recyle.security.handler.CustomSocialLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +21,20 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.sql.DataSource;
 
 
+@Log4j2
 @RequiredArgsConstructor
 @Configuration
 @EnableMethodSecurity()
 @EnableWebSecurity
-@Log4j2
 public class CustomSecurityConfig {
 
-//    private DataSource dataSource;
-//    private CustomUserDetailsService customUserDetailsService;
+    private DataSource dataSource;
+    private CustomUserDetailsService customUserDetailsService;
+    private final MemberRepository memberRepository;
+
     // ip에서 분당 요청 횟수 제한
     private final RateLimitingFilter rateLimitingFilter;
 
@@ -43,19 +48,26 @@ public class CustomSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("시큐리티 동작 확인 ====CustomSecurityConfig======================");
 
-        // 폼 방식 일경우
+        //로그인 성공 후, 리다이렉트 될 페이지. 간단한 버전.
+        http.formLogin(formLogin -> formLogin
+                .loginPage("/echopickup/member/login").permitAll()
+                .defaultSuccessUrl("/echopickup/index", true)
+        );
+
+        // 로그 아웃 설정.
+        http.logout(logout -> logout
+                .logoutUrl("/echopickup/member/logout")
+                .logoutSuccessUrl("/echopickup/member/login?logout")
+        );
+
+//        // 폼 방식 일경우
         http
-                .formLogin(formLogin ->
-                        formLogin
-                                .loginPage("/echopickup/member/login")
-                                .permitAll()
+                .authorizeRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/api/users", "/users/new", "/refreshToken").permitAll()
+                                .requestMatchers("/users/**").authenticated()
+
                 );
-//                .authorizeRequests(authorizeRequests ->
-//                        authorizeRequests
-//                                .requestMatchers("/api/users", "/users/new", "/refreshToken").permitAll()
-//                                .requestMatchers("/users/**").authenticated()
-//
-//                )
 //                .sessionManagement(sessionManagement ->
 //                        sessionManagement
 //                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -67,18 +79,18 @@ public class CustomSecurityConfig {
 //                                        .anyRequest().permitAll()
 //
 //                );
-
-
-        // 로그 아웃 설정.
-        http.logout(logout -> logout
-                .logoutUrl("/echopickup/member/logout")
-                .logoutSuccessUrl("/echopickup/member/login?logout")
-        );
-
-        //로그인 성공 후, 리다이렉트 될 페이지. 간단한 버전.
-        http.formLogin(formLogin ->
-                formLogin.defaultSuccessUrl("/echopickup/index", true)
-        );
+//        // 권한 설정 - authorizeHttpRequests 사용
+//        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+//
+//                //모든 권한 오픈
+//                 .anyRequest().permitAll()
+//
+////                .requestMatchers("/css/**", "/js/**","/images/**","/images2/**").permitAll()
+////                .requestMatchers("/", "/board/list", "/member/join", "/login", "/member/login", "/joinUser", "/joinForm", "/findAll", "/images/**", "/members/**", "/item/**").permitAll()
+////                .requestMatchers("/echopickup/admin/product", "/echopickup/admin/product_register").authenticated()
+////                .requestMatchers("/admin/**").hasRole("ADMIN")
+////                .anyRequest().authenticated()
+//        );
 
         // 기본은 csrf 설정이 on, 작업시에는 끄고 작업하기.
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());

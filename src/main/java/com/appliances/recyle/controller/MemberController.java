@@ -80,4 +80,16 @@ public class MemberController {
         return "redirect:/echopickup/member/login";
     }
 
+//    @PostMapping("/join")
+//    public String createUser(@ModelAttribute Member member, @RequestParam("profileImage") MultipartFile file) {
+//        log.info("lsy User created" + member, "multipart : " + file
+//        );
+//        // 비밀번호 암호화
+//        member.setPw(bCryptPasswordEncoder.encode(member.getPw()));
+//        // 사용자 저장
+////            Member savedMember = memberService.createUser(member);
+//        return "redirect:/echopickup/member/login";
+//        // Redirect to the list of users
+//    }
+
 }

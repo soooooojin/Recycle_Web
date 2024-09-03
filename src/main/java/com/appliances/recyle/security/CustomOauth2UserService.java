@@ -27,6 +27,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     // 카카오 소셜 로그인시 , 로그인 로직 처리를 여기서 함.
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

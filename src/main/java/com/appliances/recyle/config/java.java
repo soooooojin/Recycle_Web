@@ -1,4 +1,4 @@
-package com.appliances.recyle.config;
-
-public class java {
-}
+//package com.appliances.recyle.config;
+//
+//public class java {
+//}
