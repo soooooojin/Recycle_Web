@@ -21,4 +21,11 @@ public class ItemDTO {
 
     private Long iprice;  //스티커 금액(제품가격)
 
+//    private String imageUrl;
+
+
+    public ItemDTO(String iname, Long iprice) {
+        this.iname = iname;
+        this.iprice = iprice;
+    }
 }

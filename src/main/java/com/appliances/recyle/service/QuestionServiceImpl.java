@@ -3,10 +3,10 @@ package com.appliances.recyle.service;
 import com.appliances.recyle.domain.Question;
 import com.appliances.recyle.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -25,7 +25,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question readQuestion(Long qno) {
-        return questionRepository.findById(qno).orElse(null);
+        return questionRepository.findById(qno).orElseThrow(() -> new IllegalArgumentException("Invalid question ID: " + qno));
     }
 
     @Override
@@ -35,18 +35,33 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question updateQuestion(Long qno, Question question) {
-        Optional<Question> existingQuestion = questionRepository.findById(qno);
-        if (existingQuestion.isPresent()) {
-            Question updatedQuestion = existingQuestion.get();
-            updatedQuestion.setQtitle(question.getQtitle());
-            updatedQuestion.setQcomment(question.getQcomment());
-            return questionRepository.save(updatedQuestion);
+        if (questionRepository.existsById(qno)) {
+            question.setQno(qno);
+            return questionRepository.save(question);
+        } else {
+            throw new IllegalArgumentException("Invalid question ID: " + qno);
         }
-        return null;
     }
 
     @Override
     public void deleteQuestion(Long qno) {
-        questionRepository.deleteById(qno);
+        if (questionRepository.existsById(qno)) {
+            questionRepository.deleteById(qno);
+        } else {
+            throw new IllegalArgumentException("Invalid question ID: " + qno);
+        }
+    }
+    @Override
+    public Page<Question> getQuestions(Pageable pageable) {
+        Page<Question> questions = questionRepository.findAll(pageable);
+        questions.forEach(question -> {
+            // Answer를 강제 로드하면서 로그 출력
+            if (question.getAnswer() != null) {
+                System.out.println("Question ID: " + question.getQno() + " has an Answer: " + question.getAnswer().getAcomment());
+            } else {
+                System.out.println("Question ID: " + question.getQno() + " has no Answer.");
+            }
+        });
+        return questions;
     }
 }

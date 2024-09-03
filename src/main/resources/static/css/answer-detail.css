@@ -1,0 +1,70 @@
+/* 기본 레이아웃 */
+.answer-content {
+    margin-top: 40px;
+    padding: 20px 40px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 답글 제목 스타일 */
+.answer-detail-table th {
+    width: 100px;
+    text-align: left;
+    font-weight: bold;
+    padding: 10px 0;
+    color: #333;
+}
+
+/* 답글 내용 스타일 */
+.answer-detail-table td {
+    padding: 10px 0;
+    color: #555;
+}
+
+/* 버튼 그룹 스타일 */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.btn-group-right {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-answer, .btn-update, .btn-delete, .btn-list {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-answer:hover, .btn-update:hover, .btn-delete:hover, .btn-list:hover {
+    background-color: #0056b3;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .answer-content {
+        padding: 15px 20px;
+    }
+
+    .answer-detail-table th, .answer-detail-table td {
+        padding: 8px 0;
+    }
+
+    .button-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-group-right {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

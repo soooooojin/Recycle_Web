@@ -2,6 +2,7 @@ package com.appliances.recyle.service;
 
 
 
+import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.domain.Order;
 import com.appliances.recyle.dto.OrderDTO;
 
@@ -23,4 +24,5 @@ public interface OrderService {
     void update(OrderDTO orderDTO);
     void delete(OrderDTO orderDTO);
 
+    void saveAll(List<Item> items);
 }

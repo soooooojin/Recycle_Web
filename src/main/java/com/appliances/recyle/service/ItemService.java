@@ -4,6 +4,7 @@ import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.dto.ItemDTO;
 import com.appliances.recyle.dto.PageRequestDTO;
 import com.appliances.recyle.dto.PageResponseDTO;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -23,8 +24,6 @@ public interface ItemService {
 
     void update(ItemDTO itemDTO);
     void delete(Long ino);
-
-
 
 
 

@@ -5,6 +5,7 @@ import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.domain.Member;
 import com.appliances.recyle.domain.Order;
 import com.appliances.recyle.domain.Pay;
+import groovy.lang.DelegatesTo;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -70,6 +71,23 @@ public class OrderRepositoryTest {
         Optional<Order> result = orderRepository.findById(1L);
         Order order = result.get();
         log.info("Order : " + order);
+    }
+
+    // 히지 테스트
+    @Test
+    public void InsertOrder2() {
+        Order order = Order.builder()
+                .member(Member.builder().email("aaa@aaa.com").build())
+                .item(Item.builder().ino(1L).build())
+                .pay(Pay.builder().pno(1L).build())
+                .purl("사진 url")
+                .ostatus("진행상태1")
+                .oaddress("주소1")
+                .build();
+
+        Order result = orderRepository.save(order);
+
+        log.info("주문 데이터 : " + result);
     }
 
 }
