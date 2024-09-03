@@ -1,37 +1,44 @@
 $(document).ready(function() {
-    // 모든 쿠키를 가져오기
-    const cookies = document.cookie.split('; ');
-    const items = [];
+    // 쿠키에서 데이터를 가져와 적절하게 처리
+    const cookies = document.cookie.split('; ');  // 쿠키를 개별 항목으로 분리
+    let totalAmount = 0;
+    console.log('로드된 쿠키:', cookies);
 
-    // 쿠키를 객체 형태로 변환
     cookies.forEach(function(cookie) {
-        const [name, value] = cookie.split('=');
-        // 필요한 경우 쿠키 이름에 대한 필터링을 수행할 수 있음
-        if (name.startsWith('item_')) {
-            const item = JSON.parse(decodeURIComponent(value));
-            items.push(item);
+        try {
+            const cookieParts = cookie.split('=');
+            const cookieName = cookieParts[0];
+            const cookieValue = cookieParts[1];
+
+            // 쿠키 이름이 특정 패턴(item_로 시작)인 경우에만 처리
+            if (cookieName.startsWith('item_')) {
+                const imageData = JSON.parse(decodeURIComponent(cookieValue));
+                if (imageData && imageData.imageUrl && imageData.iname) {
+                    // 쿠키 데이터를 사용하여 화면에 항목을 표시
+                    const row = `<tr>
+                                  <td>
+                                    <div class="product-info">
+                                      <img src="${imageData.imageUrl}" alt="제품 이미지" class="product-image">
+                                      <div class="product-details">
+                                        <strong>${imageData.iname}</strong>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>${imageData.iprice}</td>
+                                </tr>`;
+                    $('#orderItemsTable').append(row);
+
+                    // 가격을 합산
+                    totalAmount += imageData.iprice;
+                } else {
+                    console.error('Invalid cookie data:', imageData);
+                }
+            }
+        } catch (error) {
+            console.error('Error parsing cookie:', error);
+            alert('쿠키 데이터를 파싱하는 중 오류가 발생했습니다.');
         }
     });
-
-    // 읽어온 쿠키 데이터로 필요한 작업 수행
-    items.forEach(function(item) {
-        // 예: 화면에 표시
-        const row = `<tr>
-                      <td>
-                        <div class="product-info">
-                          <img src="${purl}" alt="제품 이미지" class="product-image">
-                          <div class="product-details">
-                            <strong>${item.iname}</strong>
-                          </div>
-                        </div>
-                      </td>
-                      <td>${item.iprice}</td>
-                      <td>
-                        <button class="delete-button">삭제</button>
-                      </td>
-                    </tr>`;
-        $('#orderItemsTable').append(row);
-    });
-
-    console.log('로드된 쿠키:', items);
+    // 총 결제 금액을 화면에 표시
+    $('.order-summary .total span:last-child').text(totalAmount + '원');
 });

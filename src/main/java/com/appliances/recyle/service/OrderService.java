@@ -24,5 +24,6 @@ public interface OrderService {
     void update(OrderDTO orderDTO);
     void delete(OrderDTO orderDTO);
 
+    void save(Order order);
     void saveAll(List<Item> items);
 }

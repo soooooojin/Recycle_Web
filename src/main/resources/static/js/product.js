@@ -47,12 +47,29 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(response) {
+                // 서버로부터 받은 JSON 응답 (response가 이미 JSON 객체로 파싱되어 있음)
+                console.log('Raw response:', response);
+                console.log('Response Type:', typeof response);
+
                 // JSON 응답이 문자열 형태라면 파싱
-                const parsedResponse = JSON.parse(response);
+                // const parsedResponse = JSON.parse(response);
 
                 // 분류 결과에서 predicted_class_label 추출
-                const resultLabel = parsedResponse.predicted_class_label;
-                alert('받은 응답: ' + response);
+                const resultLabel = response.predicted_class_label;
+                console.log('Result Label Type:', typeof resultLabel);
+                alert('받은 응답: ' + response.confidence + "분류결과" + response.predicted_class_label);
+
+                // MongoDB에 이미지 저장 요청
+                $.ajax({
+                    url: '/uploadImage',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(imageId) {
+                        console.log('이미지 업로드 성공:', imageId);
+                        alert('이미지 업로드 성공: ' + imageId);  // 이미지 ID를 표시
+                        const imageUrl = `/image/${imageId}`; // 이미지 URL 생성
 
                 // 분류 결과를 팝업창에 표시
                 popupMessage.text(`분류 결과: ${resultLabel}`);
@@ -61,7 +78,7 @@ $(document).ready(function() {
 
                 // 예 버튼 클릭 시
                 confirmYes.off('click').on('click', function () {
-                    fetchAndDisplayItem(resultLabel, selectedImageUrl);
+                    fetchAndDisplayItem(resultLabel, imageUrl);
                     resetPopup();
                 });
 
@@ -78,7 +95,7 @@ $(document).ready(function() {
                         items.forEach(function (item) {
                             const button = $(`<button>${item.iname}</button>`);
                             button.click(function () {
-                                fetchAndDisplayItem(item.iname, selectedImageUrl);
+                                fetchAndDisplayItem(item.iname, imageUrl);
                                 resetPopup();
                             });
                             selectionButtons.append(button);
@@ -86,6 +103,13 @@ $(document).ready(function() {
                     }).fail(function () {
                         alert('제품 목록을 불러오는 중 오류가 발생했습니다.');
                     });
+                });
+                        // 쿠키에 이미지 URL 저장
+
+                    },
+                    error: function() {
+                        alert('이미지 업로드 실패');
+                    }
                 });
             },
             error: function () {
@@ -95,7 +119,7 @@ $(document).ready(function() {
     });
 
     // DB에서 데이터를 가져와 화면에 표시하는 함수
-    function fetchAndDisplayItem(iname, purl) {
+    function fetchAndDisplayItem(iname, imageUrl) {
         $.getJSON('/api/getAllItems', function(items) {
             console.log("서버에서 받은 응답:", items);
 
@@ -107,11 +131,11 @@ $(document).ready(function() {
                 const row =
                     `<tr>
                             <td class="product-image-container">
-                                <img src="${purl}" alt="제품 이미지" class="product-image">
+                                <img src="${imageUrl}" alt="제품 이미지" class="product-image" style="width: 100px; height: 100px;">
                             </td>
                             <td class="product-info">${matchedItem.iname}</td>
                             <td class="product-info">${matchedItem.iprice}</td> 
-                            <td><button class="deleteButton">삭제</button></td>                              
+                           <td><button class="deleteButton" data-id="${imageUrl}">삭제</button></td>                                                           
                          </tr>`;
                 $('#classifiedItems').append(row);
 
@@ -121,9 +145,10 @@ $(document).ready(function() {
                     const itemName = matchedItem.iname;
                     lastRow.remove(); // 테이블에서 행 삭제
                     deleteCookie(itemName); // 쿠키에서 항목 삭제
+                    deleteItemFromServer(imageUrl)
                 });
 
-                saveToCookie(purl, matchedItem.iname, matchedItem.iprice);
+                saveToCookie(imageUrl, matchedItem.iname, matchedItem.iprice);
 
             } else {
                 alert('DB에서 해당 항목을 찾을 수 없습니다.');
@@ -131,6 +156,20 @@ $(document).ready(function() {
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.error("데이터 가져오기 실패:", textStatus, errorThrown);
             alert('데이터를 불러오지 못했습니다.');
+        });
+    }
+    function deleteItemFromServer(imageUrl) {
+        const imageId = imageUrl.split('/').pop(); // URL에서 이미지 ID 추출
+        $.ajax({
+            url: '/image/' + imageId,
+            type: 'DELETE',
+            success: function() {
+                // 서버에서 성공적으로 삭제된 경우
+                alert('삭제 성공');
+            },
+            error: function() {
+                alert('삭제 실패');
+            }
         });
     }
 
@@ -153,11 +192,9 @@ $(document).ready(function() {
     });
 
     // 쿠키에 데이터 저장하는 함수
-    function saveToCookie(purl, name, price) {
-        const item = {purl, iname: name, iprice: price };
+    function saveToCookie(imageUrl, name, price) {
+        const item = {imageUrl, iname: name, iprice: price };
         const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
-        const jsonString = JSON.stringify(item);
-        const encodedString = encodeURIComponent(jsonString);
         document.cookie = `item_${name}_${cookieIndex}=${JSON.stringify(item)};path=/`;
     }
 
@@ -203,5 +240,7 @@ $(document).ready(function() {
     $('#popupClose').on('click', function() {
         closePopup();
     });
+
+
 
 });

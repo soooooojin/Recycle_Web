@@ -1,15 +1,14 @@
 package com.appliances.recyle.controller;
 
 import com.appliances.recyle.domain.Item;
+import com.appliances.recyle.domain.Order;
 import com.appliances.recyle.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,16 +26,23 @@ public class OrderController {
     }
 
     @GetMapping("/order")
-    public void orderGet() {
-
+    public void orderGet(Model model) {
+        model.addAttribute("member", new Order());
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<Void> saveItems(@RequestBody List<Item> items) {
-        orderService.saveAll(items);
-        log.info("쿠키 확인 : "+items);
-        return ResponseEntity.ok().build();
+    @PostMapping("/order")
+    public void orderPost(@ModelAttribute Order order) {
+        // Order 객체를 저장합니다. 예시로 orderService를 사용하여 저장
+        orderService.save(order);
+        log.info("주문 저장: " + order);
     }
+
+//    @PostMapping("/save")
+//    public ResponseEntity<Void> saveItems(@RequestBody List<Item> items) {
+////        orderService.saveAll(items);
+//        log.info("쿠키 확인 : "+items);
+//        return ResponseEntity.ok().build();
+//    }
 
     @GetMapping("/pay")
     public void payGet() {
