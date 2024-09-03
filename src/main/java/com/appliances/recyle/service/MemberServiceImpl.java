@@ -6,6 +6,7 @@ import com.appliances.recyle.dto.MemberDTO;
 import com.appliances.recyle.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +17,8 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public boolean checkid(String email) {
@@ -37,12 +40,13 @@ public class MemberServiceImpl implements MemberService {
         // 중복 확인 후 회원 가입
         Member member = dtoToEntity(memberDTO);
         // 패스워드는 현재 평문 -> 암호로 변경.
-//        member.changePassword(passwordEncoder.encode(member.getpw()));
+        member.changePassword(passwordEncoder.encode(member.getPw()));
         // 역할. 기본은 USER
         member.addRole(MemberRole.USER);
 
         // 데이터 가 잘 알맞게 변경이 됐는지 여부,
         log.info("joinMember: " + member);
+        log.info("joinMember (encoded password): " + member.getPw());
         log.info("joinMember: " + member.getRoleSet());
 
         memberRepository.save(member);

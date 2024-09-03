@@ -23,6 +23,14 @@
             <div class="auth">
                 <a th:href="@{/echopickup/member/login}">로그인</a>
                 <a th:href="@{/echopickup/member/join}">회원가입</a>
+                <a th:if="${member} != null and ${member.social.toString().equals('false')}"
+                   class="nav-link" href="/echopickup/member/logout">로그아웃</a>
+                <a th:if="${member} != null and ${member.social.toString().equals('true')}"
+                   class="nav-link" href="/echopickup/member/logout">소셜 로그아웃</a>
+
+<!--                <li class="nav-item " th:if="${user} != null and ${user.social.toString().equals('true')}">-->
+<!--                    <a class="nav-link" href="/echopickup/member/kakaoLogout">소셜 로그아웃</a>-->
+<!--                </li>-->
             </div>
         </header>
 
