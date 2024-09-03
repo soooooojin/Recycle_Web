@@ -8,7 +8,8 @@ $(document).ready(function() {
         const [name, value] = cookie.split('=');
         // 필요한 경우 쿠키 이름에 대한 필터링을 수행할 수 있음
         if (name.startsWith('item_')) {
-            const item = JSON.parse(decodeURIComponent(value));
+            // const item = JSON.parse(decodeURIComponent(value));
+            const item = decodeURIComponent(value);
             items.push(item);
         }
     });
@@ -19,7 +20,7 @@ $(document).ready(function() {
         const row = `<tr>
                       <td>
                         <div class="product-info">
-                          <img src="https://via.placeholder.com/50" alt="제품 이미지" class="product-image">
+                          <img src="${item.fileName}" alt="제품 이미지" class="product-image">
                           <div class="product-details">
                             <strong>${item.iname}</strong>
                           </div>
