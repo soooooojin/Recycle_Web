@@ -131,7 +131,7 @@ $(document).ready(function() {
                 const row =
                     `<tr>
                             <td class="product-image-container">
-                                <img src="${imageUrl}" alt="제품 이미지" class="product-image">
+                                <img src="${imageUrl}" alt="제품 이미지" class="product-image" style="width: 100px; height: 100px;">
                             </td>
                             <td class="product-info">${matchedItem.iname}</td>
                             <td class="product-info">${matchedItem.iprice}</td> 

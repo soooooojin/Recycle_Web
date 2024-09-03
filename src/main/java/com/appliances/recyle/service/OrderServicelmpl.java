@@ -129,6 +129,11 @@ public class OrderServicelmpl implements OrderService{
     }
 
     @Override
+    public void save(Order order) {
+
+    }
+
+    @Override
     public void saveAll(List<Item> items) {
 
     }
