@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
+
+<head>
+    <title>답글 작성</title>
+    <link rel="stylesheet" th:href="@{/css/answer.css}">
+</head>
+
+<body>
+<div layout:fragment="content">
+    <main>
+        <div class="answer-content">
+            <h1>답글 작성</h1>
+            <form th:action="@{/echopickup/answer}" method="post">
+                <input type="hidden" th:value="${qno}" name="qno">
+
+                <!-- Email Hidden Field (현재는 임의로 넣어도 됩니다) -->
+                <input type="hidden" name="email" value="ngy1@gmail.com">
+
+                <div class="form-group">
+                    <label for="acomment">내용</label>
+                    <textarea id="acomment" name="acomment" required></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="btn-submit" type="submit">답글 등록하기</button>
+                    <button class="btn-list" type="button" onclick="location.href='/echopickup/question-list'">목록</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+</html>

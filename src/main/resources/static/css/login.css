@@ -1,0 +1,225 @@
+/* 전체 스타일 */
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    background-color: #f9f9f9;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    height: 100vh;*/
+/*    color: #333;*/
+/*}*/
+
+/* 로그인 폼 컨테이너 */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+/* 로그인 폼 스타일 */
+.login-form {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-form h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    text-align: left;
+    font-size: 14px;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.find-info a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.find-info a:hover {
+    text-decoration: underline;
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.signup-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    color: #007bff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.signup-button:hover {
+    background-color: #f1f1f1;
+}
+
+.social-login {
+    text-align: center;
+}
+
+.google-login {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.kakao-login img {
+    /*width: 100%;*/
+    /*max-width: 300px; !* 구글 로그인 버튼의 크기와 일치하도록 설정 *!*/
+    /*display: block;*/
+    height: 40px;
+    margin: 10px auto;
+    cursor: pointer;
+}
+
+.google-login:hover {
+    background-color: #f1f1f1;
+}
+
+
+/*회원가입 css*/
+
+
+/* 전체 폼 스타일 */
+.registration-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* 폼 그룹 스타일 */
+.registration-form .form-group {
+    margin-bottom: 15px;
+}
+
+/* 레이블 스타일 */
+.registration-form .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 인풋 필드 스타일 */
+.registration-form .form-group input[type="email"],
+.registration-form .form-group input[type="password"],
+.registration-form .form-group input[type="text"],
+.registration-form .form-group input[type="number"] {
+    width: calc(100% - 10px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+/* 중복확인 버튼 스타일 */
+.registration-form .form-group button[type="button"] {
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.registration-form .form-group button[type="button"]:hover {
+    background-color: #2980b9;
+}
+
+/* 제출 버튼 스타일 */
+.registration-form .submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.registration-form .submit-button:hover {
+    background-color: #007bff;
+}
+
+/* 로그인 링크 스타일 */
+.registration-form .login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.registration-form .login-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.registration-form .login-link a:hover {
+    text-decoration: underline;
+}
