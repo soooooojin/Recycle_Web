@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/base.html}">
+<head>
+  <title>공지사항 작성</title>
+  <link rel="stylesheet" th:href="@{/css/notice-write.css}">
+</head>
+<body>
+<div layout:fragment="content">
+  <main>
+    <div class="notice-write-content">
+      <h1>공지사항 작성</h1>
+      <form th:action="@{/echopickup/notice/write}" method="post" class="notice-form">
+        <div class="form-group">
+          <label for="ntitle">제목</label>
+          <input type="text" id="ntitle" name="ntitle" required/>
+        </div>
+        <div class="form-group">
+          <label for="ncomment">내용</label>
+          <textarea id="ncomment" name="ncomment" required></textarea>
+        </div>
+        <div class="form-buttons">
+          <a th:href="@{/echopickup/notice}" class="btn-submit">목록으로 돌아가기</a>
+          <button type="submit" class="btn-submit">작성하기</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+</body>
+</html>
