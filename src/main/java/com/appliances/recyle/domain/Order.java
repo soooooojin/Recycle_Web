@@ -3,6 +3,8 @@ package com.appliances.recyle.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Table(name = "orders")
 @Builder
 @Data
@@ -35,5 +37,8 @@ public class Order {
 
     @Column(length = 100, nullable = false)
     private String oaddress; //주소
+
+    @Column(name = "odate")
+    private String odate;  // 수거 예정일 추가
 }
 

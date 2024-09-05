@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @Log4j2
@@ -46,7 +47,7 @@ public class ItemServiceTests {
 
     @Test
     public void read() {
-        List<Item> result = itemRepository.findByItemName("통돌이세탁기");
+        Optional<Item> result = itemRepository.findByIname("통돌이세탁기");
         log.info("알려줭 : "+result);
     }
 
