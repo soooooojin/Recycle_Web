@@ -1,48 +1,37 @@
 $(document).ready(function() {
-    const cookies = document.cookie.split('; ');  // 쿠키를 개별 항목으로 분리
     let orders = [];  // 전송할 주문 목록을 담을 배열
     let totalAmount = 0;
 
-    console.log('로드된 쿠키:', cookies);
+    // localStorage에서 item 정보를 가져와 처리
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
 
-    // 쿠키에서 item 정보를 찾아서 처리
-    cookies.forEach(function(cookie) {
-        try {
-            const cookieParts = cookie.split('=');
-            const cookieName = cookieParts[0];
-            const cookieValue = cookieParts[1];
+        // key가 특정 패턴(item_로 시작)인 경우에만 처리
+        if (key.startsWith('item_')) {
+            const itemData = JSON.parse(localStorage.getItem(key));
 
-            // 쿠키 이름이 특정 패턴(item_로 시작)인 경우에만 처리
-            if (cookieName.startsWith('item_')) {
-                const imageData = JSON.parse(decodeURIComponent(cookieValue));
-
-                if (imageData && imageData.imageUrl && imageData.iname) {
-                    // 쿠키 데이터를 사용하여 화면에 항목을 표시
-                    const row = `<tr>
-                                    <td>
-                                        <div class="product-info">
-                                            <img src="${imageData.imageUrl}" alt="제품 이미지" class="product-image">
-                                            <div class="product-details">
-                                                <strong>${imageData.iname}</strong>
-                                            </div>
+            if (itemData && itemData.imageUrl && itemData.iname) {
+                // 화면에 항목 표시
+                const row = `<tr>
+                                <td>
+                                    <div class="product-info">
+                                        <img src="${itemData.imageUrl}" alt="제품 이미지" class="product-image">
+                                        <div class="product-details">
+                                            <strong>${itemData.iname}</strong>
                                         </div>
-                                    </td>
-                                    <td>${imageData.iprice}원</td>
-                                </tr>`;
-                    $('#orderItemsTable').append(row);
+                                    </div>
+                                </td>
+                                <td>${itemData.iprice}원</td>
+                            </tr>`;
+                $('#orderItemsTable').append(row);
 
-                    // 개별 가격을 총 금액에 더함
-                    totalAmount += imageData.iprice;
-
-                } else {
-                    console.error('유효하지 않은 쿠키 데이터:', imageData);
-                }
+                // 개별 가격을 총 금액에 더함
+                totalAmount += itemData.iprice;
+            } else {
+                console.error('유효하지 않은 localStorage 데이터:', itemData);
             }
-        } catch (error) {
-            console.error('쿠키 데이터 파싱 중 오류 발생:', error);
-            alert('쿠키 데이터를 파싱하는 중 오류가 발생했습니다.');
         }
-    });
+    }
 
     // 총 결제 금액을 화면에 표시
     $('.order-summary .total span:last-child').text(totalAmount + '원');
@@ -60,25 +49,22 @@ $(document).ready(function() {
         }
 
         // orders 배열을 여기서 채웁니다 (사용자가 폼을 제출한 후에 데이터를 추가)
-        cookies.forEach(function(cookie) {
-            const cookieParts = cookie.split('=');
-            const cookieName = cookieParts[0];
-            const cookieValue = cookieParts[1];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
 
-            if (cookieName.startsWith('item_')) {
-                const imageData = JSON.parse(decodeURIComponent(cookieValue));
+            if (key.startsWith('item_')) {
+                const itemData = JSON.parse(localStorage.getItem(key));
                 orders.push({
-                    iname: imageData.iname,
-                    purl: imageData.imageUrl,
+                    iname: itemData.iname,
+                    purl: itemData.imageUrl,
                     oaddress: fullAddress,
-                    amount: parseInt(totalAmount),  // 개별 가격
+                    amount: parseInt(itemData.iprice),  // 개별 가격
                     odate: selectedDate  // 사용자가 입력한 날짜
                 });
             }
-        });
+        }
 
         console.log("전송할 데이터:", orders);
-        console.log("넌 뭔데:",JSON.stringify(orders));
 
         // 주문 정보가 있으면 서버로 전송
         if (orders.length > 0) {

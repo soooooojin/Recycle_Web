@@ -3,6 +3,7 @@ package com.appliances.recyle.service;
 import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.domain.Member;
 import com.appliances.recyle.domain.Order;
+import com.appliances.recyle.domain.Pay;
 import com.appliances.recyle.dto.OrderDTO;
 import com.appliances.recyle.dto.OrderItemDTO;
 import com.appliances.recyle.repository.ItemRepository;
@@ -153,12 +154,11 @@ public class OrderServicelmpl implements OrderService {
         Item item = itemRepository.findByIname(orderItemDTO.getIname())
                 .orElseThrow(() -> new IllegalArgumentException("Item not found: " + orderItemDTO.getIname()));
 
-        log.info("item 값 나옴?"+item);
-
         // Order 생성 후 저장
         Order order = Order.builder()
                 .member(member) // Member 객체
                 .item(item) // Item 객체
+                .pay(Pay.builder().pno(1L).build())
                 .purl(orderItemDTO.getPurl()) // 이미지 경로
                 .ostatus("진행 중") // 진행 상태
                 .oaddress(orderItemDTO.getOaddress()) // 주소
