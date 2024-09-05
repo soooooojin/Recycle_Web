@@ -26,16 +26,16 @@
         </tbody>
       </table>
 
-      <form th:action="@{/echopickup/product/order}" th:object="${member}" method="post">
 <!--      <form action="/echopickup/product/order" method="post">-->
+      <form>
         <div class="form-group">
           <label for="name">신청인</label>
-          <input type="text" id="name" name="name" placeholder="이름을 입력하세요" value="${member.mname}">
+          <input type="text" id="name" name="name" placeholder="이름을 입력하세요" th:value="${member.mname}" readonly>
         </div>
         <div class="form-group">
           <label for="phone">휴대전화</label>
           <div class="phone-input">
-            <input type="tel" id="phone" name="phone" placeholder="01012345678" value="${member.phone}">
+            <input type="tel" id="phone" name="phone" placeholder="01012345678" th:value="${member.phone}" readonly>
           </div>
         </div>
         <div class="form-group">
@@ -44,7 +44,7 @@
         </div>
         <div class="form-group">
           <label for="address">주소</label>
-          <input type="text" id="address" name="address" placeholder="주소를 입력하세요" value="${member.address}">
+          <input type="text" id="address" name="address" placeholder="주소를 입력하세요" th:value="${member.address}">
           <input type="hidden" id="postcode" placeholder="우편번호">
           <button type="button" class="find-address-btn" onclick="DaumPostcode()">우편번호</button>
         </div>
@@ -99,21 +99,6 @@
           }
         }).open();
       }
-      // 주소 작성 후 최종 합치기
-      // 각 input 필드의 값이 변경될 때마다 주소를 업데이트하는 함수
-      function updateFullAddress() {
-        var postcode = document.getElementById('postcode').value;
-        var address = document.getElementById('address').value;
-        var detailAddress = document.getElementById('detailAddress').value;
-
-        // 연결할 문자열 생성
-        var fullAddress = '('  + postcode + ')' + ' ' + address + ' ' + detailAddress;
-      }
-
-      // 각 input 필드에 change 이벤트 리스너 추가
-      document.getElementById('postcode').addEventListener('input', updateFullAddress);
-      document.getElementById('address').addEventListener('input', updateFullAddress);
-      document.getElementById('detailAddress').addEventListener('input', updateFullAddress);
     </script>
   </main>
 </div>

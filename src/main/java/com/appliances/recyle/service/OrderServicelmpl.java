@@ -4,20 +4,22 @@ import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.domain.Member;
 import com.appliances.recyle.domain.Order;
 import com.appliances.recyle.dto.OrderDTO;
+import com.appliances.recyle.dto.OrderItemDTO;
 import com.appliances.recyle.repository.ItemRepository;
 import com.appliances.recyle.repository.MemberRepository;
 import com.appliances.recyle.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-public class OrderServicelmpl implements OrderService{
+public class OrderServicelmpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -129,16 +131,6 @@ public class OrderServicelmpl implements OrderService{
     }
 
     @Override
-    public void save(Order order) {
-
-    }
-
-    @Override
-    public void saveAll(List<Item> items) {
-
-    }
-
-    @Override
     public void update(OrderDTO orderDTO) {
         // DTO를 Entity로 변환
         Order order = dtoTOEntity(orderDTO);
@@ -149,7 +141,31 @@ public class OrderServicelmpl implements OrderService{
     @Override
     public void delete(OrderDTO orderDTO) {
         orderRepository.deleteById(orderDTO.getOno());
+    }
 
+    @Transactional
+    public void saveOrder(String email, OrderItemDTO orderItemDTO) {
+        // 이메일로 Member 찾기
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        // Item을 iname으로 조회
+        Item item = itemRepository.findByIname(orderItemDTO.getIname())
+                .orElseThrow(() -> new IllegalArgumentException("Item not found: " + orderItemDTO.getIname()));
+
+        log.info("item 값 나옴?"+item);
+
+        // Order 생성 후 저장
+        Order order = Order.builder()
+                .member(member) // Member 객체
+                .item(item) // Item 객체
+                .purl(orderItemDTO.getPurl()) // 이미지 경로
+                .ostatus("진행 중") // 진행 상태
+                .oaddress(orderItemDTO.getOaddress()) // 주소
+                .odate(orderItemDTO.getOdate())
+                .build();
+
+        orderRepository.save(order);
     }
 
 }
