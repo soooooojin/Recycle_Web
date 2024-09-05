@@ -195,7 +195,7 @@ $(document).ready(function() {
     function saveToCookie(imageUrl, name, price) {
         const item = {imageUrl, iname: name, iprice: price };
         const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
-        document.cookie = `item_${name}_${cookieIndex}=${JSON.stringify(item)};path=/`;
+        document.cookie = `item_${name}_${cookieIndex}=${encodeURIComponent(JSON.stringify(item))};path=/`;
     }
 
     // 쿠키에서 항목 삭제하는 함수

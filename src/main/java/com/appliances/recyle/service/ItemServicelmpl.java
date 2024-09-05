@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,7 +54,7 @@ public class ItemServicelmpl implements ItemService{
 
     @Override
     public List<ItemDTO> searchItems(String iname) { // 일단 iname으로 설정.
-        List<Item> items = itemRepository.findByItemName(iname);
+        Optional<Item> items = itemRepository.findByIname(iname);
         return items.stream()
                 .map(this::entityToDTO)
                 .collect(Collectors.toList());
