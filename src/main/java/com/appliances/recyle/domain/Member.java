@@ -22,9 +22,9 @@ public class Member {
     private String mname;
     @Column(length = 100, nullable = false)
     private String pw;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String address;
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String phone;
 
 //    // 권한 [0: 일반사용자, 1: 공지만 쓸 수 있는 관리자, 2:전부 다 가능한 관리자]
@@ -41,6 +41,10 @@ public class Member {
     @Builder.Default
     private Set<MemberRole> roleSet = new HashSet<>();
 
+    // 세터 대신에, 임의의 멤버의 필드를 교체하는 메서드 만들기 => set 랑 비슷함.
+    public void changePassword(String pw) {
+        this.pw = pw;
+    }
     public void addRole(MemberRole memberRole) {
         this.roleSet.add(memberRole);
     }
