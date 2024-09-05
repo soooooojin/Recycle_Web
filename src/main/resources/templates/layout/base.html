@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="www.thymeleaf.org">
+      xmlns:th="www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,14 +15,15 @@
                 <img th:src="@{/images/echologo.png}" alt="Logo">
             </div>
             <nav>
-                <span><a th:href="@{/}">이용안내</a></span>
+                <span><a th:href="@{/echopickup/index}">이용안내</a></span>
                 <span><a th:href="@{/echopickup/product}">수거신청</a></span>
-                <span><a th:href="@{/echopickup/help}">고객문의</a></span>
+                <span><a th:href="@{/echopickup/question}">고객문의</a></span>
                 <span><a th:href="@{/echopickup/notice}">공지사항</a></span>
             </nav>
             <div class="auth">
-                <a th:href="@{/echopickup/member/login}">로그인</a>
-                <a th:href="@{/echopickup/member/join}">회원가입</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/echopickup/member/login}">로그인</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/echopickup/member/join}">회원가입</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/echopickup/member/logout}">로그아웃</a>
             </div>
         </header>
 

@@ -64,13 +64,27 @@
     width: 20%;
 }
 
+/* 페이지 네이션과 작성하기 버튼을 감싸는 컨테이너 */
+.pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px 0;
+}
+
 /* 페이지 네이션 스타일 */
-.pagination ul {
+.pagination {
     display: flex;
     justify-content: center;
-    padding: 0;
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.pagination ul {
+    display: flex;
     list-style: none;
-    margin-top: 20px;
+    padding: 0;
 }
 
 .pagination ul li {
@@ -98,6 +112,22 @@
     border-color: #ddd;
 }
 
+/* 작성하기 버튼 스타일 */
+.btn-write {
+    padding: 10px 20px;
+    background-color: #007acc;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.btn-write:hover {
+    background-color: #005f99;
+}
+
 /* 모바일 대응 */
 @media (max-width: 768px) {
     .notice-table {
@@ -106,5 +136,21 @@
 
     .notice-table th, .notice-table td {
         padding: 10px;
+    }
+
+    .pagination-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-right: 0;
+    }
+
+    .btn-write {
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
     }
 }
