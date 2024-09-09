@@ -71,14 +71,6 @@ $(document).ready(function() {
 
         console.log("전송할 데이터:", orders);
 
-        // 결제 데이터 전송 및 Pay 객체 저장
-        const payData = {
-            amount: totalAmount,  // 결제 금액
-            pmethod: pay_method,  // 결제 방식 [카드, 통장, 페이]
-            pstatus: "진행 중",  // 결제 상태 [진행 중, 환불]
-            pdate: LocalDateTime.now()       // 결제 날짜는 아직 null
-        };
-
         // 주문 정보가 있으면 서버로 전송
         if (orders.length > 0) {
             $.ajax({
@@ -89,6 +81,13 @@ $(document).ready(function() {
                 success: function(response) {
                     // 성공 시 처리 로직
                     requestInicisPayment(totalAmount, username, phone, address, zipCode);
+                    // 결제 데이터 전송 및 Pay 객체 저장
+                    const payData = {
+                        amount: totalAmount,  // 결제 금액
+                        pmethod: pay_method,  // 결제 방식 [카드, 통장, 페이]
+                        pstatus: "진행 중",  // 결제 상태 [진행 중, 환불]
+                        pdate: LocalDateTime.now()  // 결제 날짜는 아직 null
+                    };
                     console.log('결제가 완료되었습니다. 결제 정보 & 주문 정보 DB 저장');
                 },
                 error: function(error) {
