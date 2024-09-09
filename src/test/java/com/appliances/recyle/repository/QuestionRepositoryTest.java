@@ -30,7 +30,7 @@ public class QuestionRepositoryTest {
                 new IllegalArgumentException("Member not found")
         );
 
-        IntStream.range(1, 31).forEach(i -> {
+        IntStream.range(32, 35).forEach(i -> {
             Question question = Question.builder()
                     .qtitle("titletest" + i)
                     .qcomment("contenttest " + i)
