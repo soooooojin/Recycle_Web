@@ -1,0 +1,52 @@
+.main_content {
+    flex-grow: 1;
+    background-color: #ecf0f1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.profile-section {
+    margin-bottom: 20px;
+}
+.profile-section .info {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.profile-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.profile-section input[type="text"], .profile-section input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.profile-section input[readonly] {
+    background-color: #e9ecef;
+}
+.profile-section select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#editButton {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 50%;
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+#editButton:hover {
+    background-color: skyblue;
+}

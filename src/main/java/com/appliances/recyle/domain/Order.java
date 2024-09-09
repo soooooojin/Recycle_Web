@@ -22,7 +22,7 @@ public class Order {
     @JoinColumn(name = "email", nullable = false)
     private Member member;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ino", nullable = false)
     private Item item;
 

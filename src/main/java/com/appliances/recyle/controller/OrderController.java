@@ -23,10 +23,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderController {
 
-
     private final OrderService orderService;
     private final MemberRepository memberRepository;
-    private final ItemRepository itemRepository;
 //    private final PaymentRepository paymentRepository;
 
     @GetMapping
@@ -38,20 +36,17 @@ public class OrderController {
     public void orderGet(@AuthenticationPrincipal UserDetails user, Model model) {
         Optional<Member> optionalMember = memberRepository.findByEmail(user.getUsername());
         Member member = optionalMember.get(); // Optional에서 Member 객체 추출
-        log.info("member 화면 확인: " + member);
-
         model.addAttribute("member", member);
     }
 
     @PostMapping("/order")
     public ResponseEntity<Void> saveOrder(@RequestBody List<OrderItemDTO> orders,
                                           @AuthenticationPrincipal UserDetails user) {
-        log.info("POST /order 진입");
         String email = user.getUsername();  // 로그인한 사용자 이메일 가져오기
 
         for (OrderItemDTO orderItemDTO : orders) {
             orderService.saveOrder(email, orderItemDTO);
-            log.info("나오긴 하니"+orderItemDTO);
+            log.info("orderItemDTO : " + orderItemDTO);
         }
 
         return ResponseEntity.ok().build();
