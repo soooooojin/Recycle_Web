@@ -1,0 +1,54 @@
+/* 배너 이미지 크기 */
+.banner img {
+    width: 100%; /* 너비를 50%로 설정 */
+    height: auto; /* 비율에 맞춰 자동 조정 */
+    display: block; /* 이미지를 가운데 정렬하기 위해 블록 요소로 설정 */
+    margin: 0 auto; /* 가로 중앙 정렬 */
+}
+
+/* 버튼을 감싸는 컨테이너 설정 */
+.button-container {
+    display: flex;
+    justify-content: center; /* 버튼을 가로 중앙 정렬 */
+    gap: 100px; /* 버튼 사이의 간격을 40px로 설정 */
+    margin-top: 30px; /* 배너와 버튼 사이 간격 */
+}
+
+/* 버튼 스타일 */
+.button {
+    display: flex; /* flexbox 사용 */
+    line-height: 100px; /* 세로 중앙 정렬 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    background-color: skyblue; /* 버튼 배경 색상 */
+    color: white; /* 버튼 글자 색상 */
+    border: none; /* 테두리 없음 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+    width: 200px; /* 정사각형 버튼 크기 */
+    height: 150px;
+    font-size: 25px; /* 글자 크기 */
+    cursor: pointer; /* 클릭할 때 커서 변경 */
+    border-radius: 10px; /* 버튼 모서리를 둥글게 */
+    padding-top: 40px; /* 텍스트를 버튼 상단에서 20px 아래로 내림 */
+}
+
+/* 버튼 하단 문장 스타일 */
+.button-description {
+    margin-top: 10px; /* 버튼과 문장 사이 간격 */
+    font-size: 10px; /* 문장 글자 크기 */
+    color: black; /* 문장 색상 */
+}
+
+/* 버튼 호버 시 스타일 */
+.button:hover {
+    background-color: cornflowerblue; /* 버튼 호버 색상 */
+}
+
+/* 하단 문장 스타일 */
+.footer-text {
+    text-align: center; /* 중앙 정렬 */
+    margin-top: 40px; /* 상단 여백 */
+    font-size: 14px; /* 글자 크기 */
+    color: #666; /* 텍스트 색상 */
+}
+
