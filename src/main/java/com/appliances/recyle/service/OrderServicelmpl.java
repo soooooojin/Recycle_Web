@@ -3,16 +3,19 @@ package com.appliances.recyle.service;
 import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.domain.Member;
 import com.appliances.recyle.domain.Order;
+import com.appliances.recyle.domain.Pay;
 import com.appliances.recyle.dto.OrderDTO;
 import com.appliances.recyle.dto.OrderItemDTO;
 import com.appliances.recyle.repository.ItemRepository;
 import com.appliances.recyle.repository.MemberRepository;
 import com.appliances.recyle.repository.OrderRepository;
+import com.appliances.recyle.repository.PayRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +23,9 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 public class OrderServicelmpl implements OrderService {
+
+    @Autowired
+    private PayRepository payRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -61,7 +67,7 @@ public class OrderServicelmpl implements OrderService {
                 .ono(order.getOno())
                 //           memberdb것
                 .email(order.getMember().getEmail())
-                .iname(order.getItem().getIname())
+                .iname(order .getItem().getIname())
                 .iprice(order.getItem().getIprice())
                 .purl(order.getPurl())
                 .oaddress(order.getOaddress())
@@ -153,12 +159,22 @@ public class OrderServicelmpl implements OrderService {
         Item item = itemRepository.findByIname(orderItemDTO.getIname())
                 .orElseThrow(() -> new IllegalArgumentException("Item not found: " + orderItemDTO.getIname()));
 
-        log.info("item 값 나옴?"+item);
+        // Pay 객체 생성
+        Pay pay = Pay.builder()
+                .pmethod("아직 미정")  // 기본 결제 방식 설정
+                .pstatus("진행 중")    // 기본 결제 상태 설정
+                .amount(null)          // 금액은 null로 설정
+                .pdate(null)           // 결제 날짜는 null로 설정
+                .build();
+
+        // Pay 객체를 먼저 저장 (영속화)
+        pay = payRepository.save(pay);  // payRepository를 사용하여 Pay 객체 저장
 
         // Order 생성 후 저장
         Order order = Order.builder()
                 .member(member) // Member 객체
                 .item(item) // Item 객체
+                .pay(pay)
                 .purl(orderItemDTO.getPurl()) // 이미지 경로
                 .ostatus("진행 중") // 진행 상태
                 .oaddress(orderItemDTO.getOaddress()) // 주소

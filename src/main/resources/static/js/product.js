@@ -2,6 +2,8 @@
 
 $(document).ready(function() {
 
+    // 페이지 로드 시 localStorage 초기화
+    localStorage.clear();
     // 페이지 로드 시 쿠키 초기화
     clearAllCookies();
     // 테이블에서 행 삭제
@@ -148,7 +150,7 @@ $(document).ready(function() {
                     deleteItemFromServer(imageUrl)
                 });
 
-                saveToCookie(imageUrl, matchedItem.iname, matchedItem.iprice);
+                saveToLocalStorage(imageUrl, matchedItem.iname, matchedItem.iprice);
 
             } else {
                 alert('DB에서 해당 항목을 찾을 수 없습니다.');
@@ -192,10 +194,17 @@ $(document).ready(function() {
     });
 
     // 쿠키에 데이터 저장하는 함수
-    function saveToCookie(imageUrl, name, price) {
-        const item = {imageUrl, iname: name, iprice: price };
-        const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
-        document.cookie = `item_${name}_${cookieIndex}=${encodeURIComponent(JSON.stringify(item))};path=/`;
+    // function saveToCookie(imageUrl, name, price) {
+    //     const item = {imageUrl, iname: name, iprice: price };
+    //     const cookieIndex = new Date().getTime(); // 시간으로 고유 인덱스 생성
+    //     document.cookie = `item_${name}_${cookieIndex}=${encodeURIComponent(JSON.stringify(item))};path=/`;
+    // }
+
+    // 데이터를 localStorage에 저장
+    function saveToLocalStorage(imageUrl, name, price) {
+        const item = { imageUrl, iname: name, iprice: price };
+        const key = `item_${name}_${new Date().getTime()}`;  // 고유한 키 생성
+        localStorage.setItem(key, JSON.stringify(item));
     }
 
     // 쿠키에서 항목 삭제하는 함수
