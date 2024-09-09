@@ -54,6 +54,11 @@ public class MemberController {
 //    public void updateGet(@AuthenticationPrincipal UserDetails user, Model model) {
 //        model.addAttribute("user", user);
 //    }
+    // 회원가입
+    @GetMapping("/join")
+    public void joinGet() {
+        log.info("joinGet====================");
+    }
 
     // 회원가입 처리 (웹 요청: Form data)
     @PostMapping(value = "/join", consumes = "application/x-www-form-urlencoded")
