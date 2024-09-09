@@ -13,13 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.appliances.recyle.domain.Member;
+
+import java.util.List;
 
 @Controller
 public class NoticeController {
@@ -30,6 +29,7 @@ public class NoticeController {
     @Autowired
     private MemberRepository memberRepository;
 
+    // 공지사항 목록 보기 (HTML 페이지용)
     @GetMapping("/echopickup/notice")
     public String getNotices(Model model,
                              @RequestParam(defaultValue = "0") int page,
@@ -37,15 +37,33 @@ public class NoticeController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "nno"));
         Page<Notice> noticePage = noticeService.getNotices(pageable);
         model.addAttribute("noticePage", noticePage);
-        return "echopickup/notice"; // 공지사항 목록 페이지
+        return "echopickup/notice"; // 공지사항 목록 HTML 페이지
     }
 
-    // 공지사항 상세보기 매핑 추가
+    // 공지사항 목록 보기 (JSON 데이터용 - 안드로이드 API)
+    @GetMapping("/echopickup/api/notices")
+    @ResponseBody
+    public List<Notice> getNoticesApi(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "nno"));
+        Page<Notice> noticePage = noticeService.getNotices(pageable);
+        return noticePage.getContent(); // JSON 배열로 반환
+    }
+
+
+    // 공지사항 상세 보기 (HTML 페이지용)
     @GetMapping("/echopickup/notice/{nno}")
     public String getNoticeDetail(@PathVariable Long nno, Model model) {
         Notice notice = noticeService.readNotice(nno);
         model.addAttribute("notice", notice);
-        return "echopickup/notice-detail";  // 상세 페이지로 이동
+        return "echopickup/notice-detail";  // 상세 HTML 페이지로 이동
+    }
+
+    // 공지사항 상세 보기 (JSON 데이터용 - 안드로이드 API)
+    @GetMapping("/echopickup/api/notices/{nno}")
+    @ResponseBody
+    public Notice getNoticeDetailApi(@PathVariable Long nno) {
+        return noticeService.readNotice(nno);  // JSON 데이터로 공지사항 상세정보 반환
     }
 
     // 공지사항 작성 화면으로 이동
