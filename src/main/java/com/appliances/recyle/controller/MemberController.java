@@ -4,10 +4,10 @@ import com.appliances.recyle.dto.MemberDTO;
 import com.appliances.recyle.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Log4j2
@@ -55,19 +55,11 @@ public class MemberController {
 //        model.addAttribute("user", user);
 //    }
 
-    // 회원가입
-    @GetMapping("/join")
-    public void joinGet() {
-        log.info("joinGet====================");
-    }
-
-    // 회원 가입 로직 처리
-    @PostMapping("/join")
-    public String joinPost(MemberDTO memberDTO,
-                           RedirectAttributes redirectAttributes) {
-        log.info("joinPost====================");
+    // 회원가입 처리 (웹 요청: Form data)
+    @PostMapping(value = "/join", consumes = "application/x-www-form-urlencoded")
+    public String joinPostWeb(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
+        log.info("joinPostWeb====================");
         log.info("JoinDTO = " + memberDTO);
-
 
         try {
             memberService.join(memberDTO);
@@ -76,8 +68,24 @@ public class MemberController {
             return "redirect:/echopickup/member/join";
         }
         // 회원 가입 성공시
-        redirectAttributes.addFlashAttribute("result","회원가입 성공");
+        redirectAttributes.addFlashAttribute("result", "회원가입 성공");
         return "redirect:/echopickup/member/login";
+    }
+
+    // 회원가입 처리 (앱 요청: JSON data)
+    @PostMapping(value = "/join", consumes = "application/json")
+    @ResponseBody
+    public ResponseEntity<String> joinPostApp(@RequestBody MemberDTO memberDTO) {
+        log.info("joinPostApp====================");
+        log.info("JoinDTO = " + memberDTO);
+
+        try {
+            memberService.join(memberDTO);
+        } catch (MemberService.IdExistException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디 중복입니다");
+        }
+        // 회원 가입 성공시
+        return ResponseEntity.ok("회원가입 성공");
     }
 
 //    @PostMapping("/join")
