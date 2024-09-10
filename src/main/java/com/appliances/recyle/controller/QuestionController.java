@@ -1,6 +1,7 @@
     package com.appliances.recyle.controller;
 
     import com.appliances.recyle.domain.Member;
+    import com.appliances.recyle.domain.MemberRole;
     import com.appliances.recyle.domain.Question;
     import com.appliances.recyle.repository.MemberRepository;
     import com.appliances.recyle.service.QuestionService;
@@ -84,8 +85,30 @@
         public String getQuestionDetail(@PathVariable("qno") Long qno, Model model) {
             Question question = questionService.readQuestion(qno);
             model.addAttribute("question", question);
+
+            // 로그인된 사용자의 이메일 가져오기
+            final String email;
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                email = userDetails.getUsername();  // username이 이메일인 경우
+
+                // 사용자 정보 조회
+                Member member = memberRepository.findByEmail(email)
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid email: " + email));
+
+                // Set<MemberRole>에서 ADMIN 역할이 있는지 확인
+                boolean isAdmin = member.getRoleSet().contains(MemberRole.ADMIN); // ADMIN 역할이 있는지 확인
+                model.addAttribute("isAdmin", isAdmin);  // 관리자 권한 여부를 모델에 추가
+            } else {
+                model.addAttribute("isAdmin", false);
+            }
+
             return "echopickup/question-detail";
         }
+
+
         // 질문 삭제 메서드 (POST 요청 처리)
         @PostMapping("/question-delete/{qno}")
         public String deleteQuestion(@PathVariable Long qno, RedirectAttributes redirectAttributes) {
