@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Pickup Admin</title>
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+</head>
+<body>
+    <div class="mypage-sidebar">
+        <div class="logo">
+            <img th:src="@{/images/echologo.png}" alt="Logo" width="250dp" height="100dp">
+        </div>
+        <ul class="menu">
+            <li><a th:href="@{/echopickup/}">수거 신청 현황</a></li>
+            <li><a th:href="@{/echopickup/}">내 정보 수정</a></li>
+            <li><a th:href="@{/echopickup/}"></a></li>
+            <li><a th:href="@{/echopickup/}"></a></li>
+            <li><a th:href="@{/echopickup/}"></a></li>
+            <li><a th:href="@{/echopickup/}"></a></li>
+            <li><a th:href="@{/echopickup/}">회원탈퇴</a></li>
+        </ul>
+    </div>
+
+    <div class="main_content" layout:fragment="mypage_content">
+
+    </div>
+
+</body>
+</html>
