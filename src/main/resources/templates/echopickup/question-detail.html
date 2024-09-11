@@ -44,7 +44,11 @@
       </div>
 
       <div class="button-group">
-        <button class="btn-answer" type="button" th:onclick="|location.href='/echopickup/answer/${question.qno}'|">답글 달기</button>
+        <!-- 관리자일 경우에만 답글 달기 버튼 보이기 -->
+        <div th:if="${isAdmin}">
+          <button class="btn-answer" type="button" th:onclick="|location.href='/echopickup/answer/${question.qno}'|">답글 달기</button>
+        </div>
+
         <div class="btn-group-right">
           <button class="btn-update" th:onclick="|location.href='/echopickup/question-update/${question.qno}'|">수정</button>
           <form th:action="@{'/echopickup/question-delete/' + ${question.qno}}" method="post" style="display:inline;">
