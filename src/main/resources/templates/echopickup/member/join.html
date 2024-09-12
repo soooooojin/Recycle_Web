@@ -34,7 +34,14 @@
             </div>
             <div class="form-group">
                 <label for="address">주소</label>
-                <input type="text" id="address" name="address" required>
+                <input type="text" id="address" placeholder="주소를 입력하세요" required>
+                <input type="hidden" id="postcode" placeholder="우편번호">
+                <input type="hidden" id="fullAddressField" name="address" />
+                <button type="button" class="find-address-btn" onclick="DaumPostcode()">우편번호</button>
+            </div>
+            <div class="form-group">
+                <label for="detailAddress">상세 주소</label>
+                <input type="text" id="detailAddress" placeholder="상세 주소를 입력하세요">
             </div>
             <div class="form-group">
                 <label for="phone">휴대폰 번호</label>
