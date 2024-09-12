@@ -51,17 +51,15 @@ public class QuestionServiceImpl implements QuestionService {
             throw new IllegalArgumentException("Invalid question ID: " + qno);
         }
     }
+
     @Override
     public Page<Question> getQuestions(Pageable pageable) {
-        Page<Question> questions = questionRepository.findAll(pageable);
-        questions.forEach(question -> {
-            // Answer를 강제 로드하면서 로그 출력
-            if (question.getAnswer() != null) {
-                System.out.println("Question ID: " + question.getQno() + " has an Answer: " + question.getAnswer().getAcomment());
-            } else {
-                System.out.println("Question ID: " + question.getQno() + " has no Answer.");
-            }
-        });
-        return questions;
+        return questionRepository.findAll(pageable);
+    }
+
+    // 이메일을 기준으로 페이지네이션된 문의 목록을 가져오는 메서드 구현
+    @Override
+    public Page<Question> findQuestionsByMemberEmail(String email, Pageable pageable) {
+        return questionRepository.findByMemberEmail(email, pageable);
     }
 }
