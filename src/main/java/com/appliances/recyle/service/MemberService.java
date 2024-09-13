@@ -5,6 +5,8 @@ import com.appliances.recyle.dto.MemberDTO;
 
 public interface MemberService {
 
+//    MemberDTO getUserById(String email);
+
     // 중복 아이디 예외처리
     static class IdExistException extends Exception {}
 
