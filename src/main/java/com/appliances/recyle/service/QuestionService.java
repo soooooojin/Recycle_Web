@@ -19,4 +19,7 @@ public interface QuestionService {
 
     // 페이징을 위한 메서드 추가
     Page<Question> getQuestions(Pageable pageable);
+
+    // 이메일로 문의 목록을 페이지네이션으로 조회하는 메서드
+    Page<Question> findQuestionsByMemberEmail(String email, Pageable pageable);
 }
