@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="www.thymeleaf.org">
+      xmlns:th="www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Echo Pickup Admin</title>
-    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+    <title>마이페이지 사이드</title>
+    <link rel="stylesheet" th:href="@{/css/mypage-sidebar.css}">
 </head>
 <body>
-    <div class="mypage-sidebar">
-        <div class="logo">
-            <img th:src="@{/images/echologo.png}" alt="Logo" width="250dp" height="100dp">
-        </div>
+<div class="container" layout:fragment="content">
+    <div class="sidebar">
+        <h1>마이페이지</h1>
         <ul class="menu">
-            <li><a th:href="@{/echopickup/}">수거 신청 현황</a></li>
-            <li><a th:href="@{/echopickup/}">내 정보 수정</a></li>
-            <li><a th:href="@{/echopickup/}"></a></li>
-            <li><a th:href="@{/echopickup/}"></a></li>
-            <li><a th:href="@{/echopickup/}"></a></li>
-            <li><a th:href="@{/echopickup/}"></a></li>
-            <li><a th:href="@{/echopickup/}">회원탈퇴</a></li>
+            <li><a th:href="@{/echopickup/mypage}">내 정보</a></li>
+            <li><a th:href="@{/echopickup/mypage/changepassword}">비밀번호 변경</a></li>
+            <li><a th:href="@{/echopickup/mypage/progress}">수거 신청 현황</a></li>
+            <li><a th:href="@{/echopickup/mypage/}">문의 목록</a></li>
+            <li><a th:href="@{/echopickup/mypage/}">1:1 상담</a></li>
+            <li><a th:href="@{/echopickup/mypage/}">회원탈퇴</a></li>
         </ul>
     </div>
 
     <div class="main_content" layout:fragment="mypage_content">
 
     </div>
-
+</div>
 </body>
 </html>
