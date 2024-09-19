@@ -69,8 +69,32 @@ public class MypageController {
 
 
     @GetMapping("/changepassword")
-    public void changepasswordGet() {
+    public String changepasswordGet() {
+        return "/echopickup/mypage/changepassword";
+    }
+//
+    // 비밀번호 변경을 위한 POST 요청 처리
+    @PostMapping("/changepassword")
+    public String changePasswordPost(@RequestBody Map<String, String> requestData, Authentication authentication) {
+        String currentPassword = requestData.get("currentPassword");
+        String newPassword = requestData.get("newPassword");
+        String confirmPassword = requestData.get("confirmPassword");
 
+        // 현재 로그인된 사용자 정보 가져오기
+        String email = ((User) authentication.getPrincipal()).getUsername();
+
+        try {
+            // 비밀번호 변경 로직 실행
+            boolean isChanged = memberService2.changeMemberPassword(email, currentPassword, newPassword, confirmPassword);
+            if (isChanged) {
+                return "redirect:/echopickup/mypage/changepassword?success=true";
+            } else {
+                return "redirect:/echopickup/mypage/changepassword?error=true";
+            }
+        } catch (Exception e) {
+            log.error("비밀번호 변경 중 오류 발생", e);
+            return "redirect:/echopickup/mypage/changepassword?error=true";
+        }
     }
 
     @GetMapping("/progress")

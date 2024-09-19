@@ -21,13 +21,19 @@ document.getElementById('changepwbutton').addEventListener('click', function(eve
         },
         body: JSON.stringify(passwordData),
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok) {
+                return response.json();  // 성공적인 응답이면 JSON으로 파싱
+            } else {
+                throw new Error('비밀번호 변경에 실패했습니다.');  // 에러 상황 처리
+            }
+        })
         .then(data => {
             alert('비밀번호가 성공적으로 변경되었습니다!');
             console.log('비밀번호 변경 결과:', data);
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('비밀번호 변경 중 문제가 발생했습니다.');
+            alert(error.message);  // 서버로부터 받은 에러 메시지 출력
         });
 });
