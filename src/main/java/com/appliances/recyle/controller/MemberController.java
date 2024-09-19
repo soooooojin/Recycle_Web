@@ -4,8 +4,7 @@ import com.appliances.recyle.dto.MemberDTO;
 import com.appliances.recyle.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -61,7 +60,7 @@ public class MemberController {
     }
 
     // 회원가입 처리 (웹 요청: Form data)
-    @PostMapping(value = "/join", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/join")
     public String joinPostWeb(@ModelAttribute MemberDTO memberDTO, RedirectAttributes redirectAttributes) {
         log.info("joinPostWeb====================");
         log.info("JoinDTO = " + memberDTO);
@@ -77,21 +76,6 @@ public class MemberController {
         return "redirect:/echopickup/member/login";
     }
 
-    // 회원가입 처리 (앱 요청: JSON data)
-    @PostMapping(value = "/join", consumes = "application/json")
-    @ResponseBody
-    public ResponseEntity<String> joinPostApp(@RequestBody MemberDTO memberDTO) {
-        log.info("joinPostApp====================");
-        log.info("JoinDTO = " + memberDTO);
-
-        try {
-            memberService.join(memberDTO);
-        } catch (MemberService.IdExistException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("아이디 중복입니다");
-        }
-        // 회원 가입 성공시
-        return ResponseEntity.ok("회원가입 성공");
-    }
 
 //    @PostMapping("/join")
 //    public String createUser(@ModelAttribute Member member, @RequestParam("profileImage") MultipartFile file) {
