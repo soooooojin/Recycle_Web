@@ -36,12 +36,12 @@ import java.util.Map;
 public class JWTUtil {
 
     // application.properties 에 설정
-    @Value("${com.busanit501team2.jwt.secret}")
+    @Value("${com.appliances.jwt.secret}")
     private String key;
 
     public String generateToken(Map<String, Object> valueMap, int days){
 
-        log.info("lsy generateKey..." + key);
+        log.info("generateKey..." + key);
 
         //헤더 부분
         Map<String, Object> headers = new HashMap<>();

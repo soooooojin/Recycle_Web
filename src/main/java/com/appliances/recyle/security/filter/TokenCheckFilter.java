@@ -1,6 +1,5 @@
 package com.appliances.recyle.security.filter;
 
-
 import com.appliances.recyle.security.CustomUserDetailsService;
 import com.appliances.recyle.security.exception.AccessTokenException;
 import com.appliances.recyle.util.JWTUtil;
@@ -43,8 +42,8 @@ public class TokenCheckFilter extends OncePerRequestFilter {
             return;
         }
 
-        log.info("lsy Token Check Filter..........................");
-        log.info("lsy JWTUtil: " + jwtUtil);
+        log.info("Token Check Filter..........................");
+        log.info("JWTUtil: " + jwtUtil);
 
 
 

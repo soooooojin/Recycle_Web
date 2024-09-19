@@ -1,6 +1,5 @@
 package com.appliances.recyle.security.filter;
 
-
 import com.appliances.recyle.security.exception.RefreshTokenException;
 import com.appliances.recyle.util.JWTUtil;
 import com.google.gson.Gson;
@@ -34,15 +33,15 @@ public class RefreshTokenFilter  extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        log.info("lsy path refresh token filter..... : " + path);
+        log.info("path refresh token filter..... : " + path);
         if (!path.equals(refreshPath)) {
-            log.info("lsy skip refresh token filter....refreshPath : ." + refreshPath);
-            log.info("lsy skip refresh token filter.....");
+            log.info("skip refresh token filter....refreshPath : ." + refreshPath);
+            log.info("skip refresh token filter.....");
             filterChain.doFilter(request, response);
             return;
         }
 
-        log.info("lsy Refresh Token Filter...run..............1");
+        log.info("Refresh Token Filter...run..............1");
 
         //전송된 JSON에서 accessToken과 refreshToken을 얻어온다.
         Map<String, String> tokens = parseRequestJSON(request);
@@ -50,8 +49,8 @@ public class RefreshTokenFilter  extends OncePerRequestFilter {
         String accessToken = tokens.get("accessToken");
         String refreshToken = tokens.get("refreshToken");
 
-        log.info("lsy accessToken: " + accessToken);
-        log.info("lsy refreshToken: " + refreshToken);
+        log.info("accessToken: " + accessToken);
+        log.info("refreshToken: " + refreshToken);
 
         try{
             checkAccessToken(accessToken);

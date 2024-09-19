@@ -20,16 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    // 스프링 시큐리티 설정 클래스에 빈으로 등록한 인스턴스 주입하기.
-    private PasswordEncoder passwordEncoder;
-
     @Autowired
     private MemberRepository memberRepository;
-
-    //생성자로 주입하기.
-    public CustomUserDetailsService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
 
     // 일반 로그인 로직 처리시, 여기를 반드시 거쳐 감.
     @Override
