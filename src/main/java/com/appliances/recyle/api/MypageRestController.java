@@ -67,31 +67,31 @@ public class MypageRestController {
 
         return ResponseEntity.ok("주소가 성공적으로 업데이트되었습니다.");
     }
-//
-//    @PostMapping("/changepassword")
-//    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeRequestDTO passwordChangeRequestDTO) {
-//        // 현재 인증된 사용자 가져오기
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String email = authentication.getName();  // 로그인된 사용자의 이메일
-//
-//        // 데이터베이스에서 사용자 정보 가져오기
-//        Member member = memberService2.getMemberByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-//
-//        // 현재 비밀번호 확인
-//        if (!passwordEncoder.matches(passwordChangeRequestDTO.getCurrentPassword(), member.getPw())) {
-//            return ResponseEntity.badRequest().body("현재 비밀번호가 일치하지 않습니다.");
-//        }
-//
-//        // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
-//        if (!passwordChangeRequestDTO.getNewPassword().equals(passwordChangeRequestDTO.getConfirmPassword())) {
-//            return ResponseEntity.badRequest().body("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
-//        }
-//
-//        // 새 비밀번호 암호화 후 저장
-//        member.setPw(passwordEncoder.encode(passwordChangeRequestDTO.getNewPassword()));
-//        memberService2.save(member);  // 변경된 비밀번호를 DB에 저장
-//
-//        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
-//    }
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> request) {
+
+        log.info("값 제대로 오고 있나.. Request body: " + request);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((User) authentication.getPrincipal()).getUsername();
+
+        Member member = memberService2.getMemberByEmail(email)
+            .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+
+        String currentPassword = request.get("currentPassword");
+        String newPassword = request.get("newPassword");
+        String confirmPassword = request.get("confirmPassword");
+
+        if (!passwordEncoder.matches(currentPassword, member.getPw())) {
+            return ResponseEntity.badRequest().body("현재 비밀번호가 일치하지 않습니다.");
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            return ResponseEntity.badRequest().body("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+        }
+        member.setPw(passwordEncoder.encode(newPassword));
+        memberService2.save(member);
+
+        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+    }
 }
