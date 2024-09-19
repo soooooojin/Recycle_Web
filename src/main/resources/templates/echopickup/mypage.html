@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org"
+      layout:decorate="~{layout/base.html}">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyPage</title>
+    <link rel="stylesheet" th:href="@{/css/mypage-sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+</head>
+<body>
+<div class="container" layout:fragment="content">
+    <div class="sidebar">
+        <h1>마이페이지</h1>
+        <ul class="menu">
+            <li><a th:href="@{/echopickup/mypage}">내 정보</a></li>
+            <li><a th:href="@{/echopickup/mypage/changepassword}">비밀번호 변경</a></li>
+            <li><a th:href="@{/echopickup/mypage/progress}">수거 신청 현황</a></li>
+            <li><a th:href="@{/echopickup/mypage/}">문의 목록</a></li>
+            <li><a th:href="@{/echopickup/mypage/}">1:1 상담</a></li>
+            <li><a th:href="@{/echopickup/mypage/}">회원탈퇴</a></li>
+        </ul>
+    </div>
+
+    <div class="main_content" layout:fragment="mypage_content">
+        <h2> 내 정보 </h2>
+        <div class="profile-section">
+
+<!--            사용자 이름 : mname-->
+            <label for="userName">이름</label>
+            <input type="text" id="userName" readonly>
+
+<!--            Id : email-->
+            <label for="email">아이디(이메일)</label>
+            <input type="text" id="email" readonly>
+
+<!--            phone-->
+            <label for="phone">휴대폰 번호</label>
+            <input type="text" id="phone" placeholder="휴대폰 번호를 입력하세요">
+
+<!--            address-->
+            <label for="address">주소</label>
+            <input type="text" id="address" placeholder="주소를 입력하세요">
+
+
+<!--            얘네는 해도되고 안해도 되고~~ 어차피 저장x-->
+            <label for="birthdate">생년월일</label>
+            <input type="date" id="birthdate">
+
+            <label for="gender">성별</label>
+            <select id="gender">
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+                <option value="other">기타</option>
+            </select>
+        </div>
+
+        <button id="editButton">정보 수정</button>
+    </div>
+
+    <script th:src="@{/js/myinfo.js}"></script>
+</div>
+</body>
+</html>
+
+
+
+
+

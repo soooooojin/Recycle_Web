@@ -1,0 +1,26 @@
+/*수거신청현황 css*/
+
+.main_content {
+    display: flex;
+    justify-content: center;
+    width: 100%; /* 가로 전체 확장 */
+    padding: 0; /* 패딩 제거 */
+}
+
+.progress-container {
+    width: 100%; /* 테이블이 가로 전체를 채우도록 설정 */
+    padding: 10px 50px; /* 상하 여백은 남기고, 좌우 여백을 설정 */
+}
+
+/* 테이블 스타일 */
+#ItemsProgressTable {
+    width: 100%; /* 테이블이 컨테이너 안에서 가로로 꽉 차게 */
+    border-collapse: collapse;
+}
+
+#ItemsProgressTable th, #ItemsProgressTable td {
+    border: 1px solid #ddd; /* 테이블 셀 테두리 */
+    padding: 8px;
+    background-color: skyblue;
+    color: white;
+}

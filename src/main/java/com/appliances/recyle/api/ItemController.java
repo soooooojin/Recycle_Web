@@ -1,14 +1,10 @@
-package com.appliances.recyle.controller;
+package com.appliances.recyle.api;
 import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.dto.ItemDTO;
 import com.appliances.recyle.service.ItemService2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

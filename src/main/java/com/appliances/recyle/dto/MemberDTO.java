@@ -1,9 +1,7 @@
 package com.appliances.recyle.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +30,13 @@ public class MemberDTO {
     @NotEmpty(message = "전화번호는 필수 입력 값입니다.")
 //    @Pattern(regexp = "^(010|011|016|017|018|019)\\d{3,4}\\d{4}$", message = "전화번호 형식이 올바르지 않습니다. (예: 01012345678)")
     private String phone;
+
+//    public MemberDTO(String email, String mname, String phone, String address) {
+//        this.email = email;
+//        this.mname = mname;
+//        this.phone = phone;
+//        this.address = address;
+//    }
 
 //    private String roll;
 }
