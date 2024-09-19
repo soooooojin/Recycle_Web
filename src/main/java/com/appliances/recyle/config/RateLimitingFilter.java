@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+@Log4j2
 @Component
 // 이 필터는 각 클라이언트 IP 주소의 요청 수를 추적합니다.
 // 요청 횟수와 타임스탬프를 저장하기 위해 메모리 내 캐시('ConcurrentHashMap')를 사용
@@ -32,6 +34,8 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         String clientIp = getClientIp(request);
 
         RateLimit rateLimit = rateLimitCache.computeIfAbsent(clientIp, k -> new RateLimit(MAX_REQUESTS, TIME_WINDOW));
+        log.info("HTTP Request URI: " + request.getRequestURI());
+        log.info("HTTP Request Method: " + request.getMethod());
 
         if (rateLimit.isAllowed()) {
             filterChain.doFilter(request, response);

@@ -70,6 +70,7 @@ public class CustomSecurityConfig {
         //반드시 필요 세팅1
         http.authenticationManager(authenticationManager);
 
+
         //APILoginFilter 세팅1
         APILoginFilter apiLoginFilter = new APILoginFilter("/generateToken");
         apiLoginFilter.setAuthenticationManager(authenticationManager);
@@ -89,7 +90,9 @@ public class CustomSecurityConfig {
                 tokenCheckFilter(jwtUtil, customUserDetailsService),
 //                tokenCheckFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class
+
         );
+        log.info("TokenCheckFilter added before UsernamePasswordAuthenticationFilter");
 
         //refreshToken 호출 처리
         http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),
@@ -189,6 +192,8 @@ public class CustomSecurityConfig {
                                 .userDetailsService(customUserDetailsService)
                                 // 토큰의 만료 시간(토믄 유효 기간_30일)
                                 .tokenValiditySeconds(60*60*24*30)
+                                .rememberMeCookieName("remember-me-cookie") // 쿠키 이름 설정 가능
+                                .useSecureCookie(false) // HTTPS를 사용하는 경우 Secure 플래그 추가
         );
 
         //카카오 로그인 API 설정

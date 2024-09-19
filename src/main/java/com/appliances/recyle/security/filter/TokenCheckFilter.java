@@ -35,9 +35,11 @@ public class TokenCheckFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
+        log.info("Request URI: " + path); // 요청된 URI 로그
 
 
         if (!path.startsWith("/api/")) {
+            log.info("Skipping token check for non-API path");
             filterChain.doFilter(request, response);
             return;
         }
@@ -58,6 +60,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
             log.info("username: " + username);
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+            log.info("UserDetails: " + userDetails);  // 사용자 정보 출력
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -65,9 +68,11 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("Authentication set in SecurityContext");
 
             filterChain.doFilter(request,response);
         }catch(AccessTokenException accessTokenException){
+
             accessTokenException.sendResponseError(response);
         }
 
