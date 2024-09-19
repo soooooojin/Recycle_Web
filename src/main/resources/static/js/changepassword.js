@@ -2,7 +2,7 @@ document.getElementById('changepwbutton').addEventListener('click', function(eve
     event.preventDefault();  // 폼 제출 기본 동작 막기
 
     // 입력된 비밀번호 값 가져오기
-    const currentPassword = document.getElementById('currentPassword').value;
+    const currentPassword = document.getElementById('pw').value;
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
