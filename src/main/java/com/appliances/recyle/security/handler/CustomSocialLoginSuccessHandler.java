@@ -25,9 +25,23 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
 
         SecurityMemberDTO securityMemberDTO = (SecurityMemberDTO) authentication.getPrincipal();
 
-        // 소셜 로그인 사용자가 로그인에 성공하면, 추가적인 비밀번호 변경 요구 없이 바로 서비스로 리다이렉트
-        log.info("소셜 로그인 사용자의 정보: " + securityMemberDTO);
-        response.sendRedirect("/echopickup/index");
+        // 소셜 로그인 사용자의 주소와 전화번호가 null인지 확인
+        if (securityMemberDTO.getAddress() == null || securityMemberDTO.getPhone() == null) {
+            log.info("소셜 로그인 사용자의 주소 또는 전화번호가 없습니다. 마이페이지로 이동합니다.");
+
+            // 경고창을 띄우고 정보 수정 페이지로 리다이렉트
+            response.setContentType("text/html; charset=UTF-8");
+            response.getWriter().write("<script>alert('주소와 전화번호를 업데이트해주세요.'); location.href='/echopickup/mypage';</script>");
+            response.getWriter().flush();
+        } else {
+            // 정상적으로 로그인 성공 후 리다이렉트
+            log.info("소셜 로그인 사용자의 정보: " + securityMemberDTO);
+            response.sendRedirect("/echopickup/index");
+        }
+        //9.12 작업중
+//        // 소셜 로그인 사용자가 로그인에 성공하면, 추가적인 비밀번호 변경 요구 없이 바로 서비스로 리다이렉트
+//        log.info("소셜 로그인 사용자의 정보: " + securityMemberDTO);
+//        response.sendRedirect("/echopickup/index");
 
         /* 마이페이지 이동을 위함. 현재 필요없음
 

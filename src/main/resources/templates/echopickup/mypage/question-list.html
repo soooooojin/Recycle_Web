@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/mypage-sidebar.html}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문의 목록</title>
+  <link rel="stylesheet" th:href="@{/css/mypage-questionlist.css}">
+</head>
+<body>
+
+<!-- 메인 콘텐츠 출력 -->
+<div class="main_content" layout:fragment="mypage_content">
+  <div class="question-content">
+    <h1>문의 목록</h1>
+    <div class="question-list">
+      <table class="question-table">
+        <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>내용</th>
+          <th>작성자</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question : ${questions.content}">
+          <td th:text="${question.qno}"></td>
+          <td>
+            <a th:href="@{'/echopickup/question-list/' + ${question.qno}}">
+              <span th:text="${question.qtitle}"></span>
+              <span th:if="${question.answer != null}" style="color:green;"> [답글완료]</span>
+            </a>
+          </td>
+          <td th:text="${question.qcomment}"></td>
+          <td th:text="${question.member.email}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(questions.content)}">
+          <td colspan="4">문의 내역이 없습니다.</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <ul>
+          <li th:classappend="${questions.hasPrevious()} ? '' : 'disabled'">
+            <a th:href="@{/echopickup/mypage/question-list(page=0, size=${questions.size})}">&laquo;</a>
+          </li>
+          <li th:each="i : ${#numbers.sequence(1, questions.totalPages)}"
+              th:classappend="${questions.number + 1 == i} ? 'active'">
+            <a th:href="@{/echopickup/mypage/question-list(page=${i - 1}, size=${questions.size})}"
+               th:text="${i}">1</a>
+          </li>
+          <li th:classappend="${questions.hasNext()} ? '' : 'disabled'">
+            <a th:href="@{/echopickup/mypage/question-list(page=${questions.totalPages - 1}, size=${questions.size})}">&raquo;</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
