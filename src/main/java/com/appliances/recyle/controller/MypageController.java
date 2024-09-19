@@ -13,10 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -75,27 +72,28 @@ public class MypageController {
 //
     // 비밀번호 변경을 위한 POST 요청 처리
     @PostMapping("/changepassword")
-    public String changePasswordPost(@RequestBody Map<String, String> requestData, Authentication authentication) {
-        String currentPassword = requestData.get("currentPassword");
-        String newPassword = requestData.get("newPassword");
-        String confirmPassword = requestData.get("confirmPassword");
+    public String changePasswordPost(@RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 Authentication authentication) {
+    // 현재 로그인된 사용자 정보 가져오기
+    String email = ((User) authentication.getPrincipal()).getUsername();
 
-        // 현재 로그인된 사용자 정보 가져오기
-        String email = ((User) authentication.getPrincipal()).getUsername();
-
-        try {
-            // 비밀번호 변경 로직 실행
-            boolean isChanged = memberService2.changeMemberPassword(email, currentPassword, newPassword, confirmPassword);
-            if (isChanged) {
-                return "redirect:/echopickup/mypage/changepassword?success=true";
-            } else {
-                return "redirect:/echopickup/mypage/changepassword?error=true";
-            }
-        } catch (Exception e) {
-            log.error("비밀번호 변경 중 오류 발생", e);
+    try {
+        // 비밀번호 변경 로직 실행
+        boolean isChanged = memberService2.changeMemberPassword(email, currentPassword, newPassword, confirmPassword);
+        if (isChanged) {
+            return "redirect:/echopickup/mypage/changepassword?success=true";
+        } else {
             return "redirect:/echopickup/mypage/changepassword?error=true";
         }
+    } catch (Exception e) {
+        log.error("비밀번호 변경 중 오류 발생", e);
+        return "redirect:/echopickup/mypage/changepassword?error=true";
+        }
     }
+
+
 
     @GetMapping("/progress")
     public void progressGet() {
