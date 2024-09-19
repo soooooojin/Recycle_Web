@@ -19,16 +19,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
-//    @Override
-//    public MemberDTO getUserById(String email) {
-//        Member member = memberRepository.findById(email).orElse(null);
-//        if (member != null) {
-//            return new MemberDTO(member.getEmail(), member.getMname(), member.getPhone(), member.getAddress());
-//        }
-//        return null;
-//    }
-
     @Override
     public boolean checkid(String email) {
         Optional<Member> result = memberRepository.findByEmail(email);
