@@ -1,7 +1,6 @@
 package com.appliances.recyle.config;
 
 
-import com.appliances.recyle.repository.MemberRepository;
 import com.appliances.recyle.security.CustomUserDetailsService;
 import com.appliances.recyle.security.handler.Custom403Handler;
 import com.appliances.recyle.security.handler.CustomSocialLoginSuccessHandler;
@@ -20,6 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
 
@@ -31,9 +32,9 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class CustomSecurityConfig {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
     private CustomUserDetailsService customUserDetailsService;
-    private final MemberRepository memberRepository;
+//    private final MemberRepository memberRepository;
 
     // ip에서 분당 요청 횟수 제한
     private final RateLimitingFilter rateLimitingFilter;
@@ -58,16 +59,17 @@ public class CustomSecurityConfig {
         http.logout(logout -> logout
                 .logoutUrl("/echopickup/member/logout")
                 .logoutSuccessUrl("/echopickup/member/login?logout")
+                .deleteCookies("JSESSIONID", "remember-me")
+                .invalidateHttpSession(true) // 세션 무효화
+                .clearAuthentication(true)   // 사용자 정보 명시적으로 삭제
         );
 
-//        // 폼 방식 일경우
-        http
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/api/users", "/users/new", "/refreshToken").permitAll()
-                                .requestMatchers("/users/**").authenticated()
+        // 폼 방식 일경우
+        http.authorizeRequests(authorizeRequests -> authorizeRequests
+                .requestMatchers("/api/users", "/users/new", "/refreshToken").permitAll()
+                .requestMatchers("/users/**").authenticated()
 
-                );
+        );
 //                .sessionManagement(sessionManagement ->
 //                        sessionManagement
 //                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -129,19 +131,19 @@ public class CustomSecurityConfig {
 //                        );
 
 
-//        // 자동로그인 설정 1
-//        http.rememberMe(
-//                httpSecurityRememberMeConfigurer ->
-//                        httpSecurityRememberMeConfigurer
-//                                // 토큰 생성시 사용할 암호
-//                                .key("12345678")
-//                                // 스프링 시큐리티에서 정의해둔 Repository
-//                                .tokenRepository(persistentTokenRepository())
-//                                // UserDetail를 반환하는 사용자가 정의한 클래스
-//                                .userDetailsService(customUserDetailsService)
-//                                // 토큰의 만료 시간.
-//                                .tokenValiditySeconds(60*60*24*30)
-//        );
+        // 자동로그인 설정 1
+        http.rememberMe(
+                httpSecurityRememberMeConfigurer ->
+                        httpSecurityRememberMeConfigurer
+                                // 토큰 생성시 사용할 암호
+                                .key("12345678")
+                                // 스프링 시큐리티에서 정의해둔 Repository
+                                .tokenRepository(persistentTokenRepository())
+                                // UserDetail를 반환하는 사용자가 정의한 클래스
+                                .userDetailsService(customUserDetailsService)
+                                // 토큰의 만료 시간(토믄 유효 기간_30일)
+                                .tokenValiditySeconds(60*60*24*30)
+        );
 
         //카카오 로그인 API 설정
         http.oauth2Login(
@@ -169,13 +171,14 @@ public class CustomSecurityConfig {
     }
 
     // 자동로그인 설정 2. 시스템에서 정의해둔 기본 약속.
-//    @Bean
-//    public PersistentTokenRepository persistentTokenRepository() {
-//        // 시큐리티에서 정의 해둔 구현체
-//        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
-//        repo.setDataSource(dataSource);
-//        return repo;
-//    }
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        // 시큐리티에서 정의 해둔 구현체
+        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        log.info("자동로그인 값 : "+ dataSource);
+        return repo;
+    }
 
     //정적 자원 시큐리티 필터 항목에 제외하기.
     @Bean
