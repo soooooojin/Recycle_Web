@@ -37,25 +37,28 @@
           </tbody>
         </table>
 
-        <div class="pagination">
-          <ul>
-            <!-- 첫 번째 페이지로 이동 -->
-            <li th:classappend="${noticePage.hasPrevious()} ? '' : 'disabled'">
-              <a th:href="@{/echopickup/notice(page=0, size=${noticePage.size})}">&laquo;</a>
-            </li>
+        <div class="pagination-wrapper">
+          <div class="pagination">
+            <ul>
+              <!-- 첫 번째 페이지로 이동 -->
+              <li th:classappend="${noticePage.hasPrevious()} ? '' : 'disabled'">
+                <a th:href="@{/echopickup/notice(page=0, size=${noticePage.size})}">&laquo;</a>
+              </li>
 
-            <!-- 각 페이지 번호로 이동 -->
-            <li th:each="i : ${#numbers.sequence(1, noticePage.totalPages)}"
-                th:classappend="${noticePage.number + 1 == i} ? 'active'">
-              <a th:href="@{/echopickup/notice(page=${i - 1}, size=${noticePage.size})}"
-                 th:text="${i}">1</a>
-            </li>
+              <!-- 각 페이지 번호로 이동 -->
+              <li th:each="i : ${#numbers.sequence(1, noticePage.totalPages)}"
+                  th:classappend="${noticePage.number + 1 == i} ? 'active'">
+                <a th:href="@{/echopickup/notice(page=${i - 1}, size=${noticePage.size})}"
+                   th:text="${i}">1</a>
+              </li>
 
-            <!-- 마지막 페이지로 이동 -->
-            <li th:classappend="${noticePage.hasNext()} ? '' : 'disabled'">
-              <a th:href="@{/echopickup/notice(page=${noticePage.totalPages - 1}, size=${noticePage.size})}">&raquo;</a>
-            </li>
-          </ul>
+              <!-- 마지막 페이지로 이동 -->
+              <li th:classappend="${noticePage.hasNext()} ? '' : 'disabled'">
+                <a th:href="@{/echopickup/notice(page=${noticePage.totalPages - 1}, size=${noticePage.size})}">&raquo;</a>
+              </li>
+            </ul>
+          </div>
+          <a th:href="@{/echopickup/notice/write}" class="btn-write">작성하기</a>
         </div>
       </div>
     </div>
