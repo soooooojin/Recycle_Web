@@ -1,7 +1,6 @@
 package com.appliances.recyle.controller;
 
 import com.appliances.recyle.domain.Member;
-import com.appliances.recyle.domain.Question;
 import com.appliances.recyle.service.MemberService2;
 import com.appliances.recyle.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +13,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import com.appliances.recyle.domain.Question;
 import java.util.Map;
 
 @Log4j2
 @Controller
-@RequestMapping("/echopickup/mypage")  // REST API 경로 설정
+@RequestMapping("/echopickup/mypage")
 @RequiredArgsConstructor
 public class MypageController {
 
@@ -31,87 +30,55 @@ public class MypageController {
         return "/echopickup/mypage";
     }
 
-    // 주소 업데이트를 위한 POST 요청 처리
-    @PostMapping
-    public String updateAddressPost(@RequestBody Map<String, String> requestData) {
-        // 현재 로그인된 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    // 회원탈퇴 처리
+    @GetMapping("/delete")
+    public String deleteMember(Authentication authentication) {
         String email = ((User) authentication.getPrincipal()).getUsername();
 
-        // 사용자의 회원 정보를 가져오기
-        Member member = memberService2.getMemberByEmail(email)
-                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+        // 회원 삭제 로직 실행
+        memberService2.deleteMemberByEmail(email);
 
-        // 새로운 정보 업데이트
-        String address = requestData.get("address");
-        String phone = requestData.get("phone");
-
-
-        // 새로운 정보 업데이트
-        member.setAddress(address);
-        member.setPhone(phone);
-        memberService2.save(member);
-
-        log.info("주소값 : "+address);
-        log.info("휴대폰: "+phone);
-        log.info(member);
-
-        if (address == null || phone == null) {
-            log.error("데이터가 비어 있습니다.");
-            return "redirect:/echopickup/mypage?error=true";
-        }
-        // 성공 시 마이페이지로 리다이렉트
-        return "redirect:/echopickup/mypage";
+        // 회원탈퇴 후 로그인 페이지로 리다이렉트
+        return "redirect:/echopickup/member/login";
     }
-
 
     @GetMapping("/changepassword")
     public String changepasswordGet() {
         return "/echopickup/mypage/changepassword";
     }
-//
-    // 비밀번호 변경을 위한 POST 요청 처리
+
     @PostMapping("/changepassword")
     public String changePasswordPost(@RequestParam("currentPassword") String currentPassword,
-                                 @RequestParam("newPassword") String newPassword,
-                                 @RequestParam("confirmPassword") String confirmPassword,
-                                 Authentication authentication) {
-    // 현재 로그인된 사용자 정보 가져오기
-    String email = ((User) authentication.getPrincipal()).getUsername();
+                                     @RequestParam("newPassword") String newPassword,
+                                     @RequestParam("confirmPassword") String confirmPassword,
+                                     Authentication authentication) {
+        String email = ((User) authentication.getPrincipal()).getUsername();
 
-    try {
-        // 비밀번호 변경 로직 실행
-        boolean isChanged = memberService2.changeMemberPassword(email, currentPassword, newPassword, confirmPassword);
-        if (isChanged) {
-            return "redirect:/echopickup/mypage/changepassword?success=true";
-        } else {
+        try {
+            boolean isChanged = memberService2.changeMemberPassword(email, currentPassword, newPassword, confirmPassword);
+            if (isChanged) {
+                return "redirect:/echopickup/mypage/changepassword?success=true";
+            } else {
+                return "redirect:/echopickup/mypage/changepassword?error=true";
+            }
+        } catch (Exception e) {
+            log.error("비밀번호 변경 중 오류 발생", e);
             return "redirect:/echopickup/mypage/changepassword?error=true";
         }
-    } catch (Exception e) {
-        log.error("비밀번호 변경 중 오류 발생", e);
-        return "redirect:/echopickup/mypage/changepassword?error=true";
-        }
     }
-
-
 
     @GetMapping("/progress")
     public void progressGet() {
-
     }
+
     @GetMapping("/question-list")
     public String questionListGet(Model model, Pageable pageable) {
-        // 로그인한 사용자의 이메일 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserEmail = authentication.getName();
 
-        // 이메일로 필터링된 문의 목록을 페이지네이션하여 가져오기
         Page<Question> questions = questionService.findQuestionsByMemberEmail(currentUserEmail, pageable);
-
-        // 데이터를 모델에 추가
         model.addAttribute("questions", questions);
 
         return "echopickup/mypage/question-list";
     }
-
 }

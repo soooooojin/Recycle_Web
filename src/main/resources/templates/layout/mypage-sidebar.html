@@ -3,28 +3,36 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="www.thymeleaf.org"
       layout:decorate="~{layout/base.html}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마이페이지 사이드</title>
-    <link rel="stylesheet" th:href="@{/css/mypage-sidebar.css}">
-</head>
-<body>
-<div class="container" layout:fragment="content">
-    <div class="sidebar">
-        <h1>마이페이지</h1>
-        <ul class="menu">
-            <li><a th:href="@{/echopickup/mypage}">내 정보</a></li>
-            <li><a th:href="@{/echopickup/mypage/changepassword}">비밀번호 변경</a></li>
-            <li><a th:href="@{/echopickup/mypage/progress}">수거 신청 현황</a></li>
-            <li><a th:href="@{/echopickup/mypage/question-list}">문의 목록</a></li>
-            <li><a th:href="@{/echopickup/mypage/}">회원탈퇴</a></li>
-        </ul>
-    </div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>마이페이지 사이드</title>
+        <link rel="stylesheet" th:href="@{/css/mypage-sidebar.css}">
+    </head>
+    <body>
+        <div class="container" layout:fragment="content">
+            <div class="sidebar">
+                <h1>마이페이지</h1>
+                <ul class="menu">
+                    <li><a th:href="@{/echopickup/mypage}">내 정보</a></li>
+                    <li><a th:href="@{/echopickup/mypage/changepassword}">비밀번호 변경</a></li>
+                    <li><a th:href="@{/echopickup/mypage/progress}">수거 신청 현황</a></li>
+                    <li><a th:href="@{/echopickup/mypage/question-list}">문의 목록</a></li>
+                    <li><a href="javascript:void(0);" onclick="confirmDelete()">회원탈퇴</a></li>
+                </ul>
+            </div>
 
-    <div class="main_content" layout:fragment="mypage_content">
+            <div class="main_content" layout:fragment="mypage_content">
 
-    </div>
-</div>
-</body>
+            </div>
+        </div>
+
+        <script>
+            function confirmDelete() {
+                if (confirm("회원을 탈퇴하시겠습니까?")) {
+                    window.location.href = "/echopickup/mypage/delete";
+                }
+            }
+        </script>
+    </body>
 </html>
