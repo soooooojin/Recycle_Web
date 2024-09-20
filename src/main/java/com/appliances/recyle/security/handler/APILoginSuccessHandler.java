@@ -43,6 +43,10 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         //Refresh Token 유효기간 30일
         String refreshToken = jwtUtil.generateToken(claim, 30);
 
+        // JWT를 응답 헤더에 추가
+        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Refresh-Token", refreshToken);
+
         //
         SecurityMemberDTO securityMemberDTO = (SecurityMemberDTO) authentication.getPrincipal();
 
@@ -51,7 +55,7 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
         Map<String,String> keyMap = Map.of(
                 "accessToken", accessToken,
                 "refreshToken", refreshToken,
-        "username", authentication.getName(),
+                "username", authentication.getName(),
                 "email",securityMemberDTO.getEmail(),
                 "name",securityMemberDTO.getMname(),
                 "phone",securityMemberDTO.getPhone(),

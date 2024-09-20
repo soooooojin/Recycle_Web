@@ -28,8 +28,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 
 @Log4j2
@@ -108,7 +111,7 @@ public class CustomSecurityConfig {
         http.logout(logout -> logout
                 .logoutUrl("/echopickup/member/logout")
                 .logoutSuccessUrl("/echopickup/member/login?logout")
-                .deleteCookies("JSESSIONID", "remember-me")
+//                .deleteCookies("JSESSIONID", "remember-me")
                 .invalidateHttpSession(true) // 세션 무효화
                 .clearAuthentication(true)   // 사용자 정보 명시적으로 삭제
         );
@@ -142,6 +145,8 @@ public class CustomSecurityConfig {
 ////                .requestMatchers("/admin/**").hasRole("ADMIN")
 ////                .anyRequest().authenticated()
 //        );
+
+        // CORS 설정 추가
 
         // 기본은 csrf 설정이 on, 작업시에는 끄고 작업하기.
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
@@ -181,20 +186,18 @@ public class CustomSecurityConfig {
 
 
         // 자동로그인 설정 1
-        http.rememberMe(
-                httpSecurityRememberMeConfigurer ->
-                        httpSecurityRememberMeConfigurer
-                                // 토큰 생성시 사용할 암호
-                                .key("12345678")
-                                // 스프링 시큐리티에서 정의해둔 Repository
-                                .tokenRepository(persistentTokenRepository())
-                                // UserDetail를 반환하는 사용자가 정의한 클래스
-                                .userDetailsService(customUserDetailsService)
-                                // 토큰의 만료 시간(토믄 유효 기간_30일)
-                                .tokenValiditySeconds(60*60*24*30)
-                                .rememberMeCookieName("remember-me-cookie") // 쿠키 이름 설정 가능
-                                .useSecureCookie(false) // HTTPS를 사용하는 경우 Secure 플래그 추가
-        );
+//        http.rememberMe(
+//                httpSecurityRememberMeConfigurer ->
+//                        httpSecurityRememberMeConfigurer
+//                                // 토큰 생성시 사용할 암호
+//                                .key("12345678")
+//                                // 스프링 시큐리티에서 정의해둔 Repository
+//                                .tokenRepository(persistentTokenRepository())
+//                                // UserDetail를 반환하는 사용자가 정의한 클래스
+//                                .userDetailsService(customUserDetailsService)
+//                                // 토큰의 만료 시간(토믄 유효 기간_30일)
+//                                .tokenValiditySeconds(60*60*24*30)
+//        );
 
         //카카오 로그인 API 설정
         http.oauth2Login(
@@ -222,14 +225,14 @@ public class CustomSecurityConfig {
     }
 
     // 자동로그인 설정 2. 시스템에서 정의해둔 기본 약속.
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        // 시큐리티에서 정의 해둔 구현체
-        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
-        repo.setDataSource(dataSource);
-        log.info("자동로그인 값 : "+ dataSource);
-        return repo;
-    }
+//    @Bean
+//    public PersistentTokenRepository persistentTokenRepository() {
+//        // 시큐리티에서 정의 해둔 구현체
+//        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+//        repo.setDataSource(dataSource);
+//        log.info("자동로그인 값 : "+ dataSource);
+//        return repo;
+//    }
 
     //정적 자원 시큐리티 필터 항목에 제외하기.
     @Bean
@@ -239,6 +242,7 @@ public class CustomSecurityConfig {
                 web.ignoring()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
+
 
     //사용자 정의한 403 예외 처리 (403 : 접근 권한 없을 때 발생)
     @Bean

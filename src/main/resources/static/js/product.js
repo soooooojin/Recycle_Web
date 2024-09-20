@@ -3,9 +3,11 @@
 $(document).ready(function() {
 
     // 페이지 로드 시 localStorage 초기화
-    localStorage.clear();
+    clearItemKeysFromLocalStorage();
+    // localStorage.clear();
     // 페이지 로드 시 쿠키 초기화
-    clearAllCookies();
+
+    // clearAllCookies();
     // 테이블에서 행 삭제
 
 
@@ -238,6 +240,21 @@ $(document).ready(function() {
         popupMessage.text('');
     }
 
+
+    function clearItemKeysFromLocalStorage() {
+        // localStorage의 모든 키를 순회
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+
+            // 'item_'로 시작하는 키 찾기
+            if (key.startsWith('item_')) {
+                localStorage.removeItem(key);  // 해당 키 삭제
+                i--; // 키가 삭제되면 인덱스가 줄어드므로 i를 감소시켜야 순회가 정상 작동
+            }
+        }
+
+        console.log('All keys starting with "item_" have been removed from localStorage.');
+    }
     // 팝업 닫기 함수
     function closePopup() {
         popupBackground.hide();
@@ -249,6 +266,7 @@ $(document).ready(function() {
     $('#popupClose').on('click', function() {
         closePopup();
     });
+
 
 
 

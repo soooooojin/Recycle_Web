@@ -67,6 +67,7 @@ public class JWTUtil {
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(time).toInstant()))
                 .signWith(SignatureAlgorithm.HS256, key.getBytes())
                 .compact();
+        log.info("토큰 생성완료?");
 
         return jwtStr;
     }

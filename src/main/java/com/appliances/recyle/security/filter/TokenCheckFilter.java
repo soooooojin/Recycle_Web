@@ -63,10 +63,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
             log.info("UserDetails: " + userDetails);  // 사용자 정보 출력
 
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-
-
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Authentication set in SecurityContext");
 
