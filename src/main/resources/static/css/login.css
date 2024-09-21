@@ -16,7 +16,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f9f9f9;
 }
 
 /* 로그인 폼 스타일 */
@@ -133,8 +132,9 @@
 }
 
 
-/*회원가입 css*/
 
+
+/*회원가입 css*/
 
 /* 전체 폼 스타일 */
 .registration-form {
