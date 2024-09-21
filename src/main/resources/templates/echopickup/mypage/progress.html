@@ -2,28 +2,16 @@
 <html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="www.thymeleaf.org"
-      layout:decorate="~{layout/base.html}" xmlns="http://www.w3.org/1999/html">
+      layout:decorate="~{layout/mypage-sidebar.html}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/mypage-sidebar.css}">
+<!--    <link rel="stylesheet" th:href="@{/css/mypage-sidebar.css}">-->
     <link rel="stylesheet" th:href="@{/css/progress.css}">
     <title> 수거신청현황 </title>
 </head>
 <body>
-
-<div class="container" layout:fragment="content">
-    <div class="sidebar">
-        <ul class="menu">
-            <li><a th:href="@{/echopickup/mypage}">내 정보</a></li>
-            <li><a th:href="@{/echopickup/mypage/changepassword}">비밀번호 변경</a></li>
-            <li><a th:href="@{/echopickup/mypage/progress}">수거 신청 현황</a></li>
-            <li><a th:href="@{/echopickup/mypage/question-list}">문의 목록</a></li>
-            <li><a th:href="@{/echopickup/mypage/}">1:1 상담</a></li>
-            <li><a th:href="@{/echopickup/mypage/}">회원탈퇴</a></li>
-        </ul>
-    </div>
 
     <div class="main_content" layout:fragment="mypage_content">
         <div class="progress-container">
@@ -48,6 +36,5 @@
 
     </div>
 
-</div>
 </body>
 </html>
