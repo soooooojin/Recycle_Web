@@ -1,6 +1,6 @@
 package com.appliances.recyle.controller;
 
-import com.appliances.recyle.domain.Member;
+import com.appliances.recyle.domain.Question;
 import com.appliances.recyle.service.MemberService2;
 import com.appliances.recyle.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import com.appliances.recyle.domain.Question;
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Log4j2
 @Controller
@@ -51,20 +52,30 @@ public class MypageController {
     public String changePasswordPost(@RequestParam("currentPassword") String currentPassword,
                                      @RequestParam("newPassword") String newPassword,
                                      @RequestParam("confirmPassword") String confirmPassword,
-                                     Authentication authentication) {
+                                     Authentication authentication,Model model) {
+        // 현재 로그인된 사용자 정보 가져오기
         String email = ((User) authentication.getPrincipal()).getUsername();
 
         try {
             boolean isChanged = memberService2.changeMemberPassword(email, currentPassword, newPassword, confirmPassword);
             if (isChanged) {
-                return "redirect:/echopickup/mypage/changepassword?success=true";
+                model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
+                model.addAttribute("status", "success");
+//                return "redirect:/echopickup/mypage/changepassword?success=true";
             } else {
-                return "redirect:/echopickup/mypage/changepassword?error=true";
+                model.addAttribute("message", "비밀번호 변경 중 오류가 발생했습니다. 다시 시도해주세요.");
+                model.addAttribute("status", "error");
+//                return "redirect:/echopickup/mypage/changepassword?error=true";
             }
         } catch (Exception e) {
             log.error("비밀번호 변경 중 오류 발생", e);
-            return "redirect:/echopickup/mypage/changepassword?error=true";
+            model.addAttribute("message", "시스템 오류가 발생했습니다.");
+            model.addAttribute("status", "error");
+//            return "redirect:/echopickup/mypage/changepassword?error=true";
         }
+
+        // 비밀번호 변경 페이지로 다시 리다이렉트 (메시지 전달)
+        return "/echopickup/mypage/changepassword";
     }
 
     @GetMapping("/progress")
