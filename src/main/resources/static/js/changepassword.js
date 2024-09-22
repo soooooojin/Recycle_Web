@@ -1,3 +1,16 @@
+//화면에서 바로 비밀번호 동일한지 확인
+document.getElementById('confirmPassword').addEventListener('input', function(event) {
+    var password = document.getElementById('newPassword').value;
+    var confirmPassword = this.value;
+    var errorMessage = document.getElementById('password-error');
+
+    if (password !== confirmPassword) {
+        errorMessage.style.display = 'block'; // 오류 메시지 표시
+    } else {
+        errorMessage.style.display = 'none'; // 오류 메시지 숨기기
+    }
+});
+
 document.getElementById('changepwbutton').addEventListener('click', function(event) {
     event.preventDefault();  // 폼 제출 기본 동작 막기
 
@@ -37,3 +50,4 @@ document.getElementById('changepwbutton').addEventListener('click', function(eve
             alert(error.message);  // 서버로부터 받은 에러 메시지 출력
         });
 });
+
