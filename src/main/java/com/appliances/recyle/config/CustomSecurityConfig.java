@@ -20,6 +20,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,6 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
@@ -150,6 +152,7 @@ public class CustomSecurityConfig {
 
         // 기본은 csrf 설정이 on, 작업시에는 끄고 작업하기.
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 //        // 특정 페이지에 접근 권한 설정.
 //        http.authorizeRequests()
@@ -198,6 +201,14 @@ public class CustomSecurityConfig {
 //                                // 토큰의 만료 시간(토믄 유효 기간_30일)
 //                                .tokenValiditySeconds(60*60*24*30)
 //        );
+        // HSTS 설정 추가
+        http.headers(headers -> headers
+                .httpStrictTransportSecurity(hsts -> hsts
+                        .includeSubDomains(true) // 하위 도메인 포함 여부
+                        .maxAgeInSeconds(31536000) // HSTS 유효 기간 (1년)
+                        .preload(true) // HSTS Preload List에 포함되도록 설정
+                )
+        );
 
         //카카오 로그인 API 설정
         http.oauth2Login(
@@ -208,6 +219,10 @@ public class CustomSecurityConfig {
 
         // 동일 아이피에서 분당 요청 횟수 10회 제한 , 필터 설정.
         http.addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.cors(httpSecurityCorsConfigurer -> {
+            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
+        });
 
         // 캐시 설정 비활성화
 //        http.headers(
@@ -222,6 +237,24 @@ public class CustomSecurityConfig {
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new CustomSocialLoginSuccessHandler(passwordEncoder());
+    }
+
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+//        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 
     // 자동로그인 설정 2. 시스템에서 정의해둔 기본 약속.

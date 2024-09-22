@@ -30,6 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 로그인 한 이메일을 디비에서 검색을 함.
         Optional<Member> result = memberRepository.getWithRoles(email);
+        log.info("Optional<Member> result 확인 : "+ result);
 
         if(result.isEmpty()){
             //예외 처리. 걍 알려주고 그만? > 어디로 연결해줘야하나...? 레퍼런스 찾아보기
