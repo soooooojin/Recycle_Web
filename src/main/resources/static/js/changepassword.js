@@ -56,3 +56,4 @@ document.getElementById('changepwbutton').addEventListener('click', function(eve
             alert(error.message);  // 서버로부터 받은 에러 메시지 출력
         });
 });
+

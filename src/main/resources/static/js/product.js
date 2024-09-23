@@ -164,6 +164,21 @@ $(document).ready(function() {
             }
         });
     }
+
+    // function deleteItemFromServer(imageUrl) {
+    //     const imageId = imageUrl.split('/').pop(); // URL에서 이미지 ID 추출
+    //     $.ajax({
+    //         url: '/image/' + imageId,
+    //         type: 'DELETE',
+    //         success: function() {
+    //             // 서버에서 성공적으로 삭제된 경우
+    //             alert('삭제 성공');
+    //         },
+    //         error: function() {
+    //             alert('삭제 실패');
+    //         }
+    //     });
+    // }
     function deleteItemFromServer(imageUrl) {
         const imageId = imageUrl.split('/').pop(); // URL에서 이미지 ID 추출
         $.ajax({
@@ -200,6 +215,7 @@ $(document).ready(function() {
             }
         }
     }
+
 
     // 신청하기 버튼 클릭 시 실행되는 함수
     document.getElementById('applyButton').addEventListener('click', function() {
