@@ -34,10 +34,10 @@
             </div>
 
             <div class="options">
-                <div class="remember-me">
-                    <input type="checkbox" id="remember-me">
-                    <label for="remember-me">아이디 저장</label>
-                </div>
+<!--                <div class="remember-me">-->
+<!--                    <input type="checkbox" id="remember-me" name ="remember-me">-->
+<!--                    <label for="remember-me">아이디 저장</label>-->
+<!--                </div>-->
                 <div class="find-info">
                     <a href="#">아이디 찾기</a> |
                     <a href="#">비밀번호 찾기</a>
@@ -90,6 +90,48 @@
 <!--            }-->
 <!--        });-->
 <!--    </script>-->
+    <!-- JavaScript 파일 링크 -->
+    <script>
+        // 로그인 폼 제출 시 JWT 발급 요청 처리
+        document.querySelector('.login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Capture the input values
+            const username = document.getElementById('email').value;
+            const password = document.getElementById('pw').value;
+
+            // Store the values in the data object
+            const data = {
+                username: username,
+                password: password
+            };
+
+            console.log('Data:', data);
+
+            // Send the data using Axios to get the JWT tokens
+            axios.post('/generateToken', data)
+                .then(function (res) {
+                    console.log('Response:', res.data);
+                    const accessToken = res.data.accessToken;
+                    const refreshToken = res.data.refreshToken;
+
+                    // Store JWT tokens in localStorage
+                    localStorage.setItem("accessToken", accessToken);
+                    localStorage.setItem("refreshToken", refreshToken);
+
+                    // Redirect to index page
+                    window.location.href = '/echopickup/index';
+                })
+                .catch(function (error) {
+                    console.error('Error:', error.response);
+                    window.location.href = '/echopickup/member/login';
+                });
+        });
+
+
+
+
+    </script>
 </div>
 
 </body>

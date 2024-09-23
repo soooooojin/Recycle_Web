@@ -19,7 +19,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     public boolean checkid(String email) {
         Optional<Member> result = memberRepository.findByEmail(email);

@@ -1,27 +1,40 @@
 package com.appliances.recyle.config;
 
 
-import com.appliances.recyle.repository.MemberRepository;
 import com.appliances.recyle.security.CustomUserDetailsService;
+import com.appliances.recyle.security.filter.APILoginFilter;
+import com.appliances.recyle.security.filter.RefreshTokenFilter;
+import com.appliances.recyle.security.filter.TokenCheckFilter;
+import com.appliances.recyle.security.handler.APILoginSuccessHandler;
 import com.appliances.recyle.security.handler.Custom403Handler;
 import com.appliances.recyle.security.handler.CustomSocialLoginSuccessHandler;
+import com.appliances.recyle.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 
 @Log4j2
@@ -31,9 +44,10 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class CustomSecurityConfig {
 
-    private DataSource dataSource;
-    private CustomUserDetailsService customUserDetailsService;
-    private final MemberRepository memberRepository;
+    private final DataSource dataSource;
+    private final JWTUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
+//    private final MemberRepository memberRepository;
 
     // ip에서 분당 요청 횟수 제한
     private final RateLimitingFilter rateLimitingFilter;
@@ -44,9 +58,50 @@ public class CustomSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, CustomUserDetailsService
+            customUserDetailsService){
+        return new TokenCheckFilter(customUserDetailsService, jwtUtil);
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("시큐리티 동작 확인 ====CustomSecurityConfig======================");
+
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+        // Get AuthenticationManager 세팅1
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+
+        //반드시 필요 세팅1
+        http.authenticationManager(authenticationManager);
+
+
+        //APILoginFilter 세팅1
+        APILoginFilter apiLoginFilter = new APILoginFilter("/generateToken");
+        apiLoginFilter.setAuthenticationManager(authenticationManager);
+
+
+        //APILoginSuccessHandler , 세팅2
+        APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil,passwordEncoder());
+        //SuccessHandler 세팅2
+        apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
+
+        //APILoginFilter의 위치 조정 세팅1, 사용자 인증 전에 ,
+        http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+        //api로 시작하는 모든 경로는 TokenCheckFilter 동작, 세팅3, 사용자 인증 전에 ,
+        http.addFilterBefore(
+                tokenCheckFilter(jwtUtil, customUserDetailsService),
+//                tokenCheckFilter(jwtUtil),
+                UsernamePasswordAuthenticationFilter.class
+
+        );
+        log.info("TokenCheckFilter added before UsernamePasswordAuthenticationFilter");
+
+        //refreshToken 호출 처리
+        http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),
+                TokenCheckFilter.class);
 
         //로그인 성공 후, 리다이렉트 될 페이지. 간단한 버전.
         http.formLogin(formLogin -> formLogin
@@ -58,16 +113,17 @@ public class CustomSecurityConfig {
         http.logout(logout -> logout
                 .logoutUrl("/echopickup/member/logout")
                 .logoutSuccessUrl("/echopickup/member/login?logout")
+//                .deleteCookies("JSESSIONID", "remember-me")
+                .invalidateHttpSession(true) // 세션 무효화
+                .clearAuthentication(true)   // 사용자 정보 명시적으로 삭제
         );
 
-//        // 폼 방식 일경우
-        http
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/api/users", "/users/new", "/refreshToken").permitAll()
-                                .requestMatchers("/users/**").authenticated()
+        // 폼 방식 일경우
+        http.authorizeRequests(authorizeRequests -> authorizeRequests
+                .requestMatchers("/api/users", "/users/new", "/refreshToken").permitAll()
+                .requestMatchers("/users/**").authenticated()
 
-                );
+        );
 //                .sessionManagement(sessionManagement ->
 //                        sessionManagement
 //                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -92,8 +148,11 @@ public class CustomSecurityConfig {
 ////                .anyRequest().authenticated()
 //        );
 
+        // CORS 설정 추가
+
         // 기본은 csrf 설정이 on, 작업시에는 끄고 작업하기.
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 //        // 특정 페이지에 접근 권한 설정.
 //        http.authorizeRequests()
@@ -129,7 +188,7 @@ public class CustomSecurityConfig {
 //                        );
 
 
-//        // 자동로그인 설정 1
+        // 자동로그인 설정 1
 //        http.rememberMe(
 //                httpSecurityRememberMeConfigurer ->
 //                        httpSecurityRememberMeConfigurer
@@ -139,9 +198,17 @@ public class CustomSecurityConfig {
 //                                .tokenRepository(persistentTokenRepository())
 //                                // UserDetail를 반환하는 사용자가 정의한 클래스
 //                                .userDetailsService(customUserDetailsService)
-//                                // 토큰의 만료 시간.
+//                                // 토큰의 만료 시간(토믄 유효 기간_30일)
 //                                .tokenValiditySeconds(60*60*24*30)
 //        );
+        // HSTS 설정 추가
+        http.headers(headers -> headers
+                .httpStrictTransportSecurity(hsts -> hsts
+                        .includeSubDomains(true) // 하위 도메인 포함 여부
+                        .maxAgeInSeconds(31536000) // HSTS 유효 기간 (1년)
+                        .preload(true) // HSTS Preload List에 포함되도록 설정
+                )
+        );
 
         //카카오 로그인 API 설정
         http.oauth2Login(
@@ -152,6 +219,10 @@ public class CustomSecurityConfig {
 
         // 동일 아이피에서 분당 요청 횟수 10회 제한 , 필터 설정.
         http.addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.cors(httpSecurityCorsConfigurer -> {
+            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
+        });
 
         // 캐시 설정 비활성화
 //        http.headers(
@@ -168,12 +239,31 @@ public class CustomSecurityConfig {
         return new CustomSocialLoginSuccessHandler(passwordEncoder());
     }
 
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+//        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+    }
+
     // 자동로그인 설정 2. 시스템에서 정의해둔 기본 약속.
 //    @Bean
 //    public PersistentTokenRepository persistentTokenRepository() {
 //        // 시큐리티에서 정의 해둔 구현체
 //        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
 //        repo.setDataSource(dataSource);
+//        log.info("자동로그인 값 : "+ dataSource);
 //        return repo;
 //    }
 
@@ -185,6 +275,7 @@ public class CustomSecurityConfig {
                 web.ignoring()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
+
 
     //사용자 정의한 403 예외 처리 (403 : 접근 권한 없을 때 발생)
     @Bean

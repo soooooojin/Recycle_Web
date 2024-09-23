@@ -20,16 +20,8 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    // 스프링 시큐리티 설정 클래스에 빈으로 등록한 인스턴스 주입하기.
-    private PasswordEncoder passwordEncoder;
-
     @Autowired
     private MemberRepository memberRepository;
-
-    //생성자로 주입하기.
-    public CustomUserDetailsService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
 
     // 일반 로그인 로직 처리시, 여기를 반드시 거쳐 감.
     @Override
@@ -38,6 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 로그인 한 이메일을 디비에서 검색을 함.
         Optional<Member> result = memberRepository.getWithRoles(email);
+        log.info("Optional<Member> result 확인 : "+ result);
 
         if(result.isEmpty()){
             //예외 처리. 걍 알려주고 그만? > 어디로 연결해줘야하나...? 레퍼런스 찾아보기

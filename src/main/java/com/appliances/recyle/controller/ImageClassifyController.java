@@ -15,7 +15,8 @@ import java.io.IOException;
 @RestController
 @Log4j2
 public class ImageClassifyController {
-        private final ImageUploadService imageUploadService;
+
+    private final ImageUploadService imageUploadService;
 
     @Autowired
     public ImageClassifyController(ImageUploadService imageUploadService) {

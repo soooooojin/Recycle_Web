@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="www.thymeleaf.org"
+      layout:decorate="~{layout/mypage-sidebar.html}">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyPage</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+</head>
+<body>
+
+    <div class="main_content" layout:fragment="mypage_content">
+        <h2> 내 정보 </h2>
+        <div class="profile-section">
+            <form action="/echopickup/mypage" method="POST">
+<!--            사용자 이름 : mname-->
+            <label for="userName">이름</label>
+            <input type="text" id="userName" readonly>
+
+<!--            Id : email-->
+            <label for="email">아이디(이메일)</label>
+            <input type="text" id="email" readonly>
+
+<!--            phone-->
+            <label for="phone">휴대폰 번호</label>
+            <input type="text" id="phone" name="phone" placeholder="휴대폰 번호를 입력하세요">
+
+<!--            address-->
+            <label for="address">주소</label>
+            <input type="text" id="address" readonly>
+            <input type="hidden" id="postcode" placeholder="우편번호">
+            <input type="hidden" id="fullAddressField" name="address" />
+            <button type="button" class="find-address-btn" onclick="DaumPostcode()">우편번호</button>
+
+<!--             상세주소-->
+            <label for="detailAddress">상세 주소</label>
+            <input type="text" id="detailAddress" placeholder="상세 주소를 입력하세요">
+            </form>
+        </div>
+
+        <button type="submit" id="editButton">정보 수정</button>
+
+        <script th:src="@{/js/myinfo.js}"></script>
+    </div>
+
+</body>
+</html>
+
+
+
+
+

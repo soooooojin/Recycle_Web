@@ -8,11 +8,15 @@
         <title>Echo Pickup</title>
         <link th:href="@{/css/styles.css}" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <header>
+<!--            로고 링크활성화-->
             <div class="logo">
-                <img th:src="@{/images/echologo.png}" alt="Logo">
+                <a th:href="@{/echopickup/index}">
+                    <img th:src="@{/images/echologo.png}" alt="Logo">
+                </a>
             </div>
             <nav>
                 <span><a th:href="@{/echopickup/index}">이용안내</a></span>
@@ -21,8 +25,9 @@
                 <span><a th:href="@{/echopickup/notice}">공지사항</a></span>
             </nav>
             <div class="auth">
-                <a sec:authorize="isAnonymous()" th:href="@{/echopickup/member/login}">로그인</a>
-                <a sec:authorize="isAnonymous()" th:href="@{/echopickup/member/join}">회원가입</a>
+                <a class="login-link" sec:authorize="isAnonymous()" th:href="@{/echopickup/member/login}">로그인</a>
+                <a class="signup-link"  sec:authorize="isAnonymous()" th:href="@{/echopickup/member/join}">회원가입</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/echopickup/mypage}">내정보</a>
                 <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/echopickup/member/logout}">로그아웃</a>
             </div>
         </header>
@@ -31,8 +36,65 @@
 
         </div>
 
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!--        결제 관련-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<!--        주소 관련-->
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
         <script th:src="@{/js/scripts.js}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const accessToken = localStorage.getItem("accessToken");
+
+                // 로그인 상태 확인
+                if (accessToken) {
+                    const payload = JSON.parse(atob(accessToken.split('.')[1]));
+                    const username = payload.username;
+
+                    // 사용자 이름 표시
+                    const welcomeMessage = document.createElement('div');
+                    welcomeMessage.innerText = `환영합니다, ${username}!`;
+                    document.body.insertBefore(welcomeMessage, document.body.firstChild);
+
+                    // 로그인 버튼 숨기고 로그아웃 버튼 보여주기
+                    document.querySelector('.login-link').style.display = 'none';
+                    document.querySelector('.signup-link').style.display = 'none';
+                    document.querySelector('.logout-link').style.display = 'block';
+                } else {
+                    // 로그인되지 않은 상태
+                    document.querySelector('.login-link').style.display = 'block';
+                    document.querySelector('.signup-link').style.display = 'block';
+                    document.querySelector('.logout-link').style.display = 'none';
+                }
+
+                // 로그아웃 처리
+                const logoutLink = document.querySelector('.logout-link');
+                if (logoutLink) {
+                    logoutLink.addEventListener('click', function(event) {
+                        event.preventDefault(); // 링크 클릭 기본 동작 방지
+                        localStorage.removeItem("accessToken");
+                        localStorage.removeItem("refreshToken");
+
+                        // 서버로 로그아웃 요청
+                        axios.post('/echopickup/member/logout')
+                            .then(response => {
+                                console.log('로그아웃 성공:', response);
+                                // 로그아웃 후 페이지 리로드
+                                window.location.reload();
+                            })
+                            .catch(error => {
+                                console.error('로그아웃 오류:', error);
+                            });
+                    });
+                }
+            });
+        </script>
+
         <th:block layout:fragment="javascript">
+
 
         </th:block>
 

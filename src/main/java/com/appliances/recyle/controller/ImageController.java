@@ -2,6 +2,7 @@ package com.appliances.recyle.controller;
 
 import com.appliances.recyle.domain.FileImage;
 import com.appliances.recyle.service.ImageUploadService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.*;
 import java.io.IOException;
 
+@Log4j2
 @Controller
 public class ImageController {
 
@@ -22,8 +24,12 @@ public class ImageController {
 
     @PostMapping("/uploadImage")
     public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image) {
+        if (image.isEmpty()) {
+            return new ResponseEntity<>("Empty image file", HttpStatus.BAD_REQUEST);
+        }
         try {
             String imageId = imageUploadService.saveFileImage(image);
+            log.info("이미지가 들어오고 있니?" + image);
             return new ResponseEntity<>(imageId, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
