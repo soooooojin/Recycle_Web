@@ -6,10 +6,13 @@
 
 <head>
     <title>로그인 페이지</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
 <body>
 <div layout:fragment="content">
+    <main>
     <div class="login-container">
 
         <div class="card-body">
@@ -26,11 +29,11 @@
             <h2>로그인</h2>
             <div class="form-group">
                 <label for="email">아이디(이메일)</label>
-                <input type="email" id="email" name="username" required>
+                <input type="email" id="email" name="username" placeholder="아이디를 입력하세요" required>
             </div>
             <div class="form-group">
                 <label for="pw">비밀번호</label>
-                <input type="password" id="pw" name="password" required>
+                <input type="password" id="pw" name="password" placeholder="비밀번호를 입력하세요" required>
             </div>
 
             <div class="options">
@@ -66,7 +69,7 @@
 
         </div>
     </div>
-
+    </main>
     <!-- 자바스크립트로 alert 표시 -->
 <!--    <script th:if="${error != null}">-->
 <!--        alert("님아이디가 없슈");-->
