@@ -26,8 +26,8 @@
             <div class="auth">
                 <a sec:authorize="isAnonymous()" th:href="@{/echopickup/member/login}">로그인</a>
                 <a sec:authorize="isAnonymous()" th:href="@{/echopickup/member/join}">회원가입</a>
-                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/echopickup/mypage}">내정보</a>
-                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/echopickup/member/logout}">로그아웃</a>
+                <a sec:authorize="isAuthenticated()" th:href="@{/echopickup/mypage}">내정보</a>
+                <a sec:authorize="isAuthenticated()" th:href="@{/echopickup/member/logout}">로그아웃</a>
             </div>
         </header>
 
@@ -46,6 +46,8 @@
         <th:block layout:fragment="javascript">
 
         </th:block>
+
+
 
         <footer>
             <p>&copy; 2024 Your Company 에코픽업에코픽업. All rights reserved.</p>

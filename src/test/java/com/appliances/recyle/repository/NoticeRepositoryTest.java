@@ -25,7 +25,7 @@ public class NoticeRepositoryTest {
     @Test
     public void insertNotice() {
         // 이미 존재하는 Member를 가져오기 (예: "ngy1@gmail.com"으로 조회)
-        String memberId = "ngy1@gmail.com";
+        String memberId = "gmlwl3277@naver.com";
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
                 new IllegalArgumentException("Member not found")
         );

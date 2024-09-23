@@ -2,8 +2,13 @@ package com.appliances.recyle.config;
 
 
 import com.appliances.recyle.security.CustomUserDetailsService;
+import com.appliances.recyle.security.filter.APILoginFilter;
+import com.appliances.recyle.security.filter.RefreshTokenFilter;
+import com.appliances.recyle.security.filter.TokenCheckFilter;
+import com.appliances.recyle.security.handler.APILoginSuccessHandler;
 import com.appliances.recyle.security.handler.Custom403Handler;
 import com.appliances.recyle.security.handler.CustomSocialLoginSuccessHandler;
+import com.appliances.recyle.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +16,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,9 +33,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 @Log4j2
@@ -38,7 +50,8 @@ import java.io.IOException;
 public class CustomSecurityConfig {
 
     private final DataSource dataSource;
-    private CustomUserDetailsService customUserDetailsService;
+    private final JWTUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
 //    private final MemberRepository memberRepository;
 
     // ip에서 분당 요청 횟수 제한
@@ -50,9 +63,46 @@ public class CustomSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, CustomUserDetailsService
+            customUserDetailsService){
+        return new TokenCheckFilter(customUserDetailsService, jwtUtil);
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("시큐리티 동작 확인 ====CustomSecurityConfig======================");
+
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+        // Get AuthenticationManager 세팅1
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+
+        //반드시 필요 세팅1
+        http.authenticationManager(authenticationManager);
+
+        //APILoginFilter 세팅1
+        APILoginFilter apiLoginFilter = new APILoginFilter("/generateToken");
+        apiLoginFilter.setAuthenticationManager(authenticationManager);
+
+
+        //APILoginSuccessHandler , 세팅2
+        APILoginSuccessHandler successHandler = new APILoginSuccessHandler(jwtUtil,passwordEncoder());
+        //SuccessHandler 세팅2
+        apiLoginFilter.setAuthenticationSuccessHandler(successHandler);
+
+        //APILoginFilter의 위치 조정 세팅1, 사용자 인증 전에 ,
+        http.addFilterBefore(apiLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+        //api로 시작하는 모든 경로는 TokenCheckFilter 동작, 세팅3, 사용자 인증 전에 ,
+        http.addFilterBefore(
+                tokenCheckFilter(jwtUtil, customUserDetailsService),
+                UsernamePasswordAuthenticationFilter.class
+        );
+
+        //refreshToken 호출 처리
+        http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),
+                TokenCheckFilter.class);
 
         //로그인 성공 후, 리다이렉트 될 페이지. 간단한 버전.
         http.formLogin(formLogin -> formLogin
@@ -141,7 +191,6 @@ public class CustomSecurityConfig {
                 }
         );
 
-
         // 자동로그인 설정 1
         http.rememberMe(
                 httpSecurityRememberMeConfigurer ->
@@ -172,6 +221,7 @@ public class CustomSecurityConfig {
 //                        disable -> disable.disable()
 //                )
 //        );
+
         return http.build();
     }
 
@@ -205,5 +255,5 @@ public class CustomSecurityConfig {
     public AccessDeniedHandler accessDeniedHandler() {
         return new Custom403Handler();
     }
-}
 
+}

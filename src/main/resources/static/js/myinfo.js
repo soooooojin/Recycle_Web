@@ -1,7 +1,19 @@
 // JavaScript: 사용자 정보를 REST API에서 가져와 HTML에 반영
 document.addEventListener("DOMContentLoaded", function () {
-    // /api/mypage/user-info API 호출
-    fetch("/api/mypage")
+    // /api/mypage API 호출
+    const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+
+    if (!token) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    fetch("/api/mypage", {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token  // 헤더에 토큰 추가
+        }
+    })
         .then(response => { // JSON 데이터를 파싱
             if (!response.ok) {
                 if (response.status === 404) {

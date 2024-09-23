@@ -26,11 +26,17 @@ document.getElementById('changepwbutton').addEventListener('click', function(eve
         confirmPassword: confirmPassword
     };
 
+    const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+    if (!token) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
     // 비밀번호 변경 API 호출
     fetch('/api/mypage/changepassword', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token  // 헤더에 토큰 추가
         },
         body: JSON.stringify(passwordData),
     })

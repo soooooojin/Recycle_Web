@@ -1,7 +1,8 @@
 $(document).ready(function() {
 
     // 페이지 로드 시 localStorage 초기화
-    localStorage.clear();
+    // localStorage.clear();
+    clearItemKeysFromLocalStorage();
     // 페이지 로드 시 쿠키 초기화
     clearAllCookies();
     // 테이블에서 행 삭제
@@ -120,42 +121,47 @@ $(document).ready(function() {
 
     // DB에서 데이터를 가져와 화면에 표시하는 함수
     function fetchAndDisplayItem(iname, imageUrl) {
-        $.getJSON('/api/getAllItems', function(items) {
-            console.log("서버에서 받은 응답:", items);
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
 
-            // 서버에서 받은 데이터 중에서 iname이 일치하는 항목 찾기
-            const matchedItem = items.find(item => item.iname === iname);
-
-            if (matchedItem) {
-                // 일치하는 항목이 있을 경우 화면에 테이블 행으로 추가
-                const row =
-                    `<tr>
+        $.ajax({
+            url: '/api/getAllItems',
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function(items) {
+                const matchedItem = items.find(item => item.iname === iname);
+                if (matchedItem) {
+                    const row =
+                        `<tr>
                             <td class="product-image-container">
                                 <img src="${imageUrl}" alt="제품 이미지" class="product-image" style="width: 100px; height: 100px;">
                             </td>
                             <td class="product-info">${matchedItem.iname}</td>
                             <td class="product-info">${matchedItem.iprice}</td> 
-                           <td><button class="deleteButton" data-id="${imageUrl}">삭제</button></td>                                                           
+                            <td><button class="deleteButton" data-id="${imageUrl}">삭제</button></td>
                          </tr>`;
-                $('#classifiedItems').append(row);
+                    $('#classifiedItems').append(row);
+                    const lastRow = $('#classifiedItems tr:last');
+                    lastRow.find('.deleteButton').click(function() {
+                        const itemName = matchedItem.iname;
+                        lastRow.remove();
+                        deleteCookie(itemName);
+                        deleteItemFromServer(imageUrl);
+                    });
 
-                // 행에 삭제 기능 추가
-                const lastRow = $('#classifiedItems tr:last');
-                lastRow.find('.deleteButton').click(function() {
-                    const itemName = matchedItem.iname;
-                    lastRow.remove(); // 테이블에서 행 삭제
-                    deleteCookie(itemName); // 쿠키에서 항목 삭제
-                    deleteItemFromServer(imageUrl)
-                });
-
-                saveToLocalStorage(imageUrl, matchedItem.iname, matchedItem.iprice);
-
-            } else {
-                alert('DB에서 해당 항목을 찾을 수 없습니다.');
+                    saveToLocalStorage(imageUrl, matchedItem.iname, matchedItem.iprice);
+                } else {
+                    alert('DB에서 해당 항목을 찾을 수 없습니다.');
+                }
+            },
+            error: function() {
+                alert('제품 목록을 불러오는 중 오류가 발생했습니다.');
             }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.error("데이터 가져오기 실패:", textStatus, errorThrown);
-            alert('데이터를 불러오지 못했습니다.');
         });
     }
 
@@ -241,6 +247,19 @@ $(document).ready(function() {
         const item = { imageUrl, iname: name, iprice: price };
         const key = `item_${name}_${new Date().getTime()}`;  // 고유한 키 생성
         localStorage.setItem(key, JSON.stringify(item));
+    }
+
+    function clearItemKeysFromLocalStorage() {
+        // localStorage의 모든 키를 순회
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+
+            // 'item_'로 시작하는 키 찾기
+            if (key.startsWith('item_')) {
+                localStorage.removeItem(key);  // 해당 키 삭제
+                i--; // 키가 삭제되면 인덱스가 줄어드므로 i를 감소시켜야 순회가 정상 작동
+            }
+        }
     }
 
     // 쿠키에서 항목 삭제하는 함수

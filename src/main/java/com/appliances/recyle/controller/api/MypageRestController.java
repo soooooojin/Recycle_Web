@@ -1,5 +1,4 @@
-package com.appliances.recyle.api;
-
+package com.appliances.recyle.controller.api;
 
 import com.appliances.recyle.domain.Member;
 import com.appliances.recyle.service.MemberService2;
