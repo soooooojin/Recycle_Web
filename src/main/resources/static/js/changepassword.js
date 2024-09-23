@@ -1,3 +1,16 @@
+//화면에서 바로 비밀번호 동일한지 확인
+document.getElementById('confirmPassword').addEventListener('input', function(event) {
+    var password = document.getElementById('newPassword').value;
+    var confirmPassword = this.value;
+    var errorMessage = document.getElementById('password-error');
+
+    if (password !== confirmPassword) {
+        errorMessage.style.display = 'block'; // 오류 메시지 표시
+    } else {
+        errorMessage.style.display = 'none'; // 오류 메시지 숨기기
+    }
+});
+
 document.getElementById('changepwbutton').addEventListener('click', function(event) {
     event.preventDefault();  // 폼 제출 기본 동작 막기
 
@@ -13,11 +26,17 @@ document.getElementById('changepwbutton').addEventListener('click', function(eve
         confirmPassword: confirmPassword
     };
 
+    const token = localStorage.getItem('accessToken'); // 토큰 가져오기
+    if (!token) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
     // 비밀번호 변경 API 호출
     fetch('/api/mypage/changepassword', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token  // 헤더에 토큰 추가
         },
         body: JSON.stringify(passwordData),
     })

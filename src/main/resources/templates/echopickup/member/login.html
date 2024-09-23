@@ -69,8 +69,45 @@
         </div>
 
 
+<script>
+    // 로그인 폼 제출 시 JWT 발급 요청 처리
+    document.querySelector('.login-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
 
+        // Capture the input values
+        const username = document.getElementById('email').value;
+        const password = document.getElementById('pw').value;
+
+        // Store the values in the data object
+        const data = {
+            username: username,
+            password: password
+        };
+
+        console.log('Data:', data);
+
+        // Send the data using Axios to get the JWT tokens
+        axios.post('/generateToken', data)
+            .then(function (res) {
+                console.log('Response:', res.data);
+                const accessToken = res.data.accessToken;
+                const refreshToken = res.data.refreshToken;
+
+                // Store JWT tokens in localStorage
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("refreshToken", refreshToken);
+
+                // Redirect to index page
+                event.target.submit();
+            })
+            .catch(function (error) {
+                console.error('Error:', error.response);
+                window.location.href = '/echopickup/member/login';
+            });
+    });
+</script>
     </main>
+
 </div>
 </body>
 </html>
