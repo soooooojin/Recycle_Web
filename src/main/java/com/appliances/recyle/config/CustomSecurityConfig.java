@@ -9,6 +9,8 @@ import com.appliances.recyle.security.handler.APILoginSuccessHandler;
 import com.appliances.recyle.security.handler.Custom403Handler;
 import com.appliances.recyle.security.handler.CustomSocialLoginSuccessHandler;
 import com.appliances.recyle.util.JWTUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -20,16 +22,24 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Arrays;
 
 
 @Log4j2
@@ -87,7 +97,6 @@ public class CustomSecurityConfig {
         //api로 시작하는 모든 경로는 TokenCheckFilter 동작, 세팅3, 사용자 인증 전에 ,
         http.addFilterBefore(
                 tokenCheckFilter(jwtUtil, customUserDetailsService),
-//                tokenCheckFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class
         );
 
@@ -104,7 +113,20 @@ public class CustomSecurityConfig {
         // 로그 아웃 설정.
         http.logout(logout -> logout
                 .logoutUrl("/echopickup/member/logout")
-                .logoutSuccessUrl("/echopickup/member/login?logout")
+                .logoutSuccessHandler(new LogoutSuccessHandler() {
+
+                    @Override
+                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+                        if (authentication != null && authentication.getAuthorities() != null) {
+                            log.info("소셜 로그인 로그아웃 처리");
+
+                            // Kakao 로그아웃 요청 보내기
+                            String kakaoLogoutUrl = "https://kauth.kakao.com/oauth/logout?client_id=1d20778ec48499e6056dd48e0de8070f&logout_redirect_uri=http://localhost:8080/echopickup/member/login?logout";
+
+                            response.sendRedirect(kakaoLogoutUrl);
+                        }
+                    }
+                })
                 .deleteCookies("JSESSIONID", "remember-me")
                 .invalidateHttpSession(true) // 세션 무효화
                 .clearAuthentication(true)   // 사용자 정보 명시적으로 삭제
@@ -169,14 +191,6 @@ public class CustomSecurityConfig {
                 }
         );
 
-        //401 핸들러 적용하기.
-//        http.exceptionHandling(
-//                handle -> {
-//                        handle.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
-//                }
-//                        );
-
-
         // 자동로그인 설정 1
         http.rememberMe(
                 httpSecurityRememberMeConfigurer ->
@@ -207,6 +221,7 @@ public class CustomSecurityConfig {
 //                        disable -> disable.disable()
 //                )
 //        );
+
         return http.build();
     }
 
@@ -240,5 +255,5 @@ public class CustomSecurityConfig {
     public AccessDeniedHandler accessDeniedHandler() {
         return new Custom403Handler();
     }
-}
 
+}

@@ -20,22 +20,37 @@
            <div class="button-container">
                <!-- 버튼 1 -->
                <div class="button-wrapper">
-                   <a href="/echopickup/product" class="button">수거신청하기</a>
-                   <p class="button-description">-수거를 신청하세요!</p>
+                   <a href="/echopickup/product" class="button" id="apply-button">수거신청하기</a>
+                   <p class="button-description">수거를 신청하세요!</p>
                </div>
                <!-- 버튼 2 -->
                <div class="button-wrapper">
-                   <a href="/echopickup/mypage/progress" class="button">수거신청현황</a>
-                   <p class="button-description">-신청 상태를 확인하세요!</p>
+                   <a href="/echopickup/mypage/progress" class="button" id="progress-button">수거신청현황</a>
+                   <p class="button-description">신청 상태를 확인하세요!</p>
                </div>
            </div>
 
            <!-- 하단 문장 -->
-           <p class="footer-text">*수거 신청과 수거 진행 현황을 확인하기 위해서는 로그인이 필요합니다.*</p>
+           <p class="footer-text" th:if="${#authorization.expression('isAnonymous()')}">*수거 신청과 수거 진행 현황을 확인하기 위해서는 로그인이 필요합니다.*</p>
+
+           <script th:inline="javascript">
+               /* 로그인 여부 확인 */
+               var isAuthenticated = /*[[${#authorization.expression('isAuthenticated()')}]]*/ false;
+
+               if (!isAuthenticated) {
+                   document.getElementById('apply-button').addEventListener('click', function (event) {
+                       event.preventDefault();
+                       alert("로그인 후 이용해 주세요.");
+                   });
+
+                   document.getElementById('progress-button').addEventListener('click', function (event) {
+                       event.preventDefault();
+                       alert("로그인 후 이용해 주세요.");
+                   });
+               }
+           </script>
 
        </main>
-
-        <script layout:fragment="javascript" th:inline="javascript"></script>
     </div>
 </body>
 </html>

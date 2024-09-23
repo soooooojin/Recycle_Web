@@ -1,4 +1,5 @@
-package com.appliances.recyle.api;
+package com.appliances.recyle.controller.api;
+
 import com.appliances.recyle.domain.Item;
 import com.appliances.recyle.dto.ItemDTO;
 import com.appliances.recyle.service.ItemService2;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @RestController
 public class ItemController {

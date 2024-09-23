@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface QuestionService {
+
     Question createQuestion(Question question);
 
     Question readQuestion(Long qno);
