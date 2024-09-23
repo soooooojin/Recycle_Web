@@ -1,5 +1,3 @@
-//product 스크립트입니다~!
-
 $(document).ready(function() {
 
     // 페이지 로드 시 localStorage 초기화
@@ -160,6 +158,21 @@ $(document).ready(function() {
             alert('데이터를 불러오지 못했습니다.');
         });
     }
+
+    // function deleteItemFromServer(imageUrl) {
+    //     const imageId = imageUrl.split('/').pop(); // URL에서 이미지 ID 추출
+    //     $.ajax({
+    //         url: '/image/' + imageId,
+    //         type: 'DELETE',
+    //         success: function() {
+    //             // 서버에서 성공적으로 삭제된 경우
+    //             alert('삭제 성공');
+    //         },
+    //         error: function() {
+    //             alert('삭제 실패');
+    //         }
+    //     });
+    // }
     function deleteItemFromServer(imageUrl) {
         const imageId = imageUrl.split('/').pop(); // URL에서 이미지 ID 추출
         $.ajax({
@@ -167,6 +180,8 @@ $(document).ready(function() {
             type: 'DELETE',
             success: function() {
                 // 서버에서 성공적으로 삭제된 경우
+                // localStorage.removeItem(imageId);
+                deleteItemFromLocalStorage(imageUrl);
                 alert('삭제 성공');
             },
             error: function() {
@@ -174,6 +189,27 @@ $(document).ready(function() {
             }
         });
     }
+
+    function deleteItemFromLocalStorage(imageUrl) {
+        // localStorage의 모든 키를 순회
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+
+            // 'item_'로 시작하는 키만 검사
+            if (key.startsWith('item_')) {
+                const storedItem = JSON.parse(localStorage.getItem(key));
+
+                // 저장된 값의 imageUrl과 삭제하려는 imageUrl이 일치하는지 확인
+                if (storedItem.imageUrl === imageUrl) {
+                    // 일치하는 항목을 로컬 스토리지에서 삭제
+                    localStorage.removeItem(key);
+                    console.log(`삭제된 항목: ${key}`);
+                    return;  // 항목을 삭제했으면 함수를 종료
+                }
+            }
+        }
+    }
+
 
     // 신청하기 버튼 클릭 시 실행되는 함수
     document.getElementById('applyButton').addEventListener('click', function() {

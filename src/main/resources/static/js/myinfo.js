@@ -48,35 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => console.error("Error fetching user info:", error));
 });
-// document.addEventListener("DOMContentLoaded", function () {
-//     // /api/mypage/user-info API 호출
-//     fetch("/api/mypage/user-info")
-//         .then(response => {
-//             if (!response.ok) {
-//                 if (response.status === 404) {
-//                     throw new Error("사용자 정보를 찾을 수 없습니다.");
-//                 } else {
-//                     throw new Error("서버 에러가 발생했습니다.");
-//                 }
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             // fullAddress를 , 기준으로 나눈다
-//             const fullAddress = data.address;
-//             const addressParts = fullAddress.split(',');
-//
-//             // 데이터를 HTML 입력 필드에 삽입
-//             document.getElementById("userName").value = data.mname;
-//             document.getElementById("email").value = data.email;
-//             document.getElementById("phone").value = data.phone;
-//
-//             // 주소와 상세주소를 나눠서 보여준다
-//             document.getElementById("address").value = addressParts[0].trim();  // 주소 부분
-//             document.getElementById("detailAddress").value = addressParts[1] ? addressParts[1].trim() : '';  // 상세주소 부분
-//         })
-//         .catch(error => console.error("Error fetching user info:", error));
-// });
 
 // 수정 버튼 눌렸을때
 document.getElementById("editButton").addEventListener("click", function(event) {
